@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Statistiques des ventes</title>
+<style>
+  body {{ font-family: DejaVu Sans, Arial, sans-serif; font-size: 12px; }}
+  h1 {{ text-align: center; }}
+  .summary {{ margin: 10px 0; }}
+  table {{ width: 100%; border-collapse: collapse; }}
+  th, td {{ border: 1px solid #999; padding: 6px; text-align: left; }}
+  th {{ background: #eee; }}
+</style>
+</head>
+<body>
+  <h1>Statistiques - {{ model.first_name }} {{ model.last_name }}</h1>
+  <div class="summary">
+    <p>Total ventes brutes: <strong>{{ gross }}</strong></p>
+    <p>Total honoraires (20%): <strong>{{ fees }}</strong></p>
+    <p>Total ventes nettes (80%): <strong>{{ net }}</strong></p>
+    <p>Jours avec ventes: <strong>{{ days_with_sales }}</strong></p>
+  </div>
+
+  <h3>Détails des ventes</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Montant (USD)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <td>{{ r.date }}</td>
+        <td>${{ r.amount_usd }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p style="margin-top:16px;">Généré le {{ generated_at }}</p>
+</body>
+</html>
