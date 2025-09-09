@@ -473,7 +473,85 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
         </div>
       </section>
 
+      {/* Section Témoignages */}
+      <section 
+        id="testimonials" 
+        ref={testimonialsRef}
+        className="relative py-16 sm:py-20 lg:py-24"
+      >
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16 sm:mb-20 px-2">
+            <h2 className="text-[clamp(1.75rem,4.5vw,2.5rem)] font-bold mb-6 bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+              Ils nous font confiance
+            </h2>
+            <p className="text-[clamp(1rem,2.2vw,1.25rem)] text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+              Découvrez comment Sales Tracker Pro transforme les entreprises
+            </p>
+          </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 px-2">
+            <div className="group relative bg-white/80 dark:bg-black/80 backdrop-blur-sm rounded-3xl p-8 border border-gray-200/50 dark:border-gray-800/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl">
+              <div className="flex items-center mb-6">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
+              <blockquote className="text-gray-700 dark:text-gray-300 mb-6 text-lg leading-relaxed">
+                "Une révolution dans notre gestion commerciale. L'interface est d'une élégance rare et les insights sont d'une précision chirurgicale."
+              </blockquote>
+              <div className="flex items-center">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mr-4">
+                  <span className="font-semibold text-white text-sm">MJ</span>
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900 dark:text-white">Marie Dubois</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Directrice Commerciale, TechCorp</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="group relative bg-white/80 dark:bg-black/80 backdrop-blur-sm rounded-3xl p-8 border border-gray-200/50 dark:border-gray-800/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl">
+              <div className="flex items-center mb-6">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
+              <blockquote className="text-gray-700 dark:text-gray-300 mb-6 text-lg leading-relaxed">
+                "Les analyses détaillées et les rapports automatiques nous donnent un avantage concurrentiel décisif. Nous anticipons les tendances avec une précision étonnante."
+              </blockquote>
+              <div className="flex items-center">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center mr-4">
+                  <span className="font-semibold text-white text-sm">TL</span>
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900 dark:text-white">Thomas Laurent</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">CEO, InnovSales</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="group relative bg-white/80 dark:bg-black/80 backdrop-blur-sm rounded-3xl p-8 border border-gray-200/50 dark:border-gray-800/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl">
+              <div className="flex items-center mb-6">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
+              <blockquote className="text-gray-700 dark:text-gray-300 mb-6 text-lg leading-relaxed">
+                "Fini les calculs manuels ! L'automatisation nous fait économiser 15 heures par semaine. Un investissement qui se rentabilise immédiatement."
+              </blockquote>
+              <div className="flex items-center">
+                <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mr-4">
+                  <span className="font-semibold text-white text-sm">SM</span>
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900 dark:text-white">Sophie Martin</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Fondatrice, AgencePro</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Section Tarifs */}
       <section 
