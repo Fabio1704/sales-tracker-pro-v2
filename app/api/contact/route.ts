@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
 
     // OPTION 1: Sauvegarder en base de données Django
     try {
-      const response = await fetch(`https://sales-tracker-pro-v2.onrender.com/api/contact-messages/`, {
+      const response = await fetch(`https://sales-tracker-pro-v2.onrender.com/api/accounts/contact-messages/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
