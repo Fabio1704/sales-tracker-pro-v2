@@ -5,14 +5,11 @@ from . import views_contact_messages
 
 urlpatterns = [
     # Authentification
-    path('users/me/', views.current_user, name='current_user'),
-    path('users/', views.UserListCreateView.as_view(), name='user-list-create'),
-    path('users/<int:pk>/', views.UserDetailView.as_view(), name='user-detail'),
-    path('users/stats/', views.admin_stats, name='admin-stats'),
+    path('users/me/', views.MeView.as_view(), name='current_user'),
+    path('users/', views.AdminUserView.as_view(), name='user-list-create'),
     
     # Admin endpoints
-    path('admin/users/', views.AdminUserListView.as_view(), name='admin-user-list'),
-    path('admin/users/<int:pk>/', views.AdminUserDetailView.as_view(), name='admin-user-detail'),
+    path('admin/users/', views.AdminUserView.as_view(), name='admin-user-list'),
     
     # Réinitialisation de mot de passe
     path('accounts/password-reset/', views.PasswordResetRequestView.as_view(), name='password_reset_request'),
