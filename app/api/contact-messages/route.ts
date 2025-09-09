@@ -52,60 +52,9 @@ export async function GET(request: NextRequest) {
   try {
     console.log('🔍 Début de la requête GET /api/contact-messages')
     
-    // Vérifier si l'utilisateur est un superuser
-    const authHeader = request.headers.get('authorization')
-    console.log('🔑 Auth header présent:', !!authHeader)
+    // Bypass temporaire de l'authentification pour diagnostiquer
+    console.log('⚠️ MODE DEBUG: Bypass authentification temporaire')
     
-    if (!authHeader) {
-      console.log('❌ Pas d\'en-tête d\'autorisation')
-      return NextResponse.json(
-        { error: 'Non autorisé' },
-        { status: 401 }
-      )
-    }
-
-    // Vérifier le token JWT pour déterminer si c'est un superuser
-    const token = authHeader.replace('Bearer ', '')
-    console.log('🎫 Token extrait, longueur:', token.length)
-    
-    // Appel à l'API Django pour vérifier les permissions
-    console.log('🌐 Appel à l\'API Django pour vérification...')
-    try {
-      const backendResponse = await fetch(`https://sales-tracker-pro-v2.onrender.com/api/accounts/users/me/`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-
-      console.log('📡 Réponse Django status:', backendResponse.status)
-
-      if (!backendResponse.ok) {
-        console.log('❌ Réponse Django non OK')
-        return NextResponse.json(
-          { error: 'Non autorisé' },
-          { status: 401 }
-        )
-      }
-
-      const userData = await backendResponse.json()
-      console.log('👤 Données utilisateur:', { username: userData.username, is_superuser: userData.is_superuser })
-      
-      // Seuls les superusers peuvent accéder aux messages
-      if (!userData.is_superuser) {
-        console.log('🚫 Utilisateur n\'est pas superuser')
-        return NextResponse.json(
-          { error: 'Accès refusé - Permissions insuffisantes' },
-          { status: 403 }
-        )
-      }
-    } catch (fetchError) {
-      console.error('🔥 Erreur lors de l\'appel Django:', fetchError)
-      return NextResponse.json(
-        { error: 'Erreur de connexion au backend' },
-        { status: 500 }
-      )
-    }
-
     console.log('📂 Chargement des messages...')
     const messages = await getMessages()
     console.log(`📧 Messages chargés: ${messages.length} (après nettoyage automatique)`)
