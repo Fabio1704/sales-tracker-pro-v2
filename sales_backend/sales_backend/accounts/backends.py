@@ -25,14 +25,7 @@ class EmailOrUsernameBackend(ModelBackend):
         except User.DoesNotExist:
             # Exécute le hashage du mot de passe pour éviter les attaques de timing
             User().set_password(password)
-            # Retourne une erreur spécifique selon le type d'identifiant
-            from django.contrib.auth import authenticate
-            from rest_framework_simplejwt.exceptions import AuthenticationFailed
-            
-            if is_email:
-                raise AuthenticationFailed('Aucun compte trouvé avec cet email')
-            else:
-                raise AuthenticationFailed('Aucun compte trouvé avec ce nom d\'utilisateur')
+            return None
         except User.MultipleObjectsReturned:
             # Si plusieurs utilisateurs ont le même email (ne devrait pas arriver)
             return None
@@ -40,10 +33,6 @@ class EmailOrUsernameBackend(ModelBackend):
         # Vérifie le mot de passe et que l'utilisateur est actif
         if user.check_password(password) and self.user_can_authenticate(user):
             return user
-        else:
-            # L'utilisateur existe mais le mot de passe est incorrect
-            from rest_framework_simplejwt.exceptions import AuthenticationFailed
-            raise AuthenticationFailed('Vérifiez vos identifiants')
         
         return None
     
