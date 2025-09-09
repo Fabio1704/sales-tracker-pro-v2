@@ -30,3 +30,4 @@ next-env.d.ts
 firebase-credentials.json
 **/firebase-credentials.json
 sales_backend/sales_backend/firebase-credentials.json
+.vercel
