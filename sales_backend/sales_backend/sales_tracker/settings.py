@@ -154,16 +154,18 @@ if not CORS_ALLOW_ALL_ORIGINS:
     CORS_ALLOWED_ORIGINS = [
         "http://localhost:3000",  # Développement local
         "http://localhost:8000",
-        "https://sales-tracker-clean-d3dm3ci3h-dangos-projects-54267b83.vercel.app",  # URL Vercel actuelle
-        "https://sales-tracker-clean.vercel.app",  # Nouvelle URL Vercel
+        "https://sales-tracker-pro-v3.vercel.app",  # Nouvelle URL Vercel
+        "https://sales-tracker-clean-d3dm3ci3h-dangos-projects-54267b83.vercel.app",  # Ancienne URL
+        "https://sales-tracker-clean.vercel.app",  # Ancienne URL
         os.getenv('FRONTEND_URL', 'https://your-app.vercel.app'),  # URL Vercel de fallback
     ]
 else:
     CORS_ALLOWED_ORIGINS = [
         "http://localhost:3000",
         "http://localhost:8000",
-        "https://sales-tracker-clean-d3dm3ci3h-dangos-projects-54267b83.vercel.app",  # URL Vercel actuelle
-        "https://sales-tracker-clean.vercel.app",  # Nouvelle URL Vercel
+        "https://sales-tracker-pro-v3.vercel.app",  # Nouvelle URL Vercel
+        "https://sales-tracker-clean-d3dm3ci3h-dangos-projects-54267b83.vercel.app",  # Ancienne URL
+        "https://sales-tracker-clean.vercel.app",  # Ancienne URL
     ]
 
 CORS_ALLOW_CREDENTIALS = True
