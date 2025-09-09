@@ -30,10 +30,9 @@ export async function POST(request: NextRequest) {
 
     // Ici vous pouvez choisir l'une des options suivantes :
 
-    // OPTION 1: Sauvegarder en base de données (si vous avez une table contact_messages)
-    /*
+    // OPTION 1: Sauvegarder en base de données Django
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/contact-messages/`, {
+      const response = await fetch(`https://sales-tracker-pro-v2.onrender.com/api/contact-messages/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -48,13 +47,14 @@ export async function POST(request: NextRequest) {
       })
       
       if (!response.ok) {
-        throw new Error('Erreur lors de la sauvegarde en base')
+        console.error('Erreur lors de la sauvegarde en base:', response.status)
+      } else {
+        console.log('✅ Message sauvegardé en base de données Django')
       }
     } catch (dbError) {
       console.error('Erreur base de données:', dbError)
       // Continuer avec l'envoi d'email même si la DB échoue
     }
-    */
 
     // OPTION 2: Envoyer par email (exemple avec un service d'email)
     // Vous devrez configurer un service comme SendGrid, Nodemailer, etc.

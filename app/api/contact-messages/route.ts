@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
     const token = authHeader.replace('Bearer ', '')
     
     // Appel à l'API Django pour vérifier les permissions
-    const backendResponse = await fetch(`http://localhost:8000/api/users/me/`, {
+    const backendResponse = await fetch(`https://sales-tracker-pro-v2.onrender.com/api/users/me/`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }

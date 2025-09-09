@@ -7,7 +7,7 @@ from django.utils.html import format_html
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
-from .models import UserProfile, LoginAttempt, SecurityEvent, ClientInvitation
+from .models import UserProfile, LoginAttempt, SecurityEvent, ClientInvitation, ContactMessage
 from .admin_filters import (
     FilteredUserAdmin, FilteredClientInvitationAdmin, FilteredUserProfileAdmin,
     FilteredLoginAttemptAdmin, FilteredSecurityEventAdmin
@@ -230,6 +230,43 @@ class SecurityEventAdmin(FilteredSecurityEventAdmin):
     
     def has_add_permission(self, request):
         return False
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    """Administration des messages de contact"""
+    
+    list_display = ('name', 'email', 'subject', 'created_at', 'read', 'is_recent')
+    list_filter = ('read', 'created_at')
+    search_fields = ('name', 'email', 'subject', 'message')
+    readonly_fields = ('created_at', 'is_recent')
+    ordering = ('-created_at',)
+    
+    fieldsets = (
+        ('Informations du contact', {
+            'fields': ('name', 'email', 'subject')
+        }),
+        ('Message', {
+            'fields': ('message',)
+        }),
+        ('Métadonnées', {
+            'fields': ('created_at', 'read', 'is_recent'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    def mark_as_read(self, request, queryset):
+        """Action pour marquer les messages comme lus"""
+        updated = queryset.update(read=True)
+        self.message_user(request, f'{updated} message(s) marqué(s) comme lu(s).')
+    mark_as_read.short_description = "Marquer comme lu"
+    
+    def mark_as_unread(self, request, queryset):
+        """Action pour marquer les messages comme non lus"""
+        updated = queryset.update(read=False)
+        self.message_user(request, f'{updated} message(s) marqué(s) comme non lu(s).')
+    mark_as_unread.short_description = "Marquer comme non lu"
+    
+    actions = ['mark_as_read', 'mark_as_unread']
 
 # Enregistrer UserProfile avec filtrage
 @admin.register(UserProfile)
