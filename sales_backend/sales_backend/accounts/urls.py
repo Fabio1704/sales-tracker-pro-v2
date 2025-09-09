@@ -21,10 +21,8 @@ urlpatterns = [
     path('contact-messages/<int:message_id>/read/', views_contact_messages.mark_message_as_read, name='mark-message-read'),
     path('contact-messages/unread-count/', views_contact_messages.unread_messages_count, name='unread-messages-count'),
     
-    # Invitations clients
+    # Invitations clients (simplified)
     path('invitations/send/', views_invitation.send_client_invitation, name='send-client-invitation'),
-    path('invitations/signup/<str:token>/', views_invitation.client_signup, name='client_signup'),
-    path('invitations/validate-token/<str:token>/', views_invitation.validate_invitation_token, name='validate_invitation_token'),
 ]
     # Firebase et 2FA (désactivé)
     # path('enable-2fa/', views_firebase.enable_2fa, name='enable_2fa'),
