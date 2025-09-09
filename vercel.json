@@ -1,22 +1,11 @@
 {
   "framework": "nextjs",
-  "buildCommand": "npm run build",
+  "buildCommand": "rm -rf .next && npm run build",
   "outputDirectory": ".next",
   "installCommand": "npm install",
   "functions": {
     "app/**": {
       "maxDuration": 30
     }
-  },
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
-      ]
-    }
-  ]
+  }
 }
