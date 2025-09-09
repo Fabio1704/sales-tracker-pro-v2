@@ -22,9 +22,7 @@ urlpatterns = [
     path('contact-messages/unread-count/', views_contact_messages.unread_messages_count, name='unread-messages-count'),
     
     # Invitations clients
-    path('invitations/', views_invitation.ClientInvitationListCreateView.as_view(), name='client-invitation-list-create'),
-    path('invitations/<int:pk>/', views_invitation.ClientInvitationDetailView.as_view(), name='client-invitation-detail'),
-    path('invitations/<int:pk>/resend/', views_invitation.resend_invitation, name='resend-invitation'),
+    path('invitations/send/', views_invitation.send_client_invitation, name='send-client-invitation'),
     path('invitations/signup/<str:token>/', views_invitation.client_signup, name='client_signup'),
     path('invitations/validate-token/<str:token>/', views_invitation.validate_invitation_token, name='validate_invitation_token'),
 ]
