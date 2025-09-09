@@ -184,7 +184,7 @@ const toggleTheme = () => {
       console.log('🔑 Token utilisé pour messages:', token?.substring(0, 20) + '...');
       console.log('🔑 Token trouvé:', !!token);
       
-      const response = await fetch('https://sales-tracker-pro-v2.onrender.com/api/accounts/contact-messages/', {
+      const response = await fetch('https://sales-tracker-pro-v2.onrender.com/api/accounts/contact-messages/unread-count/', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
