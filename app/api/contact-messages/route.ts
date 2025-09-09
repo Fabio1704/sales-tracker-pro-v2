@@ -52,17 +52,18 @@ export async function GET(request: NextRequest) {
   try {
     console.log('🔍 Début de la requête GET /api/contact-messages')
     
-    // Bypass temporaire de l'authentification pour diagnostiquer
-    console.log('⚠️ MODE DEBUG: Bypass authentification temporaire')
+    // Test ultra-simple sans lecture de fichier
+    console.log('⚠️ MODE DEBUG: Test ultra-simple')
     
-    console.log('📂 Chargement des messages...')
-    const messages = await getMessages()
-    console.log(`📧 Messages chargés: ${messages.length} (après nettoyage automatique)`)
-    return NextResponse.json({ messages })
+    return NextResponse.json({ 
+      messages: [],
+      debug: 'API fonctionne - pas de lecture de fichier',
+      timestamp: new Date().toISOString()
+    })
   } catch (error) {
-    console.error('💥 Erreur générale lors de la lecture des messages:', error)
+    console.error('💥 Erreur générale:', error)
     return NextResponse.json(
-      { error: 'Erreur lors de la lecture des messages', details: error instanceof Error ? error.message : 'Erreur inconnue' },
+      { error: 'Erreur', details: error instanceof Error ? error.message : 'Erreur inconnue' },
       { status: 500 }
     )
   }
