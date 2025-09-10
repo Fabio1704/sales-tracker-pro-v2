@@ -194,10 +194,8 @@ const toggleTheme = () => {
       
       if (response.ok) {
         const data = await response.json();
-        const messages = data.messages || [];
-        const unreadCount = messages.filter((msg: any) => !msg.read).length;
-        console.log('📧 Messages non lus:', unreadCount);
-        setUnreadMessages(unreadCount);
+        console.log('📧 Réponse unread count:', data);
+        setUnreadMessages(data.unread_count || 0);
       } else {
         console.log('❌ Erreur API:', response.status);
         setUnreadMessages(0);
