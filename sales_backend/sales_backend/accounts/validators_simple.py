@@ -77,16 +77,16 @@ def validate_gmail_email_strict(email):
     if len(local_part) < 4:
         return False
     
-    # Emails trop longs (plus de 25 caractères)
-    if len(local_part) > 25:
+    # Emails trop longs (plus de 30 caractères) - assoupli
+    if len(local_part) > 30:
         return False
     
     # Caractères répétitifs suspects (3+ identiques consécutifs)
     if re.search(r'(.)\1{2,}', local_part):
         return False
     
-    # Patterns de lettres/chiffres suspects
-    if re.match(r'^[a-z]{1,2}\d+$', local_part):  # a1, ab123, etc.
+    # Patterns de lettres/chiffres suspects - assoupli pour noms réels
+    if re.match(r'^[a-z]{1}\d+$', local_part):  # a1, b123, etc. (mais pas ab123)
         return False
     
     # Patterns de chiffres uniquement
