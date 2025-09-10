@@ -37,10 +37,10 @@ class CustomUserAdmin(BaseUserAdmin):
 class CustomContactMessageAdmin(admin.ModelAdmin):
     """Admin personnalisé pour les messages de contact - seul le super admin peut voir"""
     
-    list_display = ['name', 'email', 'subject', 'timestamp', 'read']
-    list_filter = ['read', 'timestamp']
+    list_display = ['name', 'email', 'subject', 'created_at', 'read']
+    list_filter = ['read', 'created_at']
     search_fields = ['name', 'email', 'subject']
-    ordering = ['-timestamp']
+    ordering = ['-created_at']
     
     def has_module_permission(self, request):
         """Seul le super admin peut voir les messages de contact"""
