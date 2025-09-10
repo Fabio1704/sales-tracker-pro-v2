@@ -79,7 +79,7 @@ class ModelProfileAdmin(admin.ModelAdmin):
         # Les admins clients voient leurs modèles + ceux créés par leurs utilisateurs
         from accounts.models import UserProfile
         created_users = UserProfile.objects.filter(created_by=request.user).values_list('user_id', flat=True)
-        return qs.filter(models.Q(owner=request.user) | models.Q(owner__id__in=created_users) | models.Q(created_by=request.user))
+        return qs.filter(Q(owner=request.user) | Q(owner__id__in=created_users) | Q(created_by=request.user))
     
     def save_model(self, request, obj, form, change):
         """Assigner automatiquement le propriétaire et créateur lors de la création"""
@@ -187,7 +187,7 @@ class DailySaleAdmin(admin.ModelAdmin):
         # Les admins clients voient les ventes de leurs modèles + ceux créés par leurs utilisateurs
         from accounts.models import UserProfile
         created_users = UserProfile.objects.filter(created_by=request.user).values_list('user_id', flat=True)
-        return qs.filter(models.Q(model_profile__owner=request.user) | models.Q(model_profile__owner__id__in=created_users) | models.Q(model_profile__created_by=request.user))
+        return qs.filter(Q(model_profile__owner=request.user) | Q(model_profile__owner__id__in=created_users) | Q(model_profile__created_by=request.user))
 
 # INLINE POUR USER ADMIN
 class ModelProfileInline(admin.TabularInline):
@@ -247,6 +247,6 @@ class CustomUserAdmin(UserAdmin):
         # Les admins clients voient leur propre compte + les utilisateurs qu'ils ont créés
         from accounts.models import UserProfile
         created_users = UserProfile.objects.filter(created_by=request.user).values_list('user_id', flat=True)
-        return qs.filter(models.Q(id=request.user.id) | models.Q(id__in=created_users))
+        return qs.filter(Q(id=request.user.id) | Q(id__in=created_users))
 
 # Ne pas désenregistrer User ici car c'est géré dans accounts/admin_custom.py
