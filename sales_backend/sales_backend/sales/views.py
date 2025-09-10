@@ -322,6 +322,30 @@ class ModelProfileViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
     
+    def destroy(self, request, *args, **kwargs):
+        """Suppression complète du modèle et de toutes ses données associées"""
+        model_profile = self.get_object()
+        
+        # Vérifier les permissions
+        if not request.user.is_staff and model_profile.owner != request.user:
+            return Response(
+                {'error': 'Vous n\'avez pas la permission de supprimer ce modèle'}, 
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
+        # Pour les admins, vérifier qu'ils peuvent supprimer ce modèle
+        if request.user.is_staff and model_profile.owner != request.user:
+            from accounts.models import UserProfile
+            created_users = UserProfile.objects.filter(created_by=request.user).values_list('user', flat=True)
+            if model_profile.owner.id not in created_users:
+                return Response(
+                    {'error': 'Vous ne pouvez supprimer que vos propres modèles ou ceux de vos utilisateurs'}, 
+                    status=status.HTTP_403_FORBIDDEN
+                )
+        
+        # Suppression en cascade - Django supprimera automatiquement les DailySales liées
+        return super().destroy(request, *args, **kwargs)
+    
     @action(detail=True, methods=['get'])
     def stats(self, request, pk=None):
         try:
