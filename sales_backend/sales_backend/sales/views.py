@@ -265,24 +265,20 @@ class ModelProfileViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
-        # Les admins voient tous les modèles des utilisateurs qu'ils ont créés
-        # Les utilisateurs normaux ne voient que leurs propres modèles
+        # Super admin voit tout
+        if self.request.user.email == 'tahiantsaoFabio17@gmail.com':
+            return ModelProfile.objects.filter(owner=self.request.user).order_by('-created_at')
+        
+        # Les autres admins voient leurs modèles + ceux des utilisateurs qu'ils ont créés
         if self.request.user.is_staff:
-            # Admin voit ses propres modèles + ceux des utilisateurs qu'il a créés
             from accounts.models import UserProfile
             created_users = UserProfile.objects.filter(created_by=self.request.user).values_list('user', flat=True)
-            
-            # Debug logging
-            import logging
-            logger = logging.getLogger(__name__)
-            logger.info(f"Admin {self.request.user.username} - Utilisateurs créés: {list(created_users)}")
             
             queryset = ModelProfile.objects.filter(
                 Q(owner=self.request.user) | 
                 Q(owner__in=created_users)
             ).order_by('-created_at')
             
-            logger.info(f"Modèles trouvés: {queryset.count()}")
             return queryset
         else:
             # Utilisateur normal ne voit que ses propres modèles
