@@ -1,6 +1,6 @@
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -21,7 +21,7 @@ from .validators_simple import validate_email_simple
 logger = logging.getLogger(__name__)
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def create_contact_invitation(request):
     """Crée une invitation à partir d'une demande de contact"""
     
@@ -107,7 +107,7 @@ def create_contact_invitation(request):
             invitation_type=invitation_type,
             invitation_token=invitation_token,
             expires_at=timezone.now() + timedelta(days=7),
-            sent_by_id=1  # Temporaire - sera remplacé par l'admin qui traite la demande
+            sent_by=request.user  # Utilisateur authentifié qui crée l'invitation
         )
         
         # Générer l'URL d'invitation
