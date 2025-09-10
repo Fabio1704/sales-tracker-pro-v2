@@ -30,6 +30,7 @@ export default function InvitationModal({ message, onClose }: InvitationModalPro
   const [customMessage, setCustomMessage] = useState("")
   const [isCreating, setIsCreating] = useState(false)
   const [isCreated, setIsCreated] = useState(false)
+  const [isSent, setIsSent] = useState(false)
   const [invitationUrl, setInvitationUrl] = useState("")
   const [invitationId, setInvitationId] = useState<number | null>(null)
   const [error, setError] = useState("")
@@ -102,9 +103,10 @@ export default function InvitationModal({ message, onClose }: InvitationModalPro
           const retryData = await retryResponse.json()
           
           if (retryResponse.ok && retryData.success) {
-            setInvitationUrl(retryData.invitation_url)
+            setInvitationUrl(`${process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000'}/signup/${retryData.invitation_token || 'token'}`)
             setInvitationId(retryData.invitation_id)
             setIsCreated(true)
+            setIsSent(true) // Marquer comme envoyée car l'API l'a déjà fait
           } else {
             throw new Error(retryData.error || 'Erreur lors de la création de l\'invitation')
           }
@@ -116,14 +118,18 @@ export default function InvitationModal({ message, onClose }: InvitationModalPro
           return
         }
       } else if (response.ok && data.success) {
-        setInvitationUrl(data.invitation_url)
+        // L'invitation est créée ET envoyée par l'API create-contact-invitation
+        setInvitationUrl(`${process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000'}/signup/${data.invitation_token || 'token'}`)
         setInvitationId(data.invitation_id)
         setIsCreated(true)
+        setIsSent(true) // Marquer comme envoyée car l'API l'a déjà fait
         
         // Afficher un message différent si l'invitation existait déjà
         if (data.existing) {
           console.log('Invitation existante réutilisée')
         }
+        
+        console.log('Invitation créée et envoyée avec succès:', data.message)
       } else {
         console.error('Erreur serveur:', data)
         setError(data.error || data.details || 'Erreur lors de la création de l\'invitation')
@@ -135,62 +141,6 @@ export default function InvitationModal({ message, onClose }: InvitationModalPro
     }
   }
 
-  const sendInvitation = async () => {
-    try {
-      // Utiliser le même token que pour create-invitation
-      const authToken = token || localStorage.getItem('authToken') || localStorage.getItem('access_token')
-      
-      if (!authToken) {
-        setError('Token d\'authentification manquant pour l\'envoi.')
-        return
-      }
-
-      const response = await fetch('/api/accounts/send-invitation', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`
-        },
-        body: JSON.stringify({
-          invitation_id: invitationId,
-          custom_message: customMessage
-        })
-      })
-
-      console.log('Response status:', response.status)
-      console.log('Response ok:', response.ok)
-
-      if (!response.ok) {
-        const errorText = await response.text()
-        console.error('Error response text:', errorText)
-        try {
-          const errorData = JSON.parse(errorText)
-          console.error('Error data:', errorData)
-          setError(errorData.error || errorData.details || 'Erreur lors de l\'envoi')
-        } catch (e) {
-          setError(`Erreur ${response.status}: ${errorText}`)
-        }
-        return
-      }
-
-      const data = await response.json()
-
-      if (data.success) {
-        alert('Invitation envoyée avec succès !')
-        onClose()
-      } else {
-        setError(data.error || 'Erreur lors de l\'envoi')
-      }
-    } catch (err) {
-      console.error('Erreur lors de l\'envoi:', err)
-      // En cas d'erreur d'envoi, afficher le lien pour partage manuel
-      if (invitationUrl) {
-        setError(`Erreur d'envoi email. Lien d'invitation disponible ci-dessous pour partage manuel.`)
-      } else {
-        setError('Erreur de connexion')
-      }
-    }
-  }
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(window.location.origin + invitationUrl)
@@ -301,9 +251,9 @@ export default function InvitationModal({ message, onClose }: InvitationModalPro
               <div className="flex items-start gap-3 mb-4">
                 <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="font-medium text-green-800">Invitation créée avec succès !</h4>
+                  <h4 className="font-medium text-green-800">Invitation créée et envoyée avec succès !</h4>
                   <p className="text-sm text-green-700">
-                    Le lien d'inscription sécurisé a été généré pour {message.email}
+                    Le lien d'inscription sécurisé a été généré et envoyé par email à {message.email}
                   </p>
                 </div>
               </div>
@@ -369,15 +319,9 @@ export default function InvitationModal({ message, onClose }: InvitationModalPro
                 </Button>
               </>
             ) : (
-              <>
-                <Button onClick={onClose} variant="outline" className="flex-1">
-                  Fermer
-                </Button>
-                <Button onClick={sendInvitation} className="flex-1">
-                  <Mail className="h-4 w-4 mr-2" />
-                  Envoyer par email
-                </Button>
-              </>
+              <Button onClick={onClose} className="w-full">
+                Fermer
+              </Button>
             )}
           </div>
         </CardContent>
