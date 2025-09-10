@@ -8,11 +8,16 @@ from rest_framework import serializers
 
 class ContactMessageSerializer(serializers.ModelSerializer):
     is_recent = serializers.ReadOnlyField()
+    timestamp = serializers.SerializerMethodField()
     
     class Meta:
         model = ContactMessage
-        fields = ['id', 'name', 'email', 'subject', 'message', 'created_at', 'read', 'is_recent']
+        fields = ['id', 'name', 'email', 'subject', 'message', 'created_at', 'timestamp', 'read', 'is_recent']
         read_only_fields = ['id', 'created_at']
+    
+    def get_timestamp(self, obj):
+        """Retourner created_at au format ISO pour éviter Invalid Date"""
+        return obj.created_at.isoformat() if obj.created_at else None
 
 class ContactMessageCreateView(generics.CreateAPIView):
     """Créer un nouveau message de contact (public)"""
