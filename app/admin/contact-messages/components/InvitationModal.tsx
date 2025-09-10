@@ -67,7 +67,7 @@ export default function InvitationModal({ message, onClose }: InvitationModalPro
       }
       console.log('Corps de la requête:', requestBody)
 
-      const response = await fetch('https://sales-tracker-pro-v2.onrender.com/api/accounts/client-invitations/', {
+      const response = await fetch('https://sales-tracker-pro-v2.onrender.com/api/accounts/create-contact-invitation/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ export default function InvitationModal({ message, onClose }: InvitationModalPro
           authToken = await refreshTokenFn()
           
           // Refaire la requête avec le nouveau token
-          const retryResponse = await fetch('https://sales-tracker-pro-v2.onrender.com/api/accounts/client-invitations/', {
+          const retryResponse = await fetch('https://sales-tracker-pro-v2.onrender.com/api/accounts/create-contact-invitation/', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
