@@ -59,7 +59,10 @@ export default function ContactMessagesPage() {
       })
       if (response.ok) {
         const data = await response.json()
-        setMessages(data.messages || [])
+        console.log('API Response:', data)
+        setMessages(data || [])
+      } else {
+        console.error('API Error:', response.status, response.statusText)
       }
     } catch (error) {
       console.error('Erreur lors du chargement des messages:', error)
@@ -72,7 +75,7 @@ export default function ContactMessagesPage() {
     try {
       const token = localStorage.getItem('authToken')
       const response = await fetch(`https://sales-tracker-pro-v2.onrender.com/api/accounts/contact-messages/${messageId}/read/`, {
-        method: 'POST',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
