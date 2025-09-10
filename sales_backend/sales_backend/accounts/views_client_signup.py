@@ -116,6 +116,12 @@ def client_signup_with_token(request, token):
                     is_active=True
                 )
                 
+                # Créer le profil avec le lien vers l'admin qui a envoyé l'invitation
+                from .models import UserProfile
+                profile, created = UserProfile.objects.get_or_create(user=user)
+                profile.created_by = invitation.sent_by
+                profile.save()
+                
                 # Marquer l'invitation comme utilisée
                 invitation.status = 'accepted'
                 invitation.used_at = timezone.now()

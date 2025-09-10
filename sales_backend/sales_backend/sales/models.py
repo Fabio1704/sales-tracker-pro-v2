@@ -8,6 +8,7 @@ def profile_upload_path(instance, filename):
 
 class ModelProfile(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='model_profiles')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_model_profiles', null=True, blank=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     profile_photo = models.ImageField(upload_to=profile_upload_path, blank=True, null=True)

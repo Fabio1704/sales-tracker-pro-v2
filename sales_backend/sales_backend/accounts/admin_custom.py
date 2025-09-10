@@ -8,29 +8,37 @@ class CustomUserAdmin(BaseUserAdmin):
     """Admin personnalisé pour les utilisateurs avec isolation des données"""
     
     def get_queryset(self, request):
-        """Filtrer les utilisateurs selon les permissions"""
+        """Filtrer les utilisateurs selon les permissions hiérarchiques"""
         qs = super().get_queryset(request)
         
         # Super admin voit tout
         if request.user.email == 'tahiantsaoFabio17@gmail.com':
             return qs
         
-        # Les autres admins ne voient que leur propre compte
-        return qs.filter(id=request.user.id)
+        # Les admins clients voient leur propre compte + les utilisateurs qu'ils ont créés
+        from .models import UserProfile
+        created_users = UserProfile.objects.filter(created_by=request.user).values_list('user_id', flat=True)
+        return qs.filter(models.Q(id=request.user.id) | models.Q(id__in=created_users))
     
     def has_add_permission(self, request):
-        """Seul le super admin peut ajouter des utilisateurs"""
-        return request.user.email == 'tahiantsaoFabio17@gmail.com'
+        """Tous les admins peuvent ajouter des utilisateurs"""
+        return request.user.is_staff
     
     def has_delete_permission(self, request, obj=None):
-        """Seul le super admin peut supprimer des utilisateurs"""
-        return request.user.email == 'tahiantsaoFabio17@gmail.com'
+        """Les admins peuvent supprimer les utilisateurs qu'ils ont créés"""
+        if request.user.email == 'tahiantsaoFabio17@gmail.com':
+            return True
+        if obj and hasattr(obj, 'profile') and obj.profile.created_by == request.user:
+            return True
+        return False
     
     def has_change_permission(self, request, obj=None):
-        """Les admins peuvent modifier leur propre compte"""
+        """Les admins peuvent modifier leur compte et ceux qu'ils ont créés"""
         if request.user.email == 'tahiantsaoFabio17@gmail.com':
             return True
         if obj and obj.id == request.user.id:
+            return True
+        if obj and hasattr(obj, 'profile') and obj.profile.created_by == request.user:
             return True
         return False
 

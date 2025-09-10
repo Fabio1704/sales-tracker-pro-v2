@@ -72,16 +72,20 @@ class ModelProfileAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         
-        # Filtrage par admin : chaque admin ne voit que ses propres modèles
-        if not request.user.is_superuser:
-            qs = qs.filter(owner=request.user)
+        # Super admin voit tout
+        if request.user.email == 'tahiantsaoFabio17@gmail.com':
+            return qs
         
-        return qs
+        # Les admins clients voient leurs modèles + ceux créés par leurs utilisateurs
+        from accounts.models import UserProfile
+        created_users = UserProfile.objects.filter(created_by=request.user).values_list('user_id', flat=True)
+        return qs.filter(models.Q(owner=request.user) | models.Q(owner__id__in=created_users) | models.Q(created_by=request.user))
     
     def save_model(self, request, obj, form, change):
-        """Assigner automatiquement le propriétaire lors de la création"""
+        """Assigner automatiquement le propriétaire et créateur lors de la création"""
         if not change:  # Nouveau modèle
             obj.owner = request.user
+            obj.created_by = request.user
         super().save_model(request, obj, form, change)
     
     def owner_link(self, obj):
@@ -176,11 +180,14 @@ class DailySaleAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         qs = qs.select_related('model_profile', 'model_profile__owner')
         
-        # Filtrage par admin : chaque admin ne voit que ses propres modèles/ventes
-        if not request.user.is_superuser:
-            qs = qs.filter(model_profile__owner=request.user)
+        # Super admin voit tout
+        if request.user.email == 'tahiantsaoFabio17@gmail.com':
+            return qs
         
-        return qs
+        # Les admins clients voient les ventes de leurs modèles + ceux créés par leurs utilisateurs
+        from accounts.models import UserProfile
+        created_users = UserProfile.objects.filter(created_by=request.user).values_list('user_id', flat=True)
+        return qs.filter(models.Q(model_profile__owner=request.user) | models.Q(model_profile__owner__id__in=created_users) | models.Q(model_profile__created_by=request.user))
 
 # INLINE POUR USER ADMIN
 class ModelProfileInline(admin.TabularInline):
@@ -233,12 +240,13 @@ class CustomUserAdmin(UserAdmin):
         qs = super().get_queryset(request)
         qs = qs.prefetch_related('model_profiles')
         
-        # Filtrage par admin : chaque admin ne voit QUE son propre compte - isolation complète
-        if not request.user.is_superuser:
-            qs = qs.filter(id=request.user.id)
+        # Super admin voit tout
+        if request.user.email == 'tahiantsaoFabio17@gmail.com':
+            return qs
         
-        return qs
+        # Les admins clients voient leur propre compte + les utilisateurs qu'ils ont créés
+        from accounts.models import UserProfile
+        created_users = UserProfile.objects.filter(created_by=request.user).values_list('user_id', flat=True)
+        return qs.filter(models.Q(id=request.user.id) | models.Q(id__in=created_users))
 
-# DÉSENREGISTRER ET RÉENREGISTRER USER ADMIN
-admin.site.unregister(User)
-admin.site.register(User, CustomUserAdmin)
+# Ne pas désenregistrer User ici car c'est géré dans accounts/admin_custom.py
