@@ -3,6 +3,7 @@ from . import views
 from . import views_invitation
 from . import views_contact_messages
 from . import views_contact_invitations
+from . import views_client_signup
 
 urlpatterns = [
     # Authentification
@@ -27,6 +28,9 @@ urlpatterns = [
     
     # Création d'invitations depuis contact
     path('create-contact-invitation/', views_contact_invitations.create_contact_invitation, name='create-contact-invitation'),
+    
+    # Inscription client avec token
+    path('signup/<str:token>/', views_client_signup.client_signup_with_token, name='client-signup-with-token'),
 ]
     # Firebase et 2FA (désactivé)
     # path('enable-2fa/', views_firebase.enable_2fa, name='enable_2fa'),
