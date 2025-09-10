@@ -44,6 +44,11 @@ def client_signup_with_token(request, token):
         # Retourner les informations de l'invitation pour pré-remplir le formulaire
         return Response({
             'success': True,
+            'contact_name': invitation.contact_name,
+            'contact_email': invitation.contact_email,
+            'contact_subject': invitation.contact_subject,
+            'expires_at': invitation.expires_at,
+            'email': invitation.contact_email,  # Ajout pour compatibilité frontend
             'invitation_data': {
                 'contact_name': invitation.contact_name,
                 'contact_email': invitation.contact_email,
