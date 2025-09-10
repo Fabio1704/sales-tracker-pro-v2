@@ -67,7 +67,12 @@ export default function DashboardPage() {
       }
 
       console.log('🔄 Chargement des modèles...');
+      
+      // Forcer le rafraîchissement en vidant le cache
+      localStorage.removeItem('models_cache');
+      
       const modelsData = await apiService.getModels();
+      console.log('📊 Modèles reçus:', modelsData);
       setModels(modelsData);
       
     } catch (err: any) {
