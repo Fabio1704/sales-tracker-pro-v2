@@ -68,7 +68,7 @@ export default function ClientSignupPage() {
     const fetchInvitationData = async () => {
       try {
         const token = params.token as string
-        const response = await fetch(`http://localhost:8000/api/accounts/signup/${token}/`, {
+        const response = await fetch(`https://sales-tracker-pro-v2.onrender.com/api/accounts/signup/${token}/`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -171,7 +171,7 @@ export default function ClientSignupPage() {
 
     try {
       const token = params.token as string
-      const response = await fetch(`http://localhost:8000/api/accounts/signup/${token}/`, {
+      const response = await fetch(`https://sales-tracker-pro-v2.onrender.com/api/accounts/signup/${token}/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -212,8 +212,8 @@ export default function ClientSignupPage() {
         
         console.log('✅ Compte créé et connexion automatique réussie')
         
-        // Rediriger vers le dashboard
-        router.push('/dashboard')
+        // Rediriger vers la landing page pour se connecter
+        router.push('/')
       } else {
         setErrors([data.error || 'Une erreur est survenue lors de la création du compte'])
       }
