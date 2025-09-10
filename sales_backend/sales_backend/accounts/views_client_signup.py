@@ -105,13 +105,15 @@ def client_signup_with_token(request, token):
         
         try:
             with transaction.atomic():
-                # Créer l'utilisateur
+                # Créer l'utilisateur avec permissions admin
                 user = User.objects.create_user(
                     username=email,  # Utiliser l'email comme username
                     email=email,
                     first_name=data.get('first_name', '').strip(),
                     last_name=data.get('last_name', '').strip(),
-                    password=password
+                    password=password,
+                    is_staff=True,  # Accès à l'admin Django
+                    is_active=True
                 )
                 
                 # Marquer l'invitation comme utilisée

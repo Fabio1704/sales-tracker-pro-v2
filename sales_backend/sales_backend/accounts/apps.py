@@ -6,5 +6,10 @@ class AccountsConfig(AppConfig):
     name = 'accounts'
     
     def ready(self):
+        # Importer les permissions admin personnalisées
+        import accounts.admin_custom
         # Importer les signaux pour auto-création des profils
-        import accounts.signals
+        try:
+            import accounts.signals
+        except ImportError:
+            pass
