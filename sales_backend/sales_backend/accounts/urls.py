@@ -14,8 +14,8 @@ urlpatterns = [
     path('admin/users/', views.AdminUserView.as_view(), name='admin-user-list'),
     
     # Réinitialisation de mot de passe
-    path('accounts/password-reset/', views.PasswordResetRequestView.as_view(), name='password_reset_request'),
-    path('accounts/password-reset/confirm/', views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('password-reset/', views.PasswordResetRequestView.as_view(), name='password_reset_request'),
+    path('password-reset/confirm/', views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     
     # Messages de contact
     path('contact-messages/', views_contact_messages.ContactMessageCreateView.as_view(), name='contact-message-create'),
