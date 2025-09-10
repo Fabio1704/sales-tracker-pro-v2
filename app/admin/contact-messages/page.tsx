@@ -52,7 +52,7 @@ export default function ContactMessagesPage() {
     try {
       setIsLoading(true)
       const token = localStorage.getItem('authToken')
-      const response = await fetch('https://sales-tracker-pro-v2.onrender.com/api/accounts/contact-messages/', {
+      const response = await fetch('https://sales-tracker-pro-v2.onrender.com/api/accounts/contact-messages/list/', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -71,7 +71,7 @@ export default function ContactMessagesPage() {
   const markAsRead = async (messageId: number) => {
     try {
       const token = localStorage.getItem('authToken')
-      const response = await fetch(`https://sales-tracker-pro-v2.onrender.com/api/accounts/contact-messages/${messageId}/mark_read/`, {
+      const response = await fetch(`https://sales-tracker-pro-v2.onrender.com/api/accounts/contact-messages/${messageId}/read/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
