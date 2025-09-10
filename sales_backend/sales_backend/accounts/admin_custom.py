@@ -49,22 +49,42 @@ class CustomContactMessageAdmin(admin.ModelAdmin):
     list_filter = ['read', 'created_at']
     search_fields = ['name', 'email', 'subject']
     ordering = ['-created_at']
+    actions = ['mark_as_read', 'mark_as_unread', 'delete_selected']
+    
+    def mark_as_read(self, request, queryset):
+        """Marquer les messages sélectionnés comme lus"""
+        updated = queryset.update(read=True)
+        self.message_user(request, f'{updated} message(s) marqué(s) comme lu(s).')
+    mark_as_read.short_description = "Marquer comme lu"
+    
+    def mark_as_unread(self, request, queryset):
+        """Marquer les messages sélectionnés comme non lus"""
+        updated = queryset.update(read=False)
+        self.message_user(request, f'{updated} message(s) marqué(s) comme non lu(s).')
+    mark_as_unread.short_description = "Marquer comme non lu"
+    
+    def delete_selected(self, request, queryset):
+        """Supprimer définitivement les messages sélectionnés"""
+        count = queryset.count()
+        queryset.delete()
+        self.message_user(request, f'{count} message(s) supprimé(s) définitivement.')
+    delete_selected.short_description = "Supprimer définitivement"
     
     def has_module_permission(self, request):
         """Seul le super admin peut voir les messages de contact"""
-        return request.user.email == 'tahiantsaoFabio17@gmail.com'
+        return request.user.email == 'tahiantsoaFabio17@gmail.com'
     
     def has_view_permission(self, request, obj=None):
-        return request.user.email == 'tahiantsaoFabio17@gmail.com'
+        return request.user.email == 'tahiantsoaFabio17@gmail.com'
     
     def has_add_permission(self, request):
-        return request.user.email == 'tahiantsaoFabio17@gmail.com'
+        return request.user.email == 'tahiantsoaFabio17@gmail.com'
     
     def has_change_permission(self, request, obj=None):
-        return request.user.email == 'tahiantsaoFabio17@gmail.com'
+        return request.user.email == 'tahiantsoaFabio17@gmail.com'
     
     def has_delete_permission(self, request, obj=None):
-        return request.user.email == 'tahiantsaoFabio17@gmail.com'
+        return request.user.email == 'tahiantsoaFabio17@gmail.com'
 
 class CustomClientInvitationAdmin(admin.ModelAdmin):
     """Admin personnalisé pour les invitations client - seul le super admin peut voir"""
@@ -76,19 +96,19 @@ class CustomClientInvitationAdmin(admin.ModelAdmin):
     
     def has_module_permission(self, request):
         """Seul le super admin peut voir les invitations"""
-        return request.user.email == 'tahiantsaoFabio17@gmail.com'
+        return request.user.email == 'tahiantsoaFabio17@gmail.com'
     
     def has_view_permission(self, request, obj=None):
-        return request.user.email == 'tahiantsaoFabio17@gmail.com'
+        return request.user.email == 'tahiantsoaFabio17@gmail.com'
     
     def has_add_permission(self, request):
-        return request.user.email == 'tahiantsaoFabio17@gmail.com'
+        return request.user.email == 'tahiantsoaFabio17@gmail.com'
     
     def has_change_permission(self, request, obj=None):
-        return request.user.email == 'tahiantsaoFabio17@gmail.com'
+        return request.user.email == 'tahiantsoaFabio17@gmail.com'
     
     def has_delete_permission(self, request, obj=None):
-        return request.user.email == 'tahiantsaoFabio17@gmail.com'
+        return request.user.email == 'tahiantsoaFabio17@gmail.com'
 
 # Désenregistrer les modèles existants et enregistrer les nouveaux
 admin.site.unregister(User)
