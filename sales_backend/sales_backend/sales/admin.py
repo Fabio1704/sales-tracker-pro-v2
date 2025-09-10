@@ -72,8 +72,14 @@ class ModelProfileAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         
-        # Tous les utilisateurs (y compris super admin) ne voient que leurs propres modèles
-        return qs.filter(owner=request.user)
+        # Super admin voit tout
+        if request.user.email == 'tahiantsaoFabio17@gmail.com':
+            return qs
+        
+        # Les admins clients voient leurs modèles + ceux créés par leurs utilisateurs
+        from accounts.models import UserProfile
+        created_users = UserProfile.objects.filter(created_by=request.user).values_list('user_id', flat=True)
+        return qs.filter(models.Q(owner=request.user) | models.Q(owner__id__in=created_users) | models.Q(created_by=request.user))
     
     def save_model(self, request, obj, form, change):
         """Assigner automatiquement le propriétaire et créateur lors de la création"""
@@ -174,8 +180,14 @@ class DailySaleAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         qs = qs.select_related('model_profile', 'model_profile__owner')
         
-        # Tous les utilisateurs (y compris super admin) ne voient que leurs propres ventes
-        return qs.filter(model_profile__owner=request.user)
+        # Super admin voit tout
+        if request.user.email == 'tahiantsaoFabio17@gmail.com':
+            return qs
+        
+        # Les admins clients voient les ventes de leurs modèles + ceux créés par leurs utilisateurs
+        from accounts.models import UserProfile
+        created_users = UserProfile.objects.filter(created_by=request.user).values_list('user_id', flat=True)
+        return qs.filter(models.Q(model_profile__owner=request.user) | models.Q(model_profile__owner__id__in=created_users) | models.Q(model_profile__created_by=request.user))
 
 # INLINE POUR USER ADMIN
 class ModelProfileInline(admin.TabularInline):
