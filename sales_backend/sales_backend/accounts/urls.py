@@ -21,6 +21,7 @@ urlpatterns = [
     path('contact-messages/', views_contact_messages.ContactMessageCreateView.as_view(), name='contact-message-create'),
     path('contact-messages/list/', views_contact_messages.ContactMessageListView.as_view(), name='contact-message-list'),
     path('contact-messages/<int:message_id>/read/', views_contact_messages.mark_message_as_read, name='mark-message-read'),
+    path('contact-messages/<int:message_id>/', views_contact_messages.delete_message, name='delete-message'),
     path('contact-messages/unread-count/', views_contact_messages.unread_messages_count, name='unread-messages-count'),
     
     # Invitations clients (simplified)

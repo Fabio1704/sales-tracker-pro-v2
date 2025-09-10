@@ -49,6 +49,20 @@ def mark_message_as_read(request, message_id):
     except ContactMessage.DoesNotExist:
         return Response({'error': 'Message not found'}, status=status.HTTP_404_NOT_FOUND)
 
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_message(request, message_id):
+    """Supprimer définitivement un message (admin seulement)"""
+    if not request.user.is_superuser:
+        return Response({'error': 'Permission denied'}, status=status.HTTP_403_FORBIDDEN)
+    
+    try:
+        message = ContactMessage.objects.get(id=message_id)
+        message.delete()
+        return Response({'message': 'Message supprimé avec succès'}, status=status.HTTP_204_NO_CONTENT)
+    except ContactMessage.DoesNotExist:
+        return Response({'error': 'Message not found'}, status=status.HTTP_404_NOT_FOUND)
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def unread_messages_count(request):
