@@ -63,7 +63,8 @@ export default function InvitationModal({ message, onClose }: InvitationModalPro
         contact_name: message.name,
         contact_email: message.email,
         contact_subject: message.subject,
-        contact_message: message.message
+        contact_message: message.message,
+        invitation_type: 'email'
       }
       console.log('Corps de la requête:', requestBody)
 
