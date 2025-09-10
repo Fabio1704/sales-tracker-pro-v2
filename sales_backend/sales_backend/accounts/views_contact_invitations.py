@@ -138,45 +138,93 @@ def create_contact_invitation(request):
 def send_invitation_email(invitation, invitation_url):
     """Envoie l'invitation par email"""
     try:
-        subject = f"🎉 Invitation à rejoindre Sales Tracker Pro - {invitation.contact_subject}"
+        subject = f"Invitation Sales Tracker Pro - Créez votre compte maintenant"
         
-        message = f"""
+        # Template HTML professionnel
+        html_message = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Invitation Sales Tracker Pro</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+        <h1 style="color: white; margin: 0; font-size: 28px;">Sales Tracker Pro</h1>
+        <p style="color: #f0f0f0; margin: 10px 0 0 0;">Plateforme de Gestion des Ventes</p>
+    </div>
+    
+    <div style="background: white; padding: 40px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px;">
+        <h2 style="color: #333; margin-top: 0;">Bonjour {invitation.contact_name},</h2>
+        
+        <p>Nous avons bien reçu votre demande concernant <strong>"{invitation.contact_subject}"</strong>.</p>
+        
+        <p>Vous êtes maintenant invité(e) à créer votre compte sécurisé sur notre plateforme Sales Tracker Pro.</p>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="{invitation_url}" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">🚀 CRÉER MON COMPTE</a>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 5px; margin: 20px 0;">
+            <h3 style="color: #495057; margin-top: 0;">Votre accès inclut :</h3>
+            <ul style="margin: 0; padding-left: 20px;">
+                <li>✅ Tableau de bord personnalisé</li>
+                <li>✅ Suivi des ventes en temps réel</li>
+                <li>✅ Rapports et analyses détaillés</li>
+                <li>✅ Support client dédié</li>
+            </ul>
+        </div>
+        
+        <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin: 20px 0;">
+            <p style="margin: 0; color: #856404;"><strong>⏰ Important :</strong> Cette invitation expire le {invitation.expires_at.strftime('%d/%m/%Y à %H:%M')}</p>
+        </div>
+        
+        <p>Si vous avez des questions, contactez-nous à <a href="mailto:support@sales-tracker-pro.com">support@sales-tracker-pro.com</a></p>
+        
+        <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+        
+        <p style="color: #6c757d; font-size: 14px; text-align: center;">
+            Cordialement,<br>
+            <strong>L'équipe Sales Tracker Pro</strong><br>
+            <a href="https://sales-tracker-pro-v3.vercel.app">sales-tracker-pro-v3.vercel.app</a>
+        </p>
+        
+        <p style="color: #adb5bd; font-size: 12px; text-align: center; margin-top: 20px;">
+            Cet email a été envoyé en réponse à votre demande de contact.<br>
+            Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet email.
+        </p>
+    </div>
+</body>
+</html>
+        """.strip()
+        
+        # Version texte simple pour compatibilité
+        text_message = f"""
 Bonjour {invitation.contact_name},
 
-Merci pour votre intérêt pour Sales Tracker Pro !
+Nous avons bien reçu votre demande concernant "{invitation.contact_subject}".
 
-Nous avons bien reçu votre message concernant : "{invitation.contact_subject}"
-
-Vous êtes maintenant invité(e) à créer votre compte sécurisé sur notre plateforme.
-
-🔗 Cliquez sur ce lien pour vous inscrire :
+Vous êtes invité(e) à créer votre compte Sales Tracker Pro :
 {invitation_url}
 
-⏰ Cette invitation expire le {invitation.expires_at.strftime('%d/%m/%Y à %H:%M')}
-
-Une fois votre compte créé, vous aurez accès à :
-✅ Tableau de bord personnalisé
-✅ Suivi des ventes en temps réel
-✅ Rapports détaillés
-✅ Support client dédié
-
-Si vous avez des questions, n'hésitez pas à nous contacter.
+Cette invitation expire le {invitation.expires_at.strftime('%d/%m/%Y à %H:%M')}
 
 Cordialement,
 L'équipe Sales Tracker Pro
-
----
-Cet email a été envoyé en réponse à votre demande de contact.
-Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet email.
+https://sales-tracker-pro-v3.vercel.app
         """.strip()
         
-        send_mail(
+        from django.core.mail import EmailMultiAlternatives
+        
+        # Créer l'email avec version HTML et texte
+        email = EmailMultiAlternatives(
             subject=subject,
-            message=message,
+            body=text_message,
             from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[invitation.contact_email],
-            fail_silently=True,  # Ne pas faire échouer si l'email ne peut pas être envoyé
+            to=[invitation.contact_email]
         )
+        email.attach_alternative(html_message, "text/html")
+        email.send(fail_silently=True)
         
         return True
         

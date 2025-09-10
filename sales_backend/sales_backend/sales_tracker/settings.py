@@ -208,7 +208,7 @@ else:
     DEFAULT_FROM_EMAIL = 'noreply@sales-tracker-pro.com'
 
 # URL du frontend pour les liens d'invitation
-FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')
+FRONTEND_URL = os.getenv('FRONTEND_URL', 'https://sales-tracker-pro-v3.vercel.app')
 
 # Configuration Twilio pour SMS (optionnel)
 TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
