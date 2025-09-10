@@ -91,10 +91,46 @@ def client_signup_with_token(request, token):
             }, status=status.HTTP_400_BAD_REQUEST)
         
         # Vérifier si l'utilisateur existe déjà
-        if User.objects.filter(email=email).exists():
-            return Response({
-                'error': 'Un compte avec cet email existe déjà'
-            }, status=status.HTTP_400_BAD_REQUEST)
+        existing_user = User.objects.filter(email=email).first()
+        if existing_user:
+            # Si l'utilisateur existe, le lier à l'invitation au lieu de créer un nouveau compte
+            try:
+                with transaction.atomic():
+                    # Créer/mettre à jour le profil avec le lien vers l'admin qui a envoyé l'invitation
+                    from .models import UserProfile
+                    profile, created = UserProfile.objects.get_or_create(user=existing_user)
+                    if not profile.created_by:  # Seulement si pas déjà assigné
+                        profile.created_by = invitation.sent_by
+                    
+                    # S'assurer que l'utilisateur a les permissions admin
+                    existing_user.is_staff = True
+                    existing_user.is_active = True
+                    existing_user.save()
+                    profile.save()
+                    
+                    # Marquer l'invitation comme utilisée
+                    invitation.status = 'accepted'
+                    invitation.used_at = timezone.now()
+                    invitation.created_user = existing_user
+                    invitation.ip_address_used = request.META.get('REMOTE_ADDR', '')
+                    invitation.user_agent_used = request.META.get('HTTP_USER_AGENT', '')[:500]
+                    invitation.save()
+                    
+                    logger.info(f"Utilisateur existant lié à l'invitation: {email} (ID: {existing_user.id})")
+                    
+                    return Response({
+                        'success': True,
+                        'message': 'Compte lié avec succès à votre invitation',
+                        'user_id': existing_user.id,
+                        'existing_user': True,
+                        'redirect_url': '/'
+                    }, status=status.HTTP_200_OK)
+                    
+            except Exception as e:
+                logger.error(f"Erreur liaison compte existant: {str(e)}")
+                return Response({
+                    'error': 'Erreur lors de la liaison du compte existant'
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         # Validation du mot de passe
         password = data.get('password')
