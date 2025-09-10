@@ -139,25 +139,10 @@ class ClientInvitationAdmin(FilteredClientInvitationAdmin):
         }),
     )
     
-    def get_actions(self, obj):
-        """Affiche les actions disponibles"""
-        actions = []
-        
-        if obj.status == 'pending' and not obj.is_expired():
-            # Bouton pour envoyer l'invitation
-            send_url = reverse('admin:send_invitation', args=[obj.pk])
-            actions.append(f'<a href="{send_url}" class="button">📧 Envoyer</a>')
-            
-            # Bouton pour copier le lien
-            copy_link = f'<button onclick="copyInvitationLink(\'{obj.get_invitation_url()}\')">🔗 Copier lien</button>'
-            actions.append(copy_link)
-        
-        if obj.status == 'pending':
-            # Bouton pour annuler
-            cancel_url = reverse('admin:cancel_invitation', args=[obj.pk])
-            actions.append(f'<a href="{cancel_url}" class="button" style="background-color: #dc3545;">❌ Annuler</a>')
-        
-        return format_html(' '.join(actions)) if actions else '-'
+    def get_actions(self, request):
+        """Retourne les actions disponibles pour l'admin"""
+        actions = super().get_actions(request)
+        return actions
     
     get_actions.short_description = 'Actions'
     get_actions.allow_tags = True
