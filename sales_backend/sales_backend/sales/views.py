@@ -271,7 +271,7 @@ class ModelProfileViewSet(viewsets.ModelViewSet):
         logger.info(f"ModelProfileViewSet - User: {self.request.user.email}, is_staff: {self.request.user.is_staff}")
         
         # Super admin voit SEULEMENT ses propres modèles
-        if self.request.user.email == 'tahiantsaoFabio17@gmail.com':
+        if self.request.user.email == 'tahiantsoaFabio17@gmail.com':
             queryset = ModelProfile.objects.filter(owner=self.request.user).order_by('-created_at')
             logger.info(f"Super admin queryset count: {queryset.count()}")
             return queryset

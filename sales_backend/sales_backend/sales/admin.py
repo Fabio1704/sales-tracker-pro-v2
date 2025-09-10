@@ -73,7 +73,7 @@ class ModelProfileAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         
         # Super admin voit tout
-        if request.user.email == 'tahiantsaoFabio17@gmail.com':
+        if request.user.email == 'tahiantsoaFabio17@gmail.com':
             return qs
         
         # Les admins clients voient leurs modèles + ceux créés par leurs utilisateurs
@@ -181,7 +181,7 @@ class DailySaleAdmin(admin.ModelAdmin):
         qs = qs.select_related('model_profile', 'model_profile__owner')
         
         # Super admin voit tout
-        if request.user.email == 'tahiantsaoFabio17@gmail.com':
+        if request.user.email == 'tahiantsoaFabio17@gmail.com':
             return qs
         
         # Les admins clients voient les ventes de leurs modèles + ceux créés par leurs utilisateurs
@@ -241,7 +241,7 @@ class CustomUserAdmin(UserAdmin):
         qs = qs.prefetch_related('model_profiles')
         
         # Super admin voit tout
-        if request.user.email == 'tahiantsaoFabio17@gmail.com':
+        if request.user.email == 'tahiantsoaFabio17@gmail.com':
             return qs
         
         # Les admins clients voient leur propre compte + les utilisateurs qu'ils ont créés
