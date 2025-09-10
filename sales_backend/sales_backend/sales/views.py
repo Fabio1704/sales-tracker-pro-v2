@@ -265,9 +265,16 @@ class ModelProfileViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
-        # Super admin voit tout
+        # Debug logging
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info(f"ModelProfileViewSet - User: {self.request.user.email}, is_staff: {self.request.user.is_staff}")
+        
+        # Super admin voit SEULEMENT ses propres modèles
         if self.request.user.email == 'tahiantsaoFabio17@gmail.com':
-            return ModelProfile.objects.filter(owner=self.request.user).order_by('-created_at')
+            queryset = ModelProfile.objects.filter(owner=self.request.user).order_by('-created_at')
+            logger.info(f"Super admin queryset count: {queryset.count()}")
+            return queryset
         
         # Les autres admins voient leurs modèles + ceux des utilisateurs qu'ils ont créés
         if self.request.user.is_staff:
@@ -279,10 +286,13 @@ class ModelProfileViewSet(viewsets.ModelViewSet):
                 Q(owner__in=created_users)
             ).order_by('-created_at')
             
+            logger.info(f"Admin queryset count: {queryset.count()}")
             return queryset
         else:
             # Utilisateur normal ne voit que ses propres modèles
-            return ModelProfile.objects.filter(owner=self.request.user)
+            queryset = ModelProfile.objects.filter(owner=self.request.user)
+            logger.info(f"User queryset count: {queryset.count()}")
+            return queryset
     
     def get_serializer_class(self):
         if self.action == 'create':
