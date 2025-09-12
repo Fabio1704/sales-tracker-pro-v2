@@ -72,19 +72,19 @@ class CustomContactMessageAdmin(admin.ModelAdmin):
     
     def has_module_permission(self, request):
         """Seul le super admin peut voir les messages de contact"""
-        return request.user.email == 'tahiantsoaFabio17@gmail.com'
+        return request.user.is_authenticated and request.user.email == 'tahiantsoaFabio17@gmail.com'
     
     def has_view_permission(self, request, obj=None):
-        return request.user.email == 'tahiantsoaFabio17@gmail.com'
+        return request.user.is_authenticated and request.user.email == 'tahiantsoaFabio17@gmail.com'
     
     def has_add_permission(self, request):
-        return request.user.email == 'tahiantsoaFabio17@gmail.com'
+        return request.user.is_authenticated and request.user.email == 'tahiantsoaFabio17@gmail.com'
     
     def has_change_permission(self, request, obj=None):
-        return request.user.email == 'tahiantsoaFabio17@gmail.com'
+        return request.user.is_authenticated and request.user.email == 'tahiantsoaFabio17@gmail.com'
     
     def has_delete_permission(self, request, obj=None):
-        return request.user.email == 'tahiantsoaFabio17@gmail.com'
+        return request.user.is_authenticated and request.user.email == 'tahiantsoaFabio17@gmail.com'
 
 class CustomClientInvitationAdmin(admin.ModelAdmin):
     """Admin personnalisé pour les invitations client - seul le super admin peut voir"""
@@ -96,19 +96,19 @@ class CustomClientInvitationAdmin(admin.ModelAdmin):
     
     def has_module_permission(self, request):
         """Seul le super admin peut voir les invitations"""
-        return request.user.email == 'tahiantsoaFabio17@gmail.com'
+        return request.user.is_authenticated and request.user.email == 'tahiantsoaFabio17@gmail.com'
     
     def has_view_permission(self, request, obj=None):
-        return request.user.email == 'tahiantsoaFabio17@gmail.com'
+        return request.user.is_authenticated and request.user.email == 'tahiantsoaFabio17@gmail.com'
     
     def has_add_permission(self, request):
-        return request.user.email == 'tahiantsoaFabio17@gmail.com'
+        return request.user.is_authenticated and request.user.email == 'tahiantsoaFabio17@gmail.com'
     
     def has_change_permission(self, request, obj=None):
-        return request.user.email == 'tahiantsoaFabio17@gmail.com'
+        return request.user.is_authenticated and request.user.email == 'tahiantsoaFabio17@gmail.com'
     
     def has_delete_permission(self, request, obj=None):
-        return request.user.email == 'tahiantsoaFabio17@gmail.com'
+        return request.user.is_authenticated and request.user.email == 'tahiantsoaFabio17@gmail.com'
 
 # Désenregistrer les modèles existants et enregistrer les nouveaux
 admin.site.unregister(User)
