@@ -67,6 +67,35 @@ class AdminUserView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=500)
 
+
+class DeleteGaelView(APIView):
+    """Vue spécifique pour supprimer Gael Rakotoharimanga (ID: 6)"""
+    permission_classes = [IsAdminUser]
+    
+    def delete(self, request):
+        if not request.user.is_superuser:
+            return Response({'error': 'Permission denied'}, status=403)
+        
+        try:
+            user = User.objects.get(id=6)  # ID fixe pour Gael
+            user_data = {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'first_name': user.first_name,
+                'last_name': user.last_name
+            }
+            user.delete()
+            return Response({
+                'success': True,
+                'message': f'Gael Rakotoharimanga supprimé avec succès',
+                'deleted_user': user_data
+            })
+        except User.DoesNotExist:
+            return Response({'error': 'Gael not found (already deleted?)'}, status=404)
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
+
     def post(self, request):
         serializer = CreateUserSerializer(data=request.data)
         if serializer.is_valid():

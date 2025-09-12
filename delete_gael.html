@@ -154,7 +154,7 @@
         async function deleteGaelDirect() {
             const token = getToken();
             if (!token) {
-                document.getElementById('result').innerHTML = '<p class="error">❌ Token d\'authentification manquant.</p>';
+                document.getElementById('result').innerHTML = '<p class="error">❌ Token d\'authentification manquant. Connectez-vous d\'abord.</p>';
                 return;
             }
             
@@ -163,24 +163,23 @@
             }
             
             try {
-                const cleanToken = token.replace(/[^\x00-\x7F]/g, "").trim();
-                
-                const response = await fetch(`${API_BASE}/admin/users/6/`, {
+                const response = await fetch(`${API_BASE}/admin/delete-gael/`, {
                     method: 'DELETE',
                     headers: {
-                        'Authorization': `Bearer ${cleanToken}`,
+                        'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     }
                 });
                 
                 const data = await response.json();
                 
-                if (data.success) {
+                if (response.ok) {
                     document.getElementById('result').innerHTML = `
                         <div class="success">
-                            <h3>✅ GAEL SUPPRIMÉ AVEC SUCCÈS!</h3>
-                            <p>${data.message}</p>
-                            <p><strong>Rechargez votre interface admin pour voir les changements.</strong></p>
+                            <h3>✅ SUPPRESSION RÉUSSIE</h3>
+                            <p><strong>Utilisateur supprimé:</strong> ${data.deleted_user.username}</p>
+                            <p><strong>Email:</strong> ${data.deleted_user.email}</p>
+                            <p><strong>Message:</strong> ${data.message}</p>
                         </div>
                     `;
                 } else {
@@ -188,6 +187,7 @@
                 }
             } catch (error) {
                 document.getElementById('result').innerHTML = `<p class="error">❌ Erreur: ${error.message}</p>`;
+                console.error('Erreur:', error);
             }
         }
         
