@@ -334,7 +334,7 @@ class ApiService {
       method: 'POST',
       body: JSON.stringify(userData),
     });
-  },
+  }
 
   // Récupérer tous les utilisateurs (admin only)
   async getUsers(): Promise<User[]> {
@@ -343,7 +343,7 @@ class ApiService {
     const response = await this.request(`/accounts/users/?t=${timestamp}`);
     console.log('🔍 API getUsers response:', response);
     return response;
-  },
+  }
 
   async getAdminUsers(): Promise<User[]> {
     return this.request('/admin/users/');
