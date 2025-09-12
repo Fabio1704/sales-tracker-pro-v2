@@ -243,7 +243,7 @@ const toggleTheme = () => {
       const timestamp = Date.now()
       
       const [usersResponse, modelsResponse] = await Promise.all([
-        apiService.getUsers(`?t=${timestamp}&nocache=${Math.random()}`),
+        apiService.getUsers(),
         apiService.getModels()
       ])
       
@@ -256,20 +256,9 @@ const toggleTheme = () => {
       // Charger les messages non lus
       await loadUnreadMessages();
       
-      const usersData: User[] = usersResponse;
+      let usersData: User[] = usersResponse;
       console.log('👥 Admin users data from API:', usersData);
       console.log('🔍 Utilisateurs trouvés:', usersData.map(u => ({ id: u.id, email: u.email, username: u.username })));
-      // Charger tous les utilisateurs avec endpoint admin
-      let usersData: User[] = [];
-      try {
-        usersData = await apiService.getUsers();
-        console.log('👥 Admin users data from API:', usersData);
-        console.log('🔍 Utilisateurs trouvés:', usersData.map(u => ({ id: u.id, email: u.email, username: u.username })));
-      } catch (error) {
-        console.error('❌ Erreur lors du chargement des utilisateurs:', error);
-        // Fallback: utiliser les utilisateurs normaux si l'endpoint admin n'existe pas
-        usersData = await apiService.getUsers();
-      }
       
       const usersWithStatus: User[] = usersData.map(user => {
         console.log(`👤 User ${user.username} (${user.first_name} ${user.last_name}):`, {
