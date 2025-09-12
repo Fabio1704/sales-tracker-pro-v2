@@ -95,7 +95,7 @@ export default function AdminPage() {
   const [dataLoading, setDataLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [refreshKey, setRefreshKey] = useState(0)
-  const [unreadMessages, setUnreadMessages] = useState(2) // Synchroniser avec les 2 messages visibles
+  const [unreadMessages, setUnreadMessages] = useState(0)
 
   // Polling pour synchronisation en temps réel
   const { isConnected: wsConnected } = useWebSocket((deletedUserData) => {
@@ -207,19 +207,23 @@ const toggleTheme = () => {
       console.log('🔑 Token utilisé pour messages:', token?.substring(0, 20) + '...');
       console.log('🔑 Token trouvé:', !!token);
       
-      // Vérifier les mises à jour via l'API - utiliser l'endpoint correct
-        const response = await fetch('https://sales-tracker-pro-v2.onrender.com/api/accounts/users/', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-      
-      console.log('📡 Réponse API:', response.status);
-      
+      // Récupérer tous les messages pour compter les non lus
+      const response = await fetch('https://sales-tracker-pro-v2.onrender.com/api/accounts/contact-messages/list/', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
       if (response.ok) {
-        const data = await response.json();
-        console.log('📧 Réponse unread count:', data);
-        setUnreadMessages(data.unread_count || 0);
+        const messages = await response.json();
+        console.log('📧 Messages récupérés:', messages);
+        
+        // Compter les messages non lus (read: false)
+        const unreadCount = messages.filter((msg: any) => !msg.read).length;
+        console.log('📧 Messages non lus comptés:', unreadCount);
+        setUnreadMessages(unreadCount);
       } else {
         console.log('❌ Erreur API:', response.status);
         setUnreadMessages(0);
