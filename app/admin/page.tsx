@@ -235,18 +235,17 @@ const toggleTheme = () => {
       setDataLoading(true);
       setError(null);
       
-      console.log('📊 Loading admin data...');
-      console.log('🧹 Vidage forcé du cache et des états...');
+      // Forcer le nettoyage complet du cache
+      localStorage.removeItem('adminUsers')
+      sessionStorage.clear()
       
-      // Vider tous les caches possibles
-      localStorage.removeItem('cached_users');
-      localStorage.removeItem('admin_cache');
+      // Ajouter timestamp pour éviter le cache
+      const timestamp = Date.now()
       
-      // Ajouter un timestamp pour forcer le rechargement
-      const timestamp = Date.now();
-      
-      // Charger les messages non lus
-      await loadUnreadMessages();
+      const [usersResponse, modelsResponse] = await Promise.all([
+        apiService.getUsers(`?t=${timestamp}&nocache=${Math.random()}`),
+        apiService.getModels()
+      ])
       
       // Forcer le rechargement en vidant d'abord les états
       setUsers([]);
@@ -254,6 +253,12 @@ const toggleTheme = () => {
       setAllSales([]);
       setActivities([]);
       
+      // Charger les messages non lus
+      await loadUnreadMessages();
+      
+      const usersData: User[] = usersResponse;
+      console.log('👥 Admin users data from API:', usersData);
+      console.log('🔍 Utilisateurs trouvés:', usersData.map(u => ({ id: u.id, email: u.email, username: u.username })));
       // Charger tous les utilisateurs avec endpoint admin
       let usersData: User[] = [];
       try {

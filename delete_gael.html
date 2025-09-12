@@ -16,6 +16,15 @@
     
     <div id="status"></div>
     
+    <div style="margin: 20px 0; padding: 15px; background-color: #f0f8ff; border: 1px solid #0066cc; border-radius: 5px;">
+        <h3>🔑 Saisir votre token d'authentification :</h3>
+        <p>1. Connectez-vous sur : <a href="https://sales-tracker-pro-v3.vercel.app/admin" target="_blank">Interface Admin</a></p>
+        <p>2. Ouvrez F12 → Console → tapez : <code>localStorage.getItem('authToken')</code></p>
+        <p>3. Copiez le token (sans les guillemets) et collez-le ci-dessous :</p>
+        <input type="text" id="tokenInput" placeholder="Collez votre token ici..." style="width: 100%; padding: 8px; margin: 5px 0;">
+        <button onclick="saveToken()" style="background-color: #28a745; color: white; padding: 8px 15px;">Sauvegarder Token</button>
+    </div>
+    
     <button onclick="checkUser()">1. Vérifier si Gael existe</button>
     <button onclick="deleteUser()" style="background-color: #ff4444; color: white;">2. SUPPRIMER DÉFINITIVEMENT</button>
     
@@ -23,6 +32,16 @@
 
     <script>
         const API_BASE = 'https://sales-tracker-pro-v2.onrender.com/api';
+        
+        function saveToken() {
+            const token = document.getElementById('tokenInput').value.trim();
+            if (token) {
+                localStorage.setItem('authToken', token);
+                showStatus('✅ Token sauvegardé avec succès !', 'success');
+            } else {
+                showStatus('❌ Veuillez saisir un token valide', 'error');
+            }
+        }
         
         function getToken() {
             return localStorage.getItem('authToken');
@@ -35,12 +54,17 @@
                 return;
             }
             
+            showStatus('🔍 Vérification en cours...', 'info');
+            
             try {
+                // Nettoyer le token pour éviter les caractères non-ASCII
+                const cleanToken = token.replace(/[^\x00-\x7F]/g, "").trim();
+                
                 const response = await fetch(`${API_BASE}/accounts/temp/cleanup-gael/`, {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
+                        'Authorization': `Bearer ${cleanToken}`,
+                        'Content-Type': 'application/json',
                     }
                 });
                 
@@ -58,7 +82,20 @@
                     document.getElementById('result').innerHTML = '<p class="success">✅ Utilisateur Gael n\'existe pas dans la base de données.</p>';
                 }
             } catch (error) {
-                document.getElementById('result').innerHTML = `<p class="error">❌ Erreur: ${error.message}</p>`;
+                console.error('Erreur:', error);
+                document.getElementById('result').innerHTML = `
+                    <div class="error">
+                        <h3>❌ Erreur de connexion</h3>
+                        <p><strong>Problème:</strong> ${error.message}</p>
+                        <p><strong>Solutions possibles:</strong></p>
+                        <ul>
+                            <li>Vérifiez que le backend est en ligne: <a href="https://sales-tracker-pro-v2.onrender.com/api/accounts/temp/cleanup-gael/" target="_blank">Tester l'endpoint</a></li>
+                            <li>Vérifiez votre token d'authentification</li>
+                            <li>Essayez de vous reconnecter sur l'interface admin</li>
+                            <li>Utilisez Django Admin directement: <a href="https://sales-tracker-pro-v2.onrender.com/admin/" target="_blank">Django Admin</a></li>
+                        </ul>
+                    </div>
+                `;
             }
         }
         
@@ -76,10 +113,13 @@
             try {
                 document.getElementById('status').innerHTML = '<p class="info">🔄 Suppression en cours...</p>';
                 
+                // Nettoyer le token pour éviter les caractères non-ASCII
+                const cleanToken = token.replace(/[^\x00-\x7F]/g, "").trim();
+                
                 const response = await fetch(`${API_BASE}/accounts/temp/cleanup-gael/`, {
                     method: 'DELETE',
                     headers: {
-                        'Authorization': `Bearer ${token}`,
+                        'Authorization': `Bearer ${cleanToken}`,
                         'Content-Type': 'application/json'
                     }
                 });
