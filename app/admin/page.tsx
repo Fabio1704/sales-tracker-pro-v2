@@ -633,19 +633,34 @@ const handleDeleteUser = async (userId: string) => {
               </span>
             </div>
             
-            {/* Messages Icon with notification badge */}
+            {/* Messages Icon with enhanced notification badge */}
             {!isLoading && currentUser?.is_superuser && (
               <Button
                 variant="ghost"
                 onClick={() => router.push('/admin/contact-messages')}
-                className="relative flex items-center gap-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white transition-all duration-300 rounded-full px-4 py-2 hover:shadow-lg hover:shadow-green-500/50 hover:scale-105"
+                className="relative flex items-center gap-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white transition-all duration-300 rounded-full px-3 sm:px-4 py-2 hover:shadow-lg hover:shadow-green-500/50 hover:scale-105"
               >
-                <MessageCircle className="h-4 w-4" />
-                <span className="hidden sm:inline font-medium">Messages</span>
+                <MessageCircle className="h-4 w-4 sm:h-5 sm:w-5" />
+                <span className="hidden sm:inline font-medium text-sm">Messages</span>
+                <span className="sm:hidden text-xs font-medium">Msg</span>
+                
+                {/* Badge principal avec animation pulse */}
                 {unreadMessages > 0 && (
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
-                    <span className="text-xs text-white font-medium">{unreadMessages}</span>
+                  <div className="absolute -top-1 -right-1 min-w-[20px] h-5 bg-red-500 rounded-full flex items-center justify-center animate-pulse shadow-lg">
+                    <span className="text-xs text-white font-bold px-1">
+                      {unreadMessages > 99 ? '99+' : unreadMessages}
+                    </span>
                   </div>
+                )}
+                
+                {/* Effet ping pour attirer l'attention */}
+                {unreadMessages > 0 && (
+                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-400/30 rounded-full animate-ping"></div>
+                )}
+                
+                {/* Indicateur visuel supplémentaire pour mobile */}
+                {unreadMessages > 0 && (
+                  <div className="sm:hidden absolute top-0 right-0 w-2 h-2 bg-yellow-400 rounded-full animate-bounce"></div>
                 )}
               </Button>
             )}
