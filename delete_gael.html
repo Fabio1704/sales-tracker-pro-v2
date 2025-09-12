@@ -44,6 +44,11 @@
             }
         }
         
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<p class="${type}">${message}</p>`;
+        }
+        
         function getToken() {
             return localStorage.getItem('authToken');
         }

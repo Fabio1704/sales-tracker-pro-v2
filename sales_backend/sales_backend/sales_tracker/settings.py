@@ -148,7 +148,7 @@ REST_FRAMEWORK = {
 }
 
 # Configuration CORS pour production et développement
-CORS_ALLOW_ALL_ORIGINS = os.getenv('CORS_ALLOW_ALL_ORIGINS', 'True') == 'True'
+CORS_ALLOW_ALL_ORIGINS = True  # Permettre toutes les origines pour fichiers locaux
 
 # En production, spécifier les domaines autorisés
 if not CORS_ALLOW_ALL_ORIGINS:
@@ -157,7 +157,7 @@ if not CORS_ALLOW_ALL_ORIGINS:
         "http://localhost:8000",
         "https://sales-tracker-pro-v3.vercel.app",  # Nouvelle URL Vercel
         "https://sales-tracker-clean-d3dm3ci3h-dangos-projects-54267b83.vercel.app",  # Ancienne URL
-        "https://sales-tracker-clean.vercel.app",  # Ancienne URL
+        "https://sales-tracker-clean.vercel.app",
         os.getenv('FRONTEND_URL', 'https://your-app.vercel.app'),  # URL Vercel de fallback
     ]
 else:
@@ -166,7 +166,7 @@ else:
         "http://localhost:8000",
         "https://sales-tracker-pro-v3.vercel.app",  # Nouvelle URL Vercel
         "https://sales-tracker-clean-d3dm3ci3h-dangos-projects-54267b83.vercel.app",  # Ancienne URL
-        "https://sales-tracker-clean.vercel.app",  # Ancienne URL
+        "https://sales-tracker-clean.vercel.app",
     ]
 
 CORS_ALLOW_CREDENTIALS = True
