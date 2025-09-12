@@ -77,8 +77,8 @@ export const useWebSocket = (onUserDeleted?: (data: UserDeletedData) => void) =>
     // Polling initial
     pollForUpdates()
     
-    // Polling toutes les 5 secondes
-    pollingIntervalRef.current = setInterval(pollForUpdates, 5000) as unknown as NodeJS.Timeout
+    // Polling désactivé - synchronisation WebSocket uniquement
+    // pollingIntervalRef.current = setInterval(pollForUpdates, 5000) as unknown as NodeJS.Timeout
   }
 
   const stopPolling = () => {
