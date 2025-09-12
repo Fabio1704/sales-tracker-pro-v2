@@ -95,7 +95,7 @@ export default function AdminPage() {
   const [dataLoading, setDataLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [refreshKey, setRefreshKey] = useState(0)
-  const [unreadMessages, setUnreadMessages] = useState(0)
+  const [unreadMessages, setUnreadMessages] = useState(5) // Test avec 5 messages pour debug
 
   // Polling pour synchronisation en temps réel
   const { isConnected: wsConnected } = useWebSocket((deletedUserData) => {
