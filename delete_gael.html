@@ -17,11 +17,20 @@
     <div id="status"></div>
     
     <div style="margin: 20px 0; padding: 15px; background-color: #f0f8ff; border: 1px solid #0066cc; border-radius: 5px;">
-        <h3>🔑 Saisir votre token d'authentification :</h3>
+        <h3>🔑 Obtenir un nouveau token (le précédent a expiré) :</h3>
+        <p><strong>Méthode 1 - Récupérer depuis l'interface :</strong></p>
         <p>1. Connectez-vous sur : <a href="https://sales-tracker-pro-v3.vercel.app/admin" target="_blank">Interface Admin</a></p>
         <p>2. Ouvrez F12 → Console → tapez : <code>localStorage.getItem('authToken')</code></p>
-        <p>3. Copiez le token (sans les guillemets) et collez-le ci-dessous :</p>
-        <input type="text" id="tokenInput" placeholder="Collez votre token ici..." style="width: 100%; padding: 8px; margin: 5px 0;">
+        <p>3. Copiez le nouveau token et collez-le ci-dessous :</p>
+        
+        <p><strong>Méthode 2 - Connexion directe :</strong></p>
+        <div style="background: #f8f9fa; padding: 10px; margin: 10px 0; border-radius: 5px;">
+            <input type="email" id="emailInput" placeholder="tahiantsoaFabio17@gmail.com" style="width: 48%; padding: 8px; margin: 2px;">
+            <input type="password" id="passwordInput" placeholder="Votre mot de passe" style="width: 48%; padding: 8px; margin: 2px;">
+            <button onclick="loginAndGetToken()" style="background-color: #007bff; color: white; padding: 8px 15px; width: 100%; margin-top: 5px;">Se connecter et obtenir le token</button>
+        </div>
+        
+        <input type="text" id="tokenInput" placeholder="Ou collez votre token ici..." style="width: 100%; padding: 8px; margin: 5px 0;">
         <button onclick="saveToken()" style="background-color: #28a745; color: white; padding: 8px 15px;">Sauvegarder Token</button>
     </div>
     
@@ -47,6 +56,43 @@
         function showStatus(message, type) {
             const statusDiv = document.getElementById('status');
             statusDiv.innerHTML = `<p class="${type}">${message}</p>`;
+        }
+        
+        async function loginAndGetToken() {
+            const email = document.getElementById('emailInput').value.trim();
+            const password = document.getElementById('passwordInput').value.trim();
+            
+            if (!email || !password) {
+                showStatus('❌ Veuillez saisir email et mot de passe', 'error');
+                return;
+            }
+            
+            try {
+                showStatus('🔄 Connexion en cours...', 'info');
+                
+                const response = await fetch(`${API_BASE}/token/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: email,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.access) {
+                    localStorage.setItem('authToken', data.access);
+                    document.getElementById('tokenInput').value = data.access;
+                    showStatus('✅ Connexion réussie ! Token obtenu et sauvegardé.', 'success');
+                } else {
+                    showStatus(`❌ Erreur de connexion: ${data.detail || 'Identifiants invalides'}`, 'error');
+                }
+            } catch (error) {
+                showStatus(`❌ Erreur: ${error.message}`, 'error');
+            }
         }
         
         function getToken() {
