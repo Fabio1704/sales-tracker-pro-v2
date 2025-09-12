@@ -4,7 +4,6 @@ from . import views_invitation
 from . import views_contact_messages
 from . import views_contact_invitations
 from . import views_client_signup
-from . import views_temp_cleanup
 
 urlpatterns = [
     # Authentification
@@ -33,9 +32,6 @@ urlpatterns = [
     
     # Inscription client avec token
     path('signup/<str:token>/', views_client_signup.client_signup_with_token, name='client-signup-with-token'),
-    
-    # Nettoyage temporaire - Suppression Gael
-    path('temp/cleanup-gael/', views_temp_cleanup.CleanupGaelView.as_view(), name='cleanup-gael'),
 ]
     # Firebase et 2FA (désactivé)
     # path('enable-2fa/', views_firebase.enable_2fa, name='enable_2fa'),
