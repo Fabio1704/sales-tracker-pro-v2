@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Supprimer Gael Rakotoharimanga</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 50px; }
+        button { padding: 10px 20px; margin: 10px; font-size: 16px; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Supprimer définitivement Gael Rakotoharimanga</h1>
+    
+    <div id="status"></div>
+    
+    <button onclick="checkUser()">1. Vérifier si Gael existe</button>
+    <button onclick="deleteUser()" style="background-color: #ff4444; color: white;">2. SUPPRIMER DÉFINITIVEMENT</button>
+    
+    <div id="result"></div>
+
+    <script>
+        const API_BASE = 'https://sales-tracker-pro-v2.onrender.com/api';
+        
+        function getToken() {
+            return localStorage.getItem('authToken');
+        }
+        
+        async function checkUser() {
+            const token = getToken();
+            if (!token) {
+                document.getElementById('result').innerHTML = '<p class="error">❌ Token d\'authentification manquant. Connectez-vous d\'abord sur votre app admin.</p>';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/accounts/temp/cleanup-gael/`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.exists) {
+                    document.getElementById('result').innerHTML = `
+                        <div class="info">
+                            <h3>✅ Utilisateur trouvé dans la base de données:</h3>
+                            <pre>${JSON.stringify(data.user, null, 2)}</pre>
+                            <p><strong>Cet utilisateur peut maintenant être supprimé définitivement.</strong></p>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('result').innerHTML = '<p class="success">✅ Utilisateur Gael n\'existe pas dans la base de données.</p>';
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<p class="error">❌ Erreur: ${error.message}</p>`;
+            }
+        }
+        
+        async function deleteUser() {
+            if (!confirm('ATTENTION: Cette action va supprimer définitivement Gael Rakotoharimanga de la base de données. Continuer?')) {
+                return;
+            }
+            
+            const token = getToken();
+            if (!token) {
+                document.getElementById('result').innerHTML = '<p class="error">❌ Token d\'authentification manquant. Connectez-vous d\'abord sur votre app admin.</p>';
+                return;
+            }
+            
+            try {
+                document.getElementById('status').innerHTML = '<p class="info">🔄 Suppression en cours...</p>';
+                
+                const response = await fetch(`${API_BASE}/accounts/temp/cleanup-gael/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('result').innerHTML = `
+                        <div class="success">
+                            <h3>✅ UTILISATEUR SUPPRIMÉ AVEC SUCCÈS!</h3>
+                            <p>${data.message}</p>
+                            <h4>Détails de l'utilisateur supprimé:</h4>
+                            <pre>${JSON.stringify(data.deleted_user, null, 2)}</pre>
+                            <p><strong>Actualisez maintenant votre interface admin pour voir les changements.</strong></p>
+                        </div>
+                    `;
+                    document.getElementById('status').innerHTML = '';
+                } else {
+                    document.getElementById('result').innerHTML = `<p class="error">❌ ${data.message}</p>`;
+                    document.getElementById('status').innerHTML = '';
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<p class="error">❌ Erreur: ${error.message}</p>`;
+                document.getElementById('status').innerHTML = '';
+            }
+        }
+        
+        // Vérifier automatiquement au chargement
+        window.onload = function() {
+            const token = getToken();
+            if (token) {
+                document.getElementById('status').innerHTML = '<p class="success">✅ Token d\'authentification trouvé</p>';
+            } else {
+                document.getElementById('status').innerHTML = '<p class="error">❌ Connectez-vous d\'abord sur votre interface admin pour obtenir un token</p>';
+            }
+        };
+    </script>
+</body>
+</html>

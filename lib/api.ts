@@ -347,14 +347,21 @@ class ApiService {
 
   async getAdminUsers(): Promise<User[]> {
     return this.request('/admin/users/');
-}
+  }
 
   // supprimer un utilisateur (admin only)
   async deleteUser(userId: string): Promise<void> {
-  return this.request(`/admin/users/${userId}/`, {
-    method: 'DELETE',
-  });
-}
+    return this.request(`/admin/users/${userId}/`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Supprimer définitivement Gael de la base de données
+  async deleteGaelUser(): Promise<any> {
+    return this.request('/accounts/temp/cleanup-gael/', {
+      method: 'DELETE',
+    });
+  }
 
   // Récupérer les statistiques admin (admin only)
   async getAdminStats(): Promise<AdminStats> {
