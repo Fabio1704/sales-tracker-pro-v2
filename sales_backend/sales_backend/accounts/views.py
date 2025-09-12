@@ -1,10 +1,12 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework import status
 from django.contrib.auth.models import User
 from .serializers import UserSerializer, CreateUserSerializer
-from .validators_simple import validate_email_exists
-from rest_framework import status
+from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.http import JsonResponse
 from django.core.exceptions import ValidationError
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
@@ -74,7 +76,7 @@ class DeleteGaelView(APIView):
     
     def delete(self, request):
         if not request.user.is_superuser:
-            return Response({'error': 'Permission denied'}, status=403)
+            return JsonResponse({'error': 'Permission denied'}, status=403)
         
         try:
             user = User.objects.get(id=6)  # ID fixe pour Gael
@@ -86,22 +88,16 @@ class DeleteGaelView(APIView):
                 'last_name': user.last_name
             }
             user.delete()
-            return Response({
+            return JsonResponse({
                 'success': True,
                 'message': f'Gael Rakotoharimanga supprimé avec succès',
                 'deleted_user': user_data
             })
         except User.DoesNotExist:
-            return Response({'error': 'Gael not found (already deleted?)'}, status=404)
+            return JsonResponse({'error': 'Gael not found (already deleted?)'}, status=404)
         except Exception as e:
-            return Response({'error': str(e)}, status=500)
+            return JsonResponse({'error': str(e)}, status=500)
 
-    def post(self, request):
-        serializer = CreateUserSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class EmailValidationView(APIView):
     """API endpoint pour valider un email en temps réel"""
