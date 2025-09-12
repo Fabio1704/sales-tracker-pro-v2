@@ -159,6 +159,8 @@ const toggleTheme = () => {
   useEffect(() => {
     // Attendre que l'authentification soit chargée
     if (!isLoading && currentUser) {
+      // Forcer un rechargement complet en vidant le localStorage
+      localStorage.removeItem('cached_users');
       loadAdminData();
       loadUnreadMessages();
     }
@@ -205,11 +207,12 @@ const toggleTheme = () => {
       console.log('🔑 Token utilisé pour messages:', token?.substring(0, 20) + '...');
       console.log('🔑 Token trouvé:', !!token);
       
-      const response = await fetch('https://sales-tracker-pro-v2.onrender.com/api/accounts/contact-messages/unread-count/', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      // Vérifier les mises à jour via l'API - utiliser l'endpoint correct
+        const response = await fetch('https://sales-tracker-pro-v2.onrender.com/api/accounts/users/', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
       
       console.log('📡 Réponse API:', response.status);
       
@@ -233,6 +236,14 @@ const toggleTheme = () => {
       setError(null);
       
       console.log('📊 Loading admin data...');
+      console.log('🧹 Vidage forcé du cache et des états...');
+      
+      // Vider tous les caches possibles
+      localStorage.removeItem('cached_users');
+      localStorage.removeItem('admin_cache');
+      
+      // Ajouter un timestamp pour forcer le rechargement
+      const timestamp = Date.now();
       
       // Charger les messages non lus
       await loadUnreadMessages();
@@ -248,6 +259,7 @@ const toggleTheme = () => {
       try {
         usersData = await apiService.getUsers();
         console.log('👥 Admin users data from API:', usersData);
+        console.log('🔍 Utilisateurs trouvés:', usersData.map(u => ({ id: u.id, email: u.email, username: u.username })));
       } catch (error) {
         console.error('❌ Erreur lors du chargement des utilisateurs:', error);
         // Fallback: utiliser les utilisateurs normaux si l'endpoint admin n'existe pas
