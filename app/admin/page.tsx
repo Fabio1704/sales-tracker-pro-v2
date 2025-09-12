@@ -43,6 +43,7 @@ import { useTheme } from "next-themes"
 import { useAuth } from "@/contexts/AuthContext"
 import { apiService, ModelProfile, DailySale, User as ApiUser } from "@/lib/api"
 import { useRouter } from "next/navigation"
+import { useWebSocket } from "@/hooks/useWebSocket"
 
 // Interface étendue pour User
 interface User extends ApiUser {
@@ -95,6 +96,28 @@ export default function AdminPage() {
   const [error, setError] = useState<string | null>(null)
   const [refreshKey, setRefreshKey] = useState(0)
   const [unreadMessages, setUnreadMessages] = useState(0)
+
+  // WebSocket pour synchronisation en temps réel
+  const { isConnected: wsConnected } = useWebSocket((deletedUserData) => {
+    console.log('🔄 Utilisateur supprimé via WebSocket:', deletedUserData)
+    
+    // Supprimer l'utilisateur de la liste locale
+    setUsers(prevUsers => prevUsers.filter(user => user.id !== deletedUserData.user_id))
+    setModels(prevModels => prevModels.filter(model => model.userId !== deletedUserData.user_id))
+    
+    // Ajouter une activité
+    setActivities(prev => [{
+      id: `activity-${Date.now()}`,
+      userId: 'system',
+      modelId: 'system',
+      action: "Utilisateur supprimé (sync)",
+      details: `Utilisateur: ${deletedUserData.user_email} supprimé par un autre admin`,
+      timestamp: new Date()
+    }, ...prev])
+    
+    // Afficher une notification
+    console.log(`✅ Synchronisation: Utilisateur ${deletedUserData.user_name} supprimé`)
+  })
 
 const toggleTheme = () => {
   setTheme(theme === "light" ? "dark" : "light")
@@ -590,6 +613,16 @@ const handleDeleteUser = async (userId: string) => {
           </div>
 
           <div className="flex items-center gap-3">
+            {/* WebSocket Connection Status */}
+            <div className="flex items-center gap-2">
+              <div className={`w-2 h-2 rounded-full ${
+                wsConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'
+              }`}></div>
+              <span className="text-xs text-gray-500 dark:text-gray-400 hidden sm:inline">
+                {wsConnected ? 'Sync actif' : 'Hors ligne'}
+              </span>
+            </div>
+            
             {/* Messages Icon with notification badge */}
             {!isLoading && currentUser?.is_superuser && (
               <Button

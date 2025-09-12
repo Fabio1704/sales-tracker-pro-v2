@@ -152,7 +152,14 @@ class ModelProfileSerializer(serializers.ModelSerializer):
 class ModelProfileCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ModelProfile
-        fields = ['first_name', 'last_name', 'profile_photo']
+        fields = ['name', 'description', 'first_name', 'last_name', 'profile_photo']
+        
+    def create(self, validated_data):
+        # Si name n'est pas fourni, utiliser first_name + last_name
+        if 'name' not in validated_data and 'first_name' in validated_data:
+            validated_data['name'] = f"{validated_data.get('first_name', '')} {validated_data.get('last_name', '')}".strip()
+        
+        return super().create(validated_data)
 
 class StatsSerializer(serializers.Serializer):
     gross_usd = serializers.FloatField()

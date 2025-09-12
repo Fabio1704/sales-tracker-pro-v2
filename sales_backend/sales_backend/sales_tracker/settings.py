@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',  # Pour blacklist des tokens
     'rest_framework.authtoken',
     'corsheaders',
+    'channels',  # Pour WebSockets
 
     'accounts',
     'sales',
@@ -217,6 +218,16 @@ TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
 
 # Modèle utilisateur personnalisé (temporairement commenté pour migrations)
 # AUTH_USER_MODEL = 'accounts.User'
+
+# Configuration WebSockets avec Channels
+ASGI_APPLICATION = 'sales_tracker.asgi.application'
+
+# Configuration des channels layers pour WebSockets
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 LOGGING = {
     'version': 1,
