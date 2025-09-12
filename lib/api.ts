@@ -340,7 +340,7 @@ class ApiService {
   async getUsers(): Promise<User[]> {
     // Ajouter un timestamp pour éviter le cache
     const timestamp = Date.now();
-    const response = await this.request(`/accounts/users/?t=${timestamp}`);
+    const response = await this.request(`/admin/users/?t=${timestamp}`);
     console.log('🔍 API getUsers response:', response);
     return response;
   }
