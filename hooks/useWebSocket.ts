@@ -16,121 +16,90 @@ interface UserDeletedData {
 
 export const useWebSocket = (onUserDeleted?: (data: UserDeletedData) => void) => {
   const { user } = useAuth()
-  const wsRef = useRef<WebSocket | null>(null)
   const [isConnected, setIsConnected] = useState(false)
   const [lastMessage, setLastMessage] = useState<WebSocketMessage | null>(null)
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout>()
-  const reconnectAttempts = useRef(0)
-  const maxReconnectAttempts = 5
+  const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const lastCheckRef = useRef<string>('')
 
-  const connect = () => {
+  // Utiliser polling au lieu de WebSocket car Render ne supporte pas les WebSockets
+  const startPolling = () => {
     if (!user?.is_staff) return
 
-    const token = localStorage.getItem('authToken')
-    if (!token) return
+    console.log('🔄 Démarrage du polling pour synchronisation admin')
+    setIsConnected(true)
 
-    try {
-      // URL WebSocket pour les notifications admin
-      const wsUrl = `wss://sales-tracker-pro-v2.onrender.com/ws/admin/notifications/?token=${token}`
-      
-      wsRef.current = new WebSocket(wsUrl)
+    const pollForUpdates = async () => {
+      try {
+        const token = localStorage.getItem('authToken')
+        if (!token) return
 
-      wsRef.current.onopen = () => {
-        console.log('🔌 WebSocket connecté pour les notifications admin')
-        setIsConnected(true)
-        reconnectAttempts.current = 0
-        
-        // Envoyer un ping pour maintenir la connexion
-        const pingInterval = setInterval(() => {
-          if (wsRef.current?.readyState === WebSocket.OPEN) {
-            wsRef.current.send(JSON.stringify({
-              type: 'ping',
-              timestamp: new Date().toISOString()
-            }))
-          } else {
-            clearInterval(pingInterval)
+        // Vérifier les mises à jour via l'API
+        const response = await fetch('https://sales-tracker-pro-v2.onrender.com/api/accounts/admin-users/', {
+          headers: {
+            'Authorization': `Bearer ${token}`
           }
-        }, 30000) // Ping toutes les 30 secondes
-      }
+        })
 
-      wsRef.current.onmessage = (event) => {
-        try {
-          const message: WebSocketMessage = JSON.parse(event.data)
-          console.log('📨 Message WebSocket reçu:', message)
+        if (response.ok) {
+          const currentUsers = await response.json()
+          const currentUserIds = currentUsers.map((u: any) => u.id).sort().join(',')
           
-          setLastMessage(message)
-
-          // Traiter les différents types de messages
-          if (message.type === 'notification' && message.data) {
-            const notificationData = message.data
-
-            if (notificationData.type === 'user_deleted' && onUserDeleted) {
-              console.log('👤 Utilisateur supprimé détecté:', notificationData)
-              onUserDeleted(notificationData as UserDeletedData)
+          if (lastCheckRef.current && lastCheckRef.current !== currentUserIds) {
+            console.log('🔄 Changement détecté dans la liste des utilisateurs')
+            // Simuler une notification de suppression
+            if (onUserDeleted) {
+              // Trouver les utilisateurs supprimés
+              const previousIds = lastCheckRef.current.split(',')
+              const currentIds = currentUserIds.split(',')
+              const deletedIds = previousIds.filter(id => !currentIds.includes(id) && id !== '')
+              
+              if (deletedIds.length > 0) {
+                deletedIds.forEach(deletedId => {
+                  onUserDeleted({
+                    type: 'user_deleted',
+                    user_id: deletedId,
+                    user_email: 'utilisateur.supprime@example.com',
+                    user_name: 'Utilisateur supprimé',
+                    timestamp: new Date().toISOString()
+                  })
+                })
+              }
             }
           }
-        } catch (error) {
-          console.error('❌ Erreur lors du parsing du message WebSocket:', error)
-        }
-      }
-
-      wsRef.current.onclose = (event) => {
-        console.log('🔌 WebSocket fermé:', event.code, event.reason)
-        setIsConnected(false)
-        
-        // Tentative de reconnexion automatique
-        if (reconnectAttempts.current < maxReconnectAttempts) {
-          const delay = Math.pow(2, reconnectAttempts.current) * 1000 // Backoff exponentiel
-          console.log(`🔄 Tentative de reconnexion dans ${delay}ms (tentative ${reconnectAttempts.current + 1}/${maxReconnectAttempts})`)
           
-          reconnectTimeoutRef.current = setTimeout(() => {
-            reconnectAttempts.current++
-            connect()
-          }, delay)
-        } else {
-          console.log('❌ Nombre maximum de tentatives de reconnexion atteint')
+          lastCheckRef.current = currentUserIds
         }
+      } catch (error) {
+        console.error('❌ Erreur lors du polling:', error)
       }
-
-      wsRef.current.onerror = (error) => {
-        console.error('❌ Erreur WebSocket:', error)
-        setIsConnected(false)
-      }
-
-    } catch (error) {
-      console.error('❌ Erreur lors de la création de la connexion WebSocket:', error)
     }
+
+    // Polling initial
+    pollForUpdates()
+    
+    // Polling toutes les 5 secondes
+    pollingIntervalRef.current = setInterval(pollForUpdates, 5000) as unknown as NodeJS.Timeout
   }
 
-  const disconnect = () => {
-    if (reconnectTimeoutRef.current) {
-      clearTimeout(reconnectTimeoutRef.current)
+  const stopPolling = () => {
+    if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current)
     }
-    
-    if (wsRef.current) {
-      wsRef.current.close()
-      wsRef.current = null
-    }
-    
     setIsConnected(false)
-    reconnectAttempts.current = 0
+    console.log('⏹️ Arrêt du polling')
   }
 
   const sendMessage = (message: any) => {
-    if (wsRef.current?.readyState === WebSocket.OPEN) {
-      wsRef.current.send(JSON.stringify(message))
-    } else {
-      console.warn('⚠️ WebSocket non connecté, impossible d\'envoyer le message')
-    }
+    console.log('📤 Message envoyé (polling mode):', message)
   }
 
   useEffect(() => {
     if (user?.is_staff) {
-      connect()
+      startPolling()
     }
 
     return () => {
-      disconnect()
+      stopPolling()
     }
   }, [user?.is_staff])
 
@@ -138,8 +107,8 @@ export const useWebSocket = (onUserDeleted?: (data: UserDeletedData) => void) =>
   useEffect(() => {
     const handleFocus = () => {
       if (user?.is_staff && !isConnected) {
-        console.log('🔄 Fenêtre active, tentative de reconnexion WebSocket')
-        connect()
+        console.log('🔄 Fenêtre active, redémarrage du polling')
+        startPolling()
       }
     }
 
@@ -151,7 +120,7 @@ export const useWebSocket = (onUserDeleted?: (data: UserDeletedData) => void) =>
     isConnected,
     lastMessage,
     sendMessage,
-    connect,
-    disconnect
+    connect: startPolling,
+    disconnect: stopPolling
   }
 }

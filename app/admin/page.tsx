@@ -97,13 +97,12 @@ export default function AdminPage() {
   const [refreshKey, setRefreshKey] = useState(0)
   const [unreadMessages, setUnreadMessages] = useState(0)
 
-  // WebSocket pour synchronisation en temps réel
+  // Polling pour synchronisation en temps réel
   const { isConnected: wsConnected } = useWebSocket((deletedUserData) => {
-    console.log('🔄 Utilisateur supprimé via WebSocket:', deletedUserData)
+    console.log('🔄 Utilisateur supprimé détecté via polling:', deletedUserData)
     
-    // Supprimer l'utilisateur de la liste locale
-    setUsers(prevUsers => prevUsers.filter(user => user.id !== deletedUserData.user_id))
-    setModels(prevModels => prevModels.filter(model => model.userId !== deletedUserData.user_id))
+    // Recharger complètement les données pour s'assurer de la cohérence
+    loadAdminData()
     
     // Ajouter une activité
     setActivities(prev => [{
@@ -111,12 +110,11 @@ export default function AdminPage() {
       userId: 'system',
       modelId: 'system',
       action: "Utilisateur supprimé (sync)",
-      details: `Utilisateur: ${deletedUserData.user_email} supprimé par un autre admin`,
+      details: `Synchronisation: Un utilisateur a été supprimé par un autre admin`,
       timestamp: new Date()
     }, ...prev])
     
-    // Afficher une notification
-    console.log(`✅ Synchronisation: Utilisateur ${deletedUserData.user_name} supprimé`)
+    console.log(`✅ Synchronisation: Rechargement des données après suppression`)
   })
 
 const toggleTheme = () => {
@@ -238,6 +236,12 @@ const toggleTheme = () => {
       
       // Charger les messages non lus
       await loadUnreadMessages();
+      
+      // Forcer le rechargement en vidant d'abord les états
+      setUsers([]);
+      setModels([]);
+      setAllSales([]);
+      setActivities([]);
       
       // Charger tous les utilisateurs avec endpoint admin
       let usersData: User[] = [];
@@ -616,10 +620,10 @@ const handleDeleteUser = async (userId: string) => {
             {/* WebSocket Connection Status */}
             <div className="flex items-center gap-2">
               <div className={`w-2 h-2 rounded-full ${
-                wsConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'
+                wsConnected ? 'bg-green-500 animate-pulse' : 'bg-yellow-500'
               }`}></div>
               <span className="text-xs text-gray-500 dark:text-gray-400 hidden sm:inline">
-                {wsConnected ? 'Sync actif' : 'Hors ligne'}
+                {wsConnected ? 'Sync actif' : 'Polling'}
               </span>
             </div>
             
