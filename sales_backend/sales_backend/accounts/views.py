@@ -33,6 +33,34 @@ class AdminUserView(APIView):
         else:
             users = User.objects.filter(id=request.user.id).order_by('id')
         return Response(UserSerializer(users, many=True).data)
+    
+    def delete(self, request, user_id=None):
+        """Supprimer un utilisateur spécifique"""
+        if not request.user.is_superuser:
+            return Response({'error': 'Permission denied'}, status=403)
+        
+        if not user_id:
+            return Response({'error': 'User ID required'}, status=400)
+        
+        try:
+            user = User.objects.get(id=user_id)
+            user_data = {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'first_name': user.first_name,
+                'last_name': user.last_name
+            }
+            user.delete()
+            return Response({
+                'success': True,
+                'message': f'Utilisateur {user.username} supprimé avec succès',
+                'deleted_user': user_data
+            })
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=404)
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
 
     def post(self, request):
         serializer = CreateUserSerializer(data=request.data)

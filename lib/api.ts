@@ -351,16 +351,25 @@ class ApiService {
 
   // supprimer un utilisateur (admin only)
   async deleteUser(userId: string): Promise<void> {
-    return this.request(`/admin/users/${userId}/`, {
+    const response = await this.request(`/admin/users/${userId}/`, {
       method: 'DELETE',
     });
+    
+    if (!response.ok) {
+      throw new Error('Erreur lors de la suppression de l\'utilisateur');
+    }
   }
 
-  // Supprimer définitivement Gael de la base de données
   async deleteGaelUser(): Promise<any> {
-    return this.request('/accounts/temp/cleanup-gael/', {
+    const response = await this.request('/admin/users/6/', {
       method: 'DELETE',
     });
+    
+    if (!response.ok) {
+      throw new Error('Erreur lors de la suppression de Gael');
+    }
+    
+    return response.json();
   }
 
   // Récupérer les statistiques admin (admin only)

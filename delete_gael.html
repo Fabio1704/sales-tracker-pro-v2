@@ -27,6 +27,7 @@
     
     <button onclick="checkUser()">1. Vérifier si Gael existe</button>
     <button onclick="deleteUser()" style="background-color: #ff4444; color: white;">2. SUPPRIMER DÉFINITIVEMENT</button>
+    <button onclick="deleteGaelDirect()" style="background-color: #cc0000; color: white; margin-top: 10px;">🚨 SUPPRESSION DIRECTE GAEL (ID: 6)</button>
     
     <div id="result"></div>
 
@@ -96,6 +97,46 @@
                         </ul>
                     </div>
                 `;
+            }
+        }
+        
+        async function deleteGaelDirect() {
+            const token = getToken();
+            if (!token) {
+                document.getElementById('result').innerHTML = '<p class="error">❌ Token d\'authentification manquant.</p>';
+                return;
+            }
+            
+            if (!confirm('🚨 SUPPRESSION DIRECTE: Supprimer définitivement Gael Rakotoharimanga (ID: 6) ?')) {
+                return;
+            }
+            
+            try {
+                const cleanToken = token.replace(/[^\x00-\x7F]/g, "").trim();
+                
+                const response = await fetch(`${API_BASE}/admin/users/6/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${cleanToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('result').innerHTML = `
+                        <div class="success">
+                            <h3>✅ GAEL SUPPRIMÉ AVEC SUCCÈS!</h3>
+                            <p>${data.message}</p>
+                            <p><strong>Rechargez votre interface admin pour voir les changements.</strong></p>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('result').innerHTML = `<p class="error">❌ Erreur: ${data.error || 'Suppression échouée'}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<p class="error">❌ Erreur: ${error.message}</p>`;
             }
         }
         
