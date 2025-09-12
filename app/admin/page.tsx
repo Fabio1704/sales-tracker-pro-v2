@@ -241,7 +241,14 @@ const toggleTheme = () => {
       
       // Forcer le nettoyage complet du cache
       localStorage.removeItem('adminUsers')
+      localStorage.removeItem('cached_users')
       sessionStorage.clear()
+      
+      // Vider complètement les états avant rechargement
+      setUsers([]);
+      setModels([]);
+      setAllSales([]);
+      setActivities([]);
       
       // Ajouter timestamp pour éviter le cache
       const timestamp = Date.now()
@@ -251,11 +258,7 @@ const toggleTheme = () => {
         apiService.getModels()
       ])
       
-      // Forcer le rechargement en vidant d'abord les états
-      setUsers([]);
-      setModels([]);
-      setAllSales([]);
-      setActivities([]);
+      // États déjà vidés au début de la fonction
       
       // Charger les messages non lus
       await loadUnreadMessages();
@@ -477,14 +480,25 @@ const toggleTheme = () => {
 
 const handleDeleteUser = async (userId: string) => {
   try {
+    console.log('🗑️ Début suppression utilisateur:', userId);
+    
     // Appel à l'API pour supprimer l'utilisateur côté backend
     await apiService.deleteUser(userId);
-    
-    // Mise à jour de l'état local
-    setUsers(users.filter((user) => user.id !== userId));
-    setModels(models.filter((model) => model.userId !== userId));
+    console.log('✅ Utilisateur supprimé côté backend');
     
     const deletedUser = users.find(u => u.id === userId);
+    
+    // Forcer le nettoyage complet du cache
+    localStorage.removeItem('adminUsers');
+    localStorage.removeItem('cached_users');
+    sessionStorage.clear();
+    
+    // Vider complètement les états
+    setUsers([]);
+    setModels([]);
+    setAllSales([]);
+    
+    // Ajouter l'activité de suppression
     setActivities(prev => [{
       id: `activity-${Date.now()}`,
       userId: currentUser?.id || 'admin',
@@ -494,11 +508,14 @@ const handleDeleteUser = async (userId: string) => {
       timestamp: new Date()
     }, ...prev]);
     
-    // Recharger les données
+    console.log('🔄 Rechargement complet des données...');
+    // Recharger complètement les données depuis l'API
     await loadAdminData();
     
+    console.log('✅ Suppression et rechargement terminés');
+    
   } catch (error) {
-    console.error('Erreur lors de la suppression de l\'utilisateur:', error);
+    console.error('❌ Erreur lors de la suppression de l\'utilisateur:', error);
     setError("Erreur lors de la suppression de l'utilisateur");
   }
 }

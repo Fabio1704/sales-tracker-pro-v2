@@ -26,6 +26,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'channels',  # Pour WebSockets
+    'django_celery_beat',  # Pour tâches programmées
+    'django_celery_results',  # Pour résultats des tâches
 
     'accounts',
     'sales',
@@ -210,6 +212,16 @@ else:
 
 # URL du frontend pour les liens d'invitation
 FRONTEND_URL = os.getenv('FRONTEND_URL', 'https://sales-tracker-pro-v3.vercel.app')
+
+# Configuration Celery pour envoi asynchrone d'emails
+CELERY_BROKER_URL = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
+CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+CELERY_TASK_ALWAYS_EAGER = False  # False pour envoi asynchrone réel
+CELERY_TASK_EAGER_PROPAGATES = True
 
 # Configuration Twilio pour SMS (optionnel)
 TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')

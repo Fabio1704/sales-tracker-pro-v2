@@ -112,27 +112,23 @@ Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet email
         
         # Log des informations pour debug
         logger.info(f"=== ENVOI EMAIL RÉEL ===")
-        logger.info(f"À: {invitation.contact_email}")
-        logger.info(f"Sujet: {subject}")
-        logger.info(f"From: {settings.DEFAULT_FROM_EMAIL}")
-        logger.info(f"Lien d'inscription: {invitation_url}")
-        logger.info(f"========================")
-        
-        # Envoyer l'email réel avec HTML professionnel
+        # Envoi asynchrone pour performance optimale
         try:
-            from django.core.mail import EmailMultiAlternatives
+            from .tasks import send_invitation_email_async
             
-            email = EmailMultiAlternatives(
-                subject=subject,
-                body=plain_message,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                to=[invitation.contact_email]
+            logger.info(f"🚀 Lancement envoi asynchrone à: {invitation.contact_email}")
+            
+            # Lancer la tâche Celery pour envoi immédiat
+            task_result = send_invitation_email_async.delay(
+                invitation_id=invitation.id,
+                invitation_url=invitation_url,
+                custom_message=custom_message
             )
-            email.attach_alternative(html_message, "text/html")
-            email.send()
             
-            # Marquer l'invitation comme envoyée
-            invitation.status = 'sent'
+            logger.info(f"✅ Tâche d'envoi lancée (ID: {task_result.id})")
+            
+            # Marquer comme en cours d'envoi
+            invitation.status = 'sending'
             invitation.sent_at = timezone.now()
             invitation.save()
             

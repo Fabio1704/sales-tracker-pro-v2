@@ -340,8 +340,9 @@ class ApiService {
   async getUsers(): Promise<User[]> {
     // Ajouter un timestamp pour éviter le cache
     const timestamp = Date.now();
-    const response = await this.request(`/admin/users/?t=${timestamp}`);
+    const response = await this.request(`/admin/users/?t=${timestamp}&nocache=${Math.random()}`);
     console.log('🔍 API getUsers response:', response);
+    console.log('🔍 Nombre d\'utilisateurs récupérés:', response?.length || 0);
     return response;
   }
 
@@ -351,13 +352,11 @@ class ApiService {
 
   // supprimer un utilisateur (admin only)
   async deleteUser(userId: string): Promise<void> {
-    const response = await this.request(`/admin/users/${userId}/`, {
+    console.log('🗑️ API: Suppression utilisateur ID:', userId);
+    await this.request(`/admin/users/${userId}/`, {
       method: 'DELETE',
     });
-    
-    if (!response.ok) {
-      throw new Error('Erreur lors de la suppression de l\'utilisateur');
-    }
+    console.log('✅ API: Utilisateur supprimé avec succès');
   }
 
   async deleteGaelUser(): Promise<any> {
