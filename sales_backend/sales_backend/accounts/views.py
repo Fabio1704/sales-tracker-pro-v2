@@ -26,7 +26,7 @@ class MeView(APIView):
 class AdminUserView(APIView):
     permission_classes = [IsAdminUser]
 
-    def get(self, request):
+    def get(self, request, user_id=None):
         # Chaque admin ne voit QUE son propre compte - isolation complète
         if request.user.is_superuser:
             users = User.objects.all().order_by('id')
@@ -38,6 +38,10 @@ class AdminUserView(APIView):
         """Supprimer un utilisateur spécifique"""
         if not request.user.is_superuser:
             return Response({'error': 'Permission denied'}, status=403)
+        
+        # Récupérer user_id depuis l'URL ou les kwargs
+        if not user_id:
+            user_id = self.kwargs.get('user_id')
         
         if not user_id:
             return Response({'error': 'User ID required'}, status=400)
