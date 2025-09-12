@@ -12,7 +12,7 @@ urlpatterns = [
     
     # Admin endpoints
     path('admin/users/', views.AdminUserView.as_view(), name='admin-user-list'),
-    path('admin/users/<int:user_id>/', views.AdminUserView.as_view(), {'user_id': None}, name='admin-user-delete'),
+    path('admin/users/<int:user_id>/', views.AdminUserView.as_view(), name='admin-user-delete'),
     
     # Réinitialisation de mot de passe
     path('password-reset/', views.PasswordResetRequestView.as_view(), name='password_reset_request'),

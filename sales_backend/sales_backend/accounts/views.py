@@ -39,9 +39,10 @@ class AdminUserView(APIView):
         if not request.user.is_superuser:
             return Response({'error': 'Permission denied'}, status=403)
         
-        # Récupérer user_id depuis l'URL ou les kwargs
-        if not user_id:
-            user_id = self.kwargs.get('user_id')
+        # Récupérer user_id depuis l'URL
+        from django.urls import resolve
+        resolver_match = resolve(request.path_info)
+        user_id = resolver_match.kwargs.get('user_id')
         
         if not user_id:
             return Response({'error': 'User ID required'}, status=400)
