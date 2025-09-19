@@ -338,9 +338,16 @@ class ApiService {
 
   // Récupérer tous les utilisateurs (admin only)
   async getUsers(): Promise<User[]> {
-    // Ajouter un timestamp pour éviter le cache
+    // Ajouter un timestamp pour éviter le cache + headers anti-cache
     const timestamp = Date.now();
-    const response = await this.request(`/admin/users/?t=${timestamp}&nocache=${Math.random()}`);
+    const randomId = Math.random().toString(36).substring(7);
+    const response = await this.request(`/admin/users/?t=${timestamp}&nocache=${randomId}&refresh=${Date.now()}`, {
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
+    });
     console.log('🔍 API getUsers response:', response);
     console.log('🔍 Nombre d\'utilisateurs récupérés:', response?.length || 0);
     return response;
@@ -355,8 +362,20 @@ class ApiService {
     console.log('🗑️ API: Suppression utilisateur ID:', userId);
     await this.request(`/admin/users/${userId}/`, {
       method: 'DELETE',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
     });
     console.log('✅ API: Utilisateur supprimé avec succès');
+    
+    // Forcer le nettoyage du cache après suppression
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('cached_users');
+      localStorage.removeItem('adminUsers');
+      sessionStorage.clear();
+    }
   }
 
   async deleteGaelUser(): Promise<any> {

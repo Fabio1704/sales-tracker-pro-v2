@@ -482,19 +482,25 @@ const handleDeleteUser = async (userId: string) => {
   try {
     console.log('🗑️ Début suppression utilisateur:', userId);
     
+    const deletedUser = users.find(u => u.id === userId);
+    
     // Appel à l'API pour supprimer l'utilisateur côté backend
     await apiService.deleteUser(userId);
     console.log('✅ Utilisateur supprimé côté backend');
-    
-    const deletedUser = users.find(u => u.id === userId);
     
     // Forcer le nettoyage complet du cache
     localStorage.removeItem('adminUsers');
     localStorage.removeItem('cached_users');
     sessionStorage.clear();
     
-    // Vider complètement les états
-    setUsers([]);
+    // Supprimer immédiatement de l'état local pour un feedback instantané
+    setUsers(prevUsers => {
+      const updatedUsers = prevUsers.filter(u => u.id !== userId);
+      console.log('🔄 Utilisateurs après suppression locale:', updatedUsers.length);
+      return updatedUsers;
+    });
+    
+    // Vider les autres états pour forcer un rechargement complet
     setModels([]);
     setAllSales([]);
     
@@ -509,10 +515,16 @@ const handleDeleteUser = async (userId: string) => {
     }, ...prev]);
     
     console.log('🔄 Rechargement complet des données...');
+    // Attendre un peu pour que la suppression soit propagée côté serveur
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
     // Recharger complètement les données depuis l'API
     await loadAdminData();
     
     console.log('✅ Suppression et rechargement terminés');
+    
+    // Forcer un re-render complet
+    setRefreshKey(prev => prev + 1);
     
   } catch (error) {
     console.error('❌ Erreur lors de la suppression de l\'utilisateur:', error);

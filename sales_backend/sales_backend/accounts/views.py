@@ -14,6 +14,7 @@ from django.conf import settings
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 import logging
 
 logger = logging.getLogger(__name__)
@@ -34,7 +35,13 @@ class AdminUserView(APIView):
             users = User.objects.all().order_by('id')
         else:
             users = User.objects.filter(id=request.user.id).order_by('id')
-        return Response(UserSerializer(users, many=True).data)
+        
+        # Ajouter des headers anti-cache pour forcer la synchronisation
+        response = Response(UserSerializer(users, many=True).data)
+        response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        response['Pragma'] = 'no-cache'
+        response['Expires'] = '0'
+        return response
     
     def delete(self, request, user_id=None):
         """Supprimer un utilisateur spécifique"""
@@ -58,15 +65,28 @@ class AdminUserView(APIView):
                 'first_name': user.first_name,
                 'last_name': user.last_name
             }
+            
+            # Log de la suppression
+            logger.info(f'Admin {request.user.username} supprime utilisateur {user.username} (ID: {user.id})')
+            
             user.delete()
-            return Response({
+            
+            # Réponse avec headers anti-cache
+            response = Response({
                 'success': True,
                 'message': f'Utilisateur {user.username} supprimé avec succès',
-                'deleted_user': user_data
+                'deleted_user': user_data,
+                'timestamp': timezone.now().isoformat()
             })
+            response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+            response['Pragma'] = 'no-cache'
+            response['Expires'] = '0'
+            return response
+            
         except User.DoesNotExist:
             return Response({'error': 'User not found'}, status=404)
         except Exception as e:
+            logger.error(f'Erreur lors de la suppression utilisateur {user_id}: {str(e)}')
             return Response({'error': str(e)}, status=500)
 
 
