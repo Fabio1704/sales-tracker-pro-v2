@@ -173,6 +173,22 @@ else:
 
 CORS_ALLOW_CREDENTIALS = True
 
+# Headers personnalisés autorisés pour CORS
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'cache-control',  # Ajout du header Cache-Control
+    'pragma',
+    'expires',
+]
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  # Plus court pour sécurité
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
