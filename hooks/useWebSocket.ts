@@ -34,7 +34,7 @@ export const useWebSocket = (onUserDeleted?: (data: UserDeletedData) => void) =>
         if (!token) return
 
         // Vérifier les mises à jour via l'API
-        const response = await fetch('https://sales-tracker-pro-v2.onrender.com/api/accounts/users/', {
+        const response = await fetch('https://sales-tracker-backend-j0c0.onrender.com/api/accounts/users/', {
           headers: {
             'Authorization': `Bearer ${token}`
           }

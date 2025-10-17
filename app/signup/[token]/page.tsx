@@ -68,7 +68,7 @@ export default function ClientSignupPage() {
     const fetchInvitationData = async () => {
       try {
         const token = params.token as string
-        const response = await fetch(`https://sales-tracker-pro-v2.onrender.com/api/accounts/signup/${token}/`, {
+        const response = await fetch(`https://sales-tracker-backend-j0c0.onrender.com/api/accounts/signup/${token}/`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -171,7 +171,7 @@ export default function ClientSignupPage() {
 
     try {
       const token = params.token as string
-      const response = await fetch(`https://sales-tracker-pro-v2.onrender.com/api/accounts/signup/${token}/`, {
+      const response = await fetch(`https://sales-tracker-backend-j0c0.onrender.com/api/accounts/signup/${token}/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
