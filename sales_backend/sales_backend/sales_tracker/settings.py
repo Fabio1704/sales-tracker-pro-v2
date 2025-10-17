@@ -150,7 +150,7 @@ REST_FRAMEWORK = {
 }
 
 # Configuration CORS pour production et développement
-CORS_ALLOW_ALL_ORIGINS = True  # Permettre toutes les origines pour fichiers locaux
+CORS_ALLOW_ALL_ORIGINS = True  # Permettre toutes les origines pour développement et production
 
 # En production, spécifier les domaines autorisés
 if not CORS_ALLOW_ALL_ORIGINS:
