@@ -4,7 +4,7 @@ services:
     env: python
     region: frankfurt
     rootDir: sales_backend/sales_backend
-    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate"
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate && python manage.py setup_admin"
     startCommand: "gunicorn sales_tracker.wsgi:application --bind 0.0.0.0:$PORT"
     plan: free
     envVars:
@@ -45,6 +45,12 @@ services:
       - key: TWILIO_AUTH_TOKEN
         sync: false
       - key: TWILIO_PHONE_NUMBER
+        sync: false
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
         sync: false
 
 databases:
