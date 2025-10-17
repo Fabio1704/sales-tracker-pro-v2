@@ -1,9 +1,8 @@
 services:
-  # Service Web Django Backend
   - type: web
     name: sales-tracker-backend
     env: python
-    region: frankfurt  # Région Europe
+    region: frankfurt
     rootDir: sales_backend/sales_backend
     buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate"
     startCommand: "gunicorn sales_tracker.wsgi:application --bind 0.0.0.0:$PORT"
@@ -48,12 +47,9 @@ services:
       - key: TWILIO_PHONE_NUMBER
         sync: false
 
-  # Base de données PostgreSQL
-  - type: pserv
-    name: sales-tracker-db
-    env: postgres
-    region: frankfurt  # Même région que le backend
+databases:
+  - name: sales-tracker-db
+    region: frankfurt
     plan: free
     databaseName: sales_db
     user: sales_user
-    ipAllowList: []  # Autoriser toutes les connexions (nécessaire pour le plan free)
