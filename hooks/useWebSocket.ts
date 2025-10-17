@@ -93,28 +93,29 @@ export const useWebSocket = (onUserDeleted?: (data: UserDeletedData) => void) =>
     console.log('📤 Message envoyé (polling mode):', message)
   }
 
-  useEffect(() => {
-    if (user?.is_staff) {
-      startPolling()
-    }
+  // Polling automatique désactivé
+  // useEffect(() => {
+  //   if (user?.is_staff) {
+  //     startPolling()
+  //   }
 
-    return () => {
-      stopPolling()
-    }
-  }, [user?.is_staff])
+  //   return () => {
+  //     stopPolling()
+  //   }
+  // }, [user?.is_staff])
 
-  // Reconnexion automatique quand la fenêtre reprend le focus
-  useEffect(() => {
-    const handleFocus = () => {
-      if (user?.is_staff && !isConnected) {
-        console.log('🔄 Fenêtre active, redémarrage du polling')
-        startPolling()
-      }
-    }
+  // Reconnexion automatique désactivée
+  // useEffect(() => {
+  //   const handleFocus = () => {
+  //     if (user?.is_staff && !isConnected) {
+  //       console.log('🔄 Fenêtre active, redémarrage du polling')
+  //       startPolling()
+  //     }
+  //   }
 
-    window.addEventListener('focus', handleFocus)
-    return () => window.removeEventListener('focus', handleFocus)
-  }, [user?.is_staff, isConnected])
+  //   window.addEventListener('focus', handleFocus)
+  //   return () => window.removeEventListener('focus', handleFocus)
+  // }, [user?.is_staff, isConnected])
 
   return {
     isConnected,
