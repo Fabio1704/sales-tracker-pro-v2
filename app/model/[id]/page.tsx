@@ -182,20 +182,10 @@ export default function ModelPage() {
     <div className="min-h-screen bg-slate-50 dark:bg-[#111827] flex">
       <AppSidebar />
 
-      <div className="flex-1 ml-56 transition-all duration-300 min-h-screen flex flex-col">
+      <div className="flex-1 min-w-0 min-h-screen flex flex-col">
         {/* Top bar */}
         <header className="sticky top-0 z-30 bg-white dark:bg-[#111827] border-b border-slate-200 dark:border-white/5 flex items-center gap-4 px-6 py-3">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => router.push("/dashboard")}
-            className="h-9 text-slate-600 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Retour
-          </Button>
-
-          <div className="flex items-center gap-3 ml-2">
+          <div className="flex items-center gap-3">
             <Avatar className="h-8 w-8 ring-2 ring-slate-200 dark:ring-white/10">
               <AvatarImage
                 src={model.profile_photo_url}

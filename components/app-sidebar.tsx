@@ -87,7 +87,7 @@ export function AppSidebar({ unreadMessages = 0 }: AppSidebarProps) {
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 h-full z-40 flex flex-col transition-all duration-300",
+        "sticky top-0 h-screen flex-shrink-0 z-40 flex flex-col transition-all duration-300",
         "bg-white dark:bg-[#1a1f2e] border-r border-slate-200 dark:border-white/5",
         collapsed ? "w-16" : "w-56"
       )}
@@ -98,13 +98,17 @@ export function AppSidebar({ unreadMessages = 0 }: AppSidebarProps) {
           <TrendingUp className="h-4 w-4 text-white" />
         </div>
         {!collapsed && (
-          <span className="text-slate-900 dark:text-white font-bold text-sm tracking-wide uppercase">
+          <span className="text-slate-900 dark:text-white font-bold text-sm tracking-wide uppercase truncate">
             Sales Tracker
           </span>
         )}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="ml-auto text-slate-400 hover:text-slate-700 dark:text-gray-500 dark:hover:text-gray-300 transition-colors"
+          className={cn(
+            "text-slate-400 hover:text-slate-700 dark:text-gray-500 dark:hover:text-gray-300 transition-colors flex-shrink-0",
+            collapsed ? "mx-auto mt-0" : "ml-auto"
+          )}
+          title={collapsed ? "Agrandir" : "Réduire"}
         >
           {collapsed ? (
             <ChevronRight className="h-4 w-4" />
@@ -164,8 +168,8 @@ export function AppSidebar({ unreadMessages = 0 }: AppSidebarProps) {
           {!collapsed && <span>{isDark ? "Mode clair" : "Mode sombre"}</span>}
         </button>
 
-        {/* User info + logout */}
-        <div className="flex items-center gap-2 px-3 py-2 rounded-lg">
+        {/* User info */}
+        <div className={cn("flex items-center gap-2.5 px-3 py-2 rounded-lg", collapsed && "justify-center px-0")}>
           <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
             <span className="text-white text-xs font-bold">
               {user?.first_name?.[0] || user?.username?.[0] || "U"}
@@ -183,14 +187,20 @@ export function AppSidebar({ unreadMessages = 0 }: AppSidebarProps) {
               </p>
             </div>
           )}
-          <button
-            onClick={logout}
-            title="Déconnexion"
-            className="text-slate-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors ml-auto"
-          >
-            <LogOut className="h-4 w-4" />
-          </button>
         </div>
+
+        {/* Logout button below profile */}
+        <button
+          onClick={logout}
+          title="Déconnexion"
+          className={cn(
+            "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-red-500/10 hover:text-red-600 dark:text-gray-400 dark:hover:bg-red-500/10 dark:hover:text-red-400 transition-all duration-200",
+            collapsed && "justify-center px-0"
+          )}
+        >
+          <LogOut className="h-4 w-4 flex-shrink-0" />
+          {!collapsed && <span>Déconnexion</span>}
+        </button>
       </div>
     </aside>
   )

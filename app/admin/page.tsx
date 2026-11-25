@@ -291,7 +291,7 @@ export default function AdminPage() {
     <div className="min-h-screen bg-slate-50 dark:bg-[#111827] flex">
       <AppSidebar unreadMessages={unreadMessages} />
 
-      <div className="flex-1 ml-56 transition-all duration-300 min-h-screen flex flex-col">
+      <div className="flex-1 min-w-0 min-h-screen flex flex-col">
         {/* Top bar */}
         <header className="sticky top-0 z-30 bg-white dark:bg-[#111827] border-b border-slate-200 dark:border-white/5 flex items-center gap-4 px-6 py-3">
           <div className="flex items-center gap-2">
