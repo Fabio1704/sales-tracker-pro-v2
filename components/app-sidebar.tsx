@@ -9,21 +9,19 @@ import {
   LogOut,
   TrendingUp,
   MessageCircle,
-  Settings,
   ChevronLeft,
   ChevronRight,
   Moon,
   Sun,
 } from "lucide-react"
 import { useTheme } from "next-themes"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 
 interface NavItem {
   label: string
   icon: React.ElementType
   href?: string
-  onClick?: () => void
   badge?: number
   adminOnly?: boolean
   superuserOnly?: boolean
@@ -37,8 +35,13 @@ export function AppSidebar({ unreadMessages = 0 }: AppSidebarProps) {
   const router = useRouter()
   const pathname = usePathname()
   const { user, logout } = useAuth()
-  const { theme, setTheme } = useTheme()
+  const { resolvedTheme, setTheme } = useTheme()
   const [collapsed, setCollapsed] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const navItems: NavItem[] = [
     {
@@ -75,32 +78,33 @@ export function AppSidebar({ unreadMessages = 0 }: AppSidebarProps) {
     return true
   })
 
-  // Dédupliquer par href
   const uniqueNav = filteredNav.filter(
     (item, index, self) => index === self.findIndex((t) => t.href === item.href)
   )
+
+  const isDark = mounted ? resolvedTheme === "dark" : true
 
   return (
     <aside
       className={cn(
         "fixed left-0 top-0 h-full z-40 flex flex-col transition-all duration-300",
-        "bg-[#1a1f2e] border-r border-white/5",
+        "bg-white dark:bg-[#1a1f2e] border-r border-slate-200 dark:border-white/5",
         collapsed ? "w-16" : "w-56"
       )}
     >
       {/* Logo */}
-      <div className="flex items-center gap-3 px-4 py-5 border-b border-white/5">
+      <div className="flex items-center gap-3 px-4 py-5 border-b border-slate-200 dark:border-white/5">
         <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-lg">
           <TrendingUp className="h-4 w-4 text-white" />
         </div>
         {!collapsed && (
-          <span className="text-white font-bold text-sm tracking-wide uppercase">
+          <span className="text-slate-900 dark:text-white font-bold text-sm tracking-wide uppercase">
             Sales Tracker
           </span>
         )}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="ml-auto text-gray-500 hover:text-gray-300 transition-colors"
+          className="ml-auto text-slate-400 hover:text-slate-700 dark:text-gray-500 dark:hover:text-gray-300 transition-colors"
         >
           {collapsed ? (
             <ChevronRight className="h-4 w-4" />
@@ -122,12 +126,12 @@ export function AppSidebar({ unreadMessages = 0 }: AppSidebarProps) {
               className={cn(
                 "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative",
                 active
-                  ? "bg-green-500/20 text-green-400"
-                  : "text-gray-400 hover:bg-white/5 hover:text-gray-200"
+                  ? "bg-green-500/15 text-green-600 dark:bg-green-500/20 dark:text-green-400"
+                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200"
               )}
             >
               {active && (
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-green-400 rounded-r-full" />
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-green-500 dark:bg-green-400 rounded-r-full" />
               )}
               <Icon className="h-4 w-4 flex-shrink-0" />
               {!collapsed && <span>{item.label}</span>}
@@ -147,18 +151,17 @@ export function AppSidebar({ unreadMessages = 0 }: AppSidebarProps) {
       </nav>
 
       {/* Bottom Actions */}
-      <div className="border-t border-white/5 p-2 space-y-1">
-        {/* Theme toggle */}
+      <div className="border-t border-slate-200 dark:border-white/5 p-2 space-y-1">
         <button
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:bg-white/5 hover:text-gray-200 transition-all duration-200"
+          onClick={() => setTheme(isDark ? "light" : "dark")}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200 transition-all duration-200"
         >
-          {theme === "dark" ? (
-            <Sun className="h-4 w-4 flex-shrink-0" />
+          {isDark ? (
+            <Sun className="h-4 w-4 flex-shrink-0 text-amber-400" />
           ) : (
-            <Moon className="h-4 w-4 flex-shrink-0" />
+            <Moon className="h-4 w-4 flex-shrink-0 text-slate-600" />
           )}
-          {!collapsed && <span>{theme === "dark" ? "Mode clair" : "Mode sombre"}</span>}
+          {!collapsed && <span>{isDark ? "Mode clair" : "Mode sombre"}</span>}
         </button>
 
         {/* User info + logout */}
@@ -170,12 +173,12 @@ export function AppSidebar({ unreadMessages = 0 }: AppSidebarProps) {
           </div>
           {!collapsed && (
             <div className="flex-1 min-w-0">
-              <p className="text-xs text-white font-medium truncate">
+              <p className="text-xs text-slate-900 dark:text-white font-medium truncate">
                 {user?.first_name
                   ? `${user.first_name} ${user.last_name || ""}`.trim()
                   : user?.username}
               </p>
-              <p className="text-xs text-gray-500 truncate">
+              <p className="text-xs text-slate-500 dark:text-gray-500 truncate">
                 {user?.is_staff ? "Admin" : "Utilisateur"}
               </p>
             </div>
@@ -183,7 +186,7 @@ export function AppSidebar({ unreadMessages = 0 }: AppSidebarProps) {
           <button
             onClick={logout}
             title="Déconnexion"
-            className="text-gray-500 hover:text-red-400 transition-colors ml-auto"
+            className="text-slate-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors ml-auto"
           >
             <LogOut className="h-4 w-4" />
           </button>

@@ -34,7 +34,7 @@ import { StatisticsReports } from "@/components/statistics-reports"
 export default function ModelPage() {
   const params = useParams()
   const router = useRouter()
-  const { theme } = useTheme()
+  const { resolvedTheme } = useTheme()
   const { user, logout, isLoading: authLoading } = useAuth()
   const [model, setModel] = useState<ModelProfile | null>(null)
   const [sales, setSales] = useState<DailySale[]>([])
@@ -55,7 +55,6 @@ export default function ModelPage() {
       router.push("/")
       return
     }
-
     if (user) {
       loadData()
     }
@@ -77,12 +76,7 @@ export default function ModelPage() {
       try {
         statsData = await apiService.getStats(params.id as string)
       } catch {
-        statsData = {
-          gross_usd: 0,
-          fees_usd: 0,
-          net_usd: 0,
-          days_with_sales: 0,
-        }
+        statsData = { gross_usd: 0, fees_usd: 0, net_usd: 0, days_with_sales: 0 }
       }
 
       setModel({
@@ -150,8 +144,8 @@ export default function ModelPage() {
 
   if (authLoading || isLoading) {
     return (
-      <div className="min-h-screen bg-[#111827] flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-green-400" />
+      <div className="min-h-screen bg-slate-50 dark:bg-[#111827] flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-green-500 dark:text-green-400" />
       </div>
     )
   }
@@ -160,9 +154,9 @@ export default function ModelPage() {
 
   if (!model) {
     return (
-      <div className="min-h-screen bg-[#111827] flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-[#111827] flex items-center justify-center">
         <div className="text-center space-y-4">
-          <h2 className="text-xl font-bold text-white">Modèle non trouvé</h2>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white">Modèle non trouvé</h2>
           <Button
             onClick={() => router.back()}
             className="bg-green-500 hover:bg-green-600 text-white"
@@ -185,24 +179,24 @@ export default function ModelPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#111827] flex">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#111827] flex">
       <AppSidebar />
 
       <div className="flex-1 ml-56 transition-all duration-300 min-h-screen flex flex-col">
         {/* Top bar */}
-        <header className="sticky top-0 z-30 bg-[#111827] border-b border-white/5 flex items-center gap-4 px-6 py-3">
+        <header className="sticky top-0 z-30 bg-white dark:bg-[#111827] border-b border-slate-200 dark:border-white/5 flex items-center gap-4 px-6 py-3">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => router.push("/dashboard")}
-            className="h-9 text-gray-400 hover:text-white hover:bg-white/5 gap-2"
+            className="h-9 text-slate-600 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 gap-2"
           >
             <ArrowLeft className="h-4 w-4" />
             Retour
           </Button>
 
           <div className="flex items-center gap-3 ml-2">
-            <Avatar className="h-8 w-8 ring-2 ring-white/10">
+            <Avatar className="h-8 w-8 ring-2 ring-slate-200 dark:ring-white/10">
               <AvatarImage
                 src={model.profile_photo_url}
                 alt={`${model.first_name} ${model.last_name}`}
@@ -212,10 +206,10 @@ export default function ModelPage() {
               </AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-sm font-semibold text-white leading-none">
+              <p className="text-sm font-semibold text-slate-900 dark:text-white leading-none">
                 {model.first_name} {model.last_name}
               </p>
-              <p className="text-xs text-gray-500 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-gray-500 mt-0.5">
                 Profil et statistiques
               </p>
             </div>
@@ -227,7 +221,7 @@ export default function ModelPage() {
               size="icon"
               onClick={loadData}
               disabled={isRefreshing}
-              className="h-9 w-9 text-gray-400 hover:text-gray-200 hover:bg-white/5"
+              className="h-9 w-9 text-slate-500 hover:text-slate-900 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-slate-100 dark:hover:bg-white/5"
             >
               {isRefreshing ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -242,10 +236,10 @@ export default function ModelPage() {
           {/* Page Title + Add Sale CTA */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-white">
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
                 {model.first_name} {model.last_name}
               </h1>
-              <p className="text-sm text-gray-500 mt-0.5">
+              <p className="text-sm text-slate-500 dark:text-gray-500 mt-0.5">
                 Suivez les performances et gérez les ventes en temps réel
               </p>
             </div>
@@ -259,11 +253,11 @@ export default function ModelPage() {
           </div>
 
           {error && (
-            <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 text-red-400 text-sm flex items-center gap-2">
+            <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 text-red-600 dark:text-red-400 text-sm flex items-center gap-2">
               <X className="h-4 w-4 flex-shrink-0" /> {error}
               <button
                 onClick={() => setError(null)}
-                className="ml-auto hover:text-red-300"
+                className="ml-auto hover:opacity-75"
               >
                 <X className="h-3 w-3" />
               </button>
@@ -272,49 +266,49 @@ export default function ModelPage() {
 
           {/* KPI Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-[#1a1f2e] rounded-xl border border-white/5 p-4 flex items-center gap-4">
+            <div className="bg-white dark:bg-[#1a1f2e] rounded-xl border border-slate-200 dark:border-white/5 p-4 flex items-center gap-4">
               <div className="w-10 h-10 rounded-lg bg-green-500/15 flex items-center justify-center">
-                <Euro className="h-5 w-5 text-green-400" />
+                <Euro className="h-5 w-5 text-green-600 dark:text-green-400" />
               </div>
               <div>
-                <p className="text-xs text-gray-500">Ventes Brutes</p>
-                <p className="text-xl font-bold text-white">
+                <p className="text-xs text-slate-500 dark:text-gray-500">Ventes Brutes</p>
+                <p className="text-xl font-bold text-slate-900 dark:text-white">
                   {Number(stats?.gross_usd || 0).toFixed(2)} $
                 </p>
               </div>
             </div>
 
-            <div className="bg-[#1a1f2e] rounded-xl border border-white/5 p-4 flex items-center gap-4">
+            <div className="bg-white dark:bg-[#1a1f2e] rounded-xl border border-slate-200 dark:border-white/5 p-4 flex items-center gap-4">
               <div className="w-10 h-10 rounded-lg bg-orange-500/15 flex items-center justify-center">
-                <Calculator className="h-5 w-5 text-orange-400" />
+                <Calculator className="h-5 w-5 text-orange-600 dark:text-orange-400" />
               </div>
               <div>
-                <p className="text-xs text-gray-500">Honoraires (20%)</p>
-                <p className="text-xl font-bold text-white">
+                <p className="text-xs text-slate-500 dark:text-gray-500">Honoraires (20%)</p>
+                <p className="text-xl font-bold text-slate-900 dark:text-white">
                   {Number(stats?.fees_usd || 0).toFixed(2)} $
                 </p>
               </div>
             </div>
 
-            <div className="bg-[#1a1f2e] rounded-xl border border-white/5 p-4 flex items-center gap-4">
+            <div className="bg-white dark:bg-[#1a1f2e] rounded-xl border border-slate-200 dark:border-white/5 p-4 flex items-center gap-4">
               <div className="w-10 h-10 rounded-lg bg-blue-500/15 flex items-center justify-center">
-                <TrendingUp className="h-5 w-5 text-blue-400" />
+                <TrendingUp className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <p className="text-xs text-gray-500">Ventes Nettes (80%)</p>
-                <p className="text-xl font-bold text-white">
+                <p className="text-xs text-slate-500 dark:text-gray-500">Ventes Nettes (80%)</p>
+                <p className="text-xl font-bold text-slate-900 dark:text-white">
                   {Number(stats?.net_usd || 0).toFixed(2)} $
                 </p>
               </div>
             </div>
 
-            <div className="bg-[#1a1f2e] rounded-xl border border-white/5 p-4 flex items-center gap-4">
+            <div className="bg-white dark:bg-[#1a1f2e] rounded-xl border border-slate-200 dark:border-white/5 p-4 flex items-center gap-4">
               <div className="w-10 h-10 rounded-lg bg-purple-500/15 flex items-center justify-center">
-                <Calendar className="h-5 w-5 text-purple-400" />
+                <Calendar className="h-5 w-5 text-purple-600 dark:text-purple-400" />
               </div>
               <div>
-                <p className="text-xs text-gray-500">Jours avec Ventes</p>
-                <p className="text-xl font-bold text-white">
+                <p className="text-xs text-slate-500 dark:text-gray-500">Jours avec Ventes</p>
+                <p className="text-xl font-bold text-slate-900 dark:text-white">
                   {stats?.days_with_sales || 0}
                 </p>
               </div>
@@ -323,30 +317,30 @@ export default function ModelPage() {
 
           {/* Add Sale Form */}
           {showAddForm && (
-            <div className="bg-[#1a1f2e] border border-white/10 rounded-xl p-6 space-y-4">
+            <div className="bg-white dark:bg-[#1a1f2e] border border-slate-200 dark:border-white/10 rounded-xl p-6 space-y-4">
               <div className="flex items-center justify-between">
-                <h2 className="text-white font-semibold">Nouvelle vente</h2>
+                <h2 className="text-slate-900 dark:text-white font-semibold">Nouvelle vente</h2>
                 <button
                   onClick={() => setShowAddForm(false)}
-                  className="text-gray-500 hover:text-gray-300"
+                  className="text-slate-400 hover:text-slate-700 dark:text-gray-500 dark:hover:text-gray-300"
                 >
                   <X className="h-4 w-4" />
                 </button>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <Label className="text-xs text-gray-400">Date</Label>
+                  <Label className="text-xs text-slate-600 dark:text-gray-400">Date</Label>
                   <Input
                     type="date"
                     value={saleData.date}
                     onChange={(e) =>
                       setSaleData({ ...saleData, date: e.target.value })
                     }
-                    className="bg-[#111827] border-white/10 text-gray-200 focus-visible:ring-green-500/30 h-9 text-sm"
+                    className="bg-slate-50 dark:bg-[#111827] border-slate-200 dark:border-white/10 text-slate-900 dark:text-gray-200 focus-visible:ring-green-500/30 h-9 text-sm"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label className="text-xs text-gray-400">Montant ($)</Label>
+                  <Label className="text-xs text-slate-600 dark:text-gray-400">Montant ($)</Label>
                   <Input
                     type="number"
                     step="0.01"
@@ -355,7 +349,7 @@ export default function ModelPage() {
                       setSaleData({ ...saleData, amount: e.target.value })
                     }
                     placeholder="0.00"
-                    className="bg-[#111827] border-white/10 text-gray-200 placeholder:text-gray-600 focus-visible:ring-green-500/30 h-9 text-sm"
+                    className="bg-slate-50 dark:bg-[#111827] border-slate-200 dark:border-white/10 text-slate-900 dark:text-gray-200 placeholder:text-slate-400 dark:placeholder:text-gray-600 focus-visible:ring-green-500/30 h-9 text-sm"
                   />
                 </div>
               </div>
@@ -369,7 +363,7 @@ export default function ModelPage() {
                 <Button
                   variant="outline"
                   onClick={() => setShowAddForm(false)}
-                  className="border-white/10 bg-transparent text-gray-400 hover:bg-white/5 hover:text-gray-200 h-9 text-sm"
+                  className="border-slate-200 dark:border-white/10 bg-transparent text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-gray-200 h-9 text-sm"
                 >
                   Annuler
                 </Button>
@@ -379,7 +373,7 @@ export default function ModelPage() {
 
           {/* Tabs */}
           <Tabs defaultValue="daily" className="space-y-4">
-            <TabsList className="bg-[#1a1f2e] border border-white/5 rounded-xl p-1 h-auto flex-wrap">
+            <TabsList className="bg-white dark:bg-[#1a1f2e] border border-slate-200 dark:border-white/5 rounded-xl p-1 h-auto flex-wrap">
               {[
                 { value: "daily", label: "Saisie Quotidienne", icon: Plus },
                 { value: "weekly", label: "Vue Hebdomadaire", icon: CalendarDays },
@@ -389,7 +383,7 @@ export default function ModelPage() {
                 <TabsTrigger
                   key={value}
                   value={value}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-500 transition-all data-[state=active]:bg-green-500/20 data-[state=active]:text-green-400"
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-500 dark:text-gray-500 transition-all data-[state=active]:bg-green-500/15 data-[state=active]:text-green-600 dark:data-[state=active]:bg-green-500/20 dark:data-[state=active]:text-green-400"
                 >
                   <Icon className="h-4 w-4" />
                   <span>{label}</span>
@@ -399,9 +393,9 @@ export default function ModelPage() {
 
             {/* Daily Tab */}
             <TabsContent value="daily">
-              <div className="bg-[#1a1f2e] rounded-xl border border-white/5 overflow-hidden">
-                <div className="flex items-center justify-between px-4 py-3 border-b border-white/5">
-                  <h3 className="text-sm font-semibold text-white">
+              <div className="bg-white dark:bg-[#1a1f2e] rounded-xl border border-slate-200 dark:border-white/5 overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-white/5">
+                  <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
                     Liste des Ventes ({sales.length})
                   </h3>
                   <Button
@@ -418,36 +412,36 @@ export default function ModelPage() {
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
-                        <tr className="border-b border-white/5">
-                          <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <tr className="border-b border-slate-200 dark:border-white/5">
+                          <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 dark:text-gray-500 uppercase tracking-wider">
                             Date
                           </th>
-                          <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 dark:text-gray-500 uppercase tracking-wider">
                             Ajouté le
                           </th>
-                          <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 dark:text-gray-500 uppercase tracking-wider">
                             Brut
                           </th>
-                          <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 dark:text-gray-500 uppercase tracking-wider">
                             Honoraires (20%)
                           </th>
-                          <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 dark:text-gray-500 uppercase tracking-wider">
                             Net (80%)
                           </th>
-                          <th className="w-16 px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th className="w-16 px-4 py-3 text-xs font-medium text-slate-500 dark:text-gray-500 uppercase tracking-wider">
                             Actions
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-white/5">
+                      <tbody className="divide-y divide-slate-200 dark:divide-white/5">
                         {sales.map((sale) => {
                           const amount = Number(sale.amount_usd || 0)
                           return (
                             <tr
                               key={sale.id}
-                              className="group hover:bg-white/[0.02] transition-colors"
+                              className="group hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors"
                             >
-                              <td className="px-4 py-3.5 font-medium text-white">
+                              <td className="px-4 py-3.5 font-medium text-slate-900 dark:text-white">
                                 {new Date(sale.date).toLocaleDateString("fr-FR", {
                                   weekday: "short",
                                   year: "numeric",
@@ -455,22 +449,22 @@ export default function ModelPage() {
                                   day: "numeric",
                                 })}
                               </td>
-                              <td className="px-4 py-3.5 text-gray-500 text-xs">
+                              <td className="px-4 py-3.5 text-slate-500 dark:text-gray-500 text-xs">
                                 {new Date(sale.created_at).toLocaleDateString("fr-FR")}
                               </td>
-                              <td className="px-4 py-3.5 font-semibold text-white">
+                              <td className="px-4 py-3.5 font-semibold text-slate-900 dark:text-white">
                                 {amount.toFixed(2)} $
                               </td>
-                              <td className="px-4 py-3.5 text-orange-400 text-xs">
+                              <td className="px-4 py-3.5 text-orange-600 dark:text-orange-400 text-xs">
                                 {(amount * 0.2).toFixed(2)} $
                               </td>
-                              <td className="px-4 py-3.5 font-semibold text-green-400">
+                              <td className="px-4 py-3.5 font-semibold text-green-600 dark:text-green-400">
                                 {(amount * 0.8).toFixed(2)} $
                               </td>
                               <td className="px-4 py-3.5">
                                 <button
                                   onClick={() => handleDeleteSale(sale.id)}
-                                  className="p-1.5 rounded-lg text-gray-500 hover:text-red-400 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100"
+                                  className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 dark:text-gray-500 dark:hover:text-red-400 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100"
                                   title="Supprimer"
                                 >
                                   <Trash2 className="h-3.5 w-3.5" />
@@ -484,13 +478,13 @@ export default function ModelPage() {
                   </div>
                 ) : (
                   <div className="py-16 text-center">
-                    <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center mx-auto mb-3">
-                      <BarChart3 className="h-6 w-6 text-gray-600" />
+                    <div className="w-12 h-12 bg-slate-100 dark:bg-white/5 rounded-xl flex items-center justify-center mx-auto mb-3">
+                      <BarChart3 className="h-6 w-6 text-slate-400 dark:text-gray-600" />
                     </div>
-                    <h3 className="text-white font-semibold mb-1">
+                    <h3 className="text-slate-900 dark:text-white font-semibold mb-1">
                       Aucune vente enregistrée
                     </h3>
-                    <p className="text-sm text-gray-500 mb-5">
+                    <p className="text-sm text-slate-500 dark:text-gray-500 mb-5">
                       Commencez par ajouter votre première vente
                     </p>
                     <Button
@@ -506,27 +500,27 @@ export default function ModelPage() {
             </TabsContent>
 
             <TabsContent value="weekly">
-              <div className="bg-[#1a1f2e] rounded-xl border border-white/5 p-6">
+              <div className="bg-white dark:bg-[#1a1f2e] rounded-xl border border-slate-200 dark:border-white/5 p-6">
                 <WeeklyView sales={sales} modelId={params.id as string} />
               </div>
             </TabsContent>
 
             <TabsContent value="monthly">
-              <div className="bg-[#1a1f2e] rounded-xl border border-white/5 p-6">
+              <div className="bg-white dark:bg-[#1a1f2e] rounded-xl border border-slate-200 dark:border-white/5 p-6">
                 <MonthlyView
                   sales={sales}
                   modelId={params.id as string}
-                  theme={theme}
+                  theme={resolvedTheme}
                 />
               </div>
             </TabsContent>
 
             <TabsContent value="reports">
-              <div className="bg-[#1a1f2e] rounded-xl border border-white/5 p-6">
+              <div className="bg-white dark:bg-[#1a1f2e] rounded-xl border border-slate-200 dark:border-white/5 p-6">
                 <StatisticsReports
                   sales={sales}
                   model={modelForReports}
-                  theme={theme || "dark"}
+                  theme={resolvedTheme || "dark"}
                 />
               </div>
             </TabsContent>

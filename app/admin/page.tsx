@@ -6,9 +6,9 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import {
-  Users, Shield, Activity, Trash2, Eye, BarChart3,
+  Users, Activity, Trash2, Eye, BarChart3,
   UserPlus, TrendingUp, Euro, Loader2, MessageCircle,
-  Search, Filter, X, RefreshCw, ChevronRight,
+  Search, Filter, X, RefreshCw,
 } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
 import { apiService, ModelProfile, DailySale, User as ApiUser } from "@/lib/api"
@@ -64,9 +64,8 @@ export default function AdminPage() {
   const [unreadMessages, setUnreadMessages] = useState(0)
   const [userSearch, setUserSearch] = useState("")
   const [modelSearch, setModelSearch] = useState("")
-  const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set())
 
-  const { isConnected: wsConnected } = useWebSocket((deletedUserData) => {
+  const { isConnected: wsConnected } = useWebSocket(() => {
     loadAdminData()
     setActivities(prev => [{
       id: `activity-${Date.now()}`, userId: "system", modelId: "system",
@@ -123,7 +122,7 @@ export default function AdminPage() {
       sessionStorage.clear()
       setUsers([]); setModels([]); setAllSales([]); setActivities([])
 
-      const [usersResponse, modelsResponse] = await Promise.all([
+      const [usersResponse] = await Promise.all([
         apiService.getUsers(), apiService.getModels()
       ])
       await loadUnreadMessages()
@@ -261,8 +260,6 @@ export default function AdminPage() {
     setUsers(users.map(u => u.id === userId ? { ...u, isActive: !u.isActive, is_active: !u.is_active } : u))
   }
 
-  // Stats
-  const totalUsers = users.filter(u => !u.is_staff).length
   const activeUsers = users.filter(u => !u.is_staff && u.is_active).length
   const totalModels = models.length
   const totalRevenue = models.reduce((sum, m) => sum + (Number(m.totalAmount) || 0), 0)
@@ -282,8 +279,8 @@ export default function AdminPage() {
 
   if (isLoading || dataLoading) {
     return (
-      <div className="min-h-screen bg-[#111827] flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-purple-400" />
+      <div className="min-h-screen bg-slate-50 dark:bg-[#111827] flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-purple-500 dark:text-purple-400" />
       </div>
     )
   }
@@ -291,15 +288,15 @@ export default function AdminPage() {
   if (!currentUser?.is_staff && currentUser?.username !== "fabio") return null
 
   return (
-    <div className="min-h-screen bg-[#111827] flex">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#111827] flex">
       <AppSidebar unreadMessages={unreadMessages} />
 
       <div className="flex-1 ml-56 transition-all duration-300 min-h-screen flex flex-col">
         {/* Top bar */}
-        <header className="sticky top-0 z-30 bg-[#111827] border-b border-white/5 flex items-center gap-4 px-6 py-3">
+        <header className="sticky top-0 z-30 bg-white dark:bg-[#111827] border-b border-slate-200 dark:border-white/5 flex items-center gap-4 px-6 py-3">
           <div className="flex items-center gap-2">
             <div className={`w-2 h-2 rounded-full ${wsConnected ? "bg-green-500 animate-pulse" : "bg-yellow-500"}`} />
-            <span className="text-xs text-gray-500">{wsConnected ? "Sync actif" : "Polling"}</span>
+            <span className="text-xs text-slate-500 dark:text-gray-500">{wsConnected ? "Sync actif" : "Polling"}</span>
           </div>
           <div className="ml-auto flex items-center gap-2">
             {currentUser?.is_superuser && (
@@ -307,7 +304,7 @@ export default function AdminPage() {
                 variant="ghost"
                 size="sm"
                 onClick={() => router.push("/admin/contact-messages")}
-                className="relative h-9 text-gray-400 hover:text-gray-200 hover:bg-white/5 gap-2"
+                className="relative h-9 text-slate-600 hover:text-slate-900 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-slate-100 dark:hover:bg-white/5 gap-2"
               >
                 <MessageCircle className="h-4 w-4" />
                 Messages
@@ -323,7 +320,7 @@ export default function AdminPage() {
               size="icon"
               onClick={loadAdminData}
               disabled={dataLoading}
-              className="h-9 w-9 text-gray-400 hover:text-gray-200 hover:bg-white/5"
+              className="h-9 w-9 text-slate-500 hover:text-slate-900 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-slate-100 dark:hover:bg-white/5"
             >
               {dataLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
             </Button>
@@ -334,8 +331,8 @@ export default function AdminPage() {
           {/* Title */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-white">Administration</h1>
-              <p className="text-sm text-gray-500 mt-0.5">Gérez la plateforme Sales Tracker Pro</p>
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Administration</h1>
+              <p className="text-sm text-slate-500 dark:text-gray-500 mt-0.5">Gérez la plateforme Sales Tracker Pro</p>
             </div>
             <Button
               onClick={() => setShowCreateUser(true)}
@@ -348,40 +345,40 @@ export default function AdminPage() {
 
           {/* Error */}
           {error && (
-            <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 text-red-400 text-sm flex items-center gap-2">
+            <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 text-red-600 dark:text-red-400 text-sm flex items-center gap-2">
               <X className="h-4 w-4 flex-shrink-0" /> {error}
-              <button onClick={() => setError(null)} className="ml-auto hover:text-red-300"><X className="h-3 w-3" /></button>
+              <button onClick={() => setError(null)} className="ml-auto hover:opacity-75"><X className="h-3 w-3" /></button>
             </div>
           )}
 
           {/* Stats cards */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {[
-              { label: "Utilisateurs", value: users.length, sub: `${activeUsers} actifs`, icon: Users, bgClass: "bg-blue-500/15", textClass: "text-blue-400" },
-              { label: "Modèles", value: totalModels, sub: "de suivi", icon: BarChart3, bgClass: "bg-purple-500/15", textClass: "text-purple-400" },
-              { label: "Ventes", value: totalSales, sub: "transactions", icon: TrendingUp, bgClass: "bg-green-500/15", textClass: "text-green-400" },
-              { label: "Revenus", value: `${totalRevenue.toFixed(0)} $`, sub: "total plateforme", icon: Euro, bgClass: "bg-yellow-500/15", textClass: "text-yellow-400" },
-              { label: "Activité", value: activities.length, sub: "actions récentes", icon: Activity, bgClass: "bg-red-500/15", textClass: "text-red-400" },
+              { label: "Utilisateurs", value: users.length, sub: `${activeUsers} actifs`, icon: Users, bgClass: "bg-blue-500/15", textClass: "text-blue-600 dark:text-blue-400" },
+              { label: "Modèles", value: totalModels, sub: "de suivi", icon: BarChart3, bgClass: "bg-purple-500/15", textClass: "text-purple-600 dark:text-purple-400" },
+              { label: "Ventes", value: totalSales, sub: "transactions", icon: TrendingUp, bgClass: "bg-green-500/15", textClass: "text-green-600 dark:text-green-400" },
+              { label: "Revenus", value: `${totalRevenue.toFixed(0)} $`, sub: "total plateforme", icon: Euro, bgClass: "bg-yellow-500/15", textClass: "text-yellow-600 dark:text-yellow-400" },
+              { label: "Activité", value: activities.length, sub: "actions récentes", icon: Activity, bgClass: "bg-red-500/15", textClass: "text-red-600 dark:text-red-400" },
             ].map(({ label, value, sub, icon: Icon, bgClass, textClass }) => (
-              <div key={label} className="bg-[#1a1f2e] rounded-xl border border-white/5 p-4">
+              <div key={label} className="bg-white dark:bg-[#1a1f2e] rounded-xl border border-slate-200 dark:border-white/5 p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs text-gray-500">{label}</span>
+                  <span className="text-xs text-slate-500 dark:text-gray-500">{label}</span>
                   <div className={`w-8 h-8 rounded-lg ${bgClass} flex items-center justify-center`}>
                     <Icon className={`h-4 w-4 ${textClass}`} />
                   </div>
                 </div>
-                <p className="text-xl font-bold text-white">{value}</p>
-                <p className="text-xs text-gray-600 mt-0.5">{sub}</p>
+                <p className="text-xl font-bold text-slate-900 dark:text-white">{value}</p>
+                <p className="text-xs text-slate-400 dark:text-gray-600 mt-0.5">{sub}</p>
               </div>
             ))}
           </div>
 
           {/* Create User Form */}
           {showCreateUser && (
-            <div className="bg-[#1a1f2e] border border-white/10 rounded-xl p-6 space-y-4">
+            <div className="bg-white dark:bg-[#1a1f2e] border border-slate-200 dark:border-white/10 rounded-xl p-6 space-y-4">
               <div className="flex items-center justify-between">
-                <h2 className="text-white font-semibold">Nouvel utilisateur</h2>
-                <button onClick={() => setShowCreateUser(false)} className="text-gray-500 hover:text-gray-300">
+                <h2 className="text-slate-900 dark:text-white font-semibold">Nouvel utilisateur</h2>
+                <button onClick={() => setShowCreateUser(false)} className="text-slate-400 hover:text-slate-700 dark:text-gray-500 dark:hover:text-gray-300">
                   <X className="h-4 w-4" />
                 </button>
               </div>
@@ -394,11 +391,11 @@ export default function AdminPage() {
                 ].map(({ id, label, type, placeholder, key }) =>
                   type === "select" ? (
                     <div key={id} className="space-y-1.5">
-                      <Label className="text-xs text-gray-400">{label}</Label>
+                      <Label className="text-xs text-slate-600 dark:text-gray-400">{label}</Label>
                       <select
                         value={newUser.role}
                         onChange={e => setNewUser({ ...newUser, role: e.target.value as "admin" | "user" })}
-                        className="w-full h-9 px-3 rounded-lg bg-[#111827] border border-white/10 text-gray-200 text-sm focus:outline-none focus:ring-1 focus:ring-purple-500/30"
+                        className="w-full h-9 px-3 rounded-lg bg-slate-50 dark:bg-[#111827] border border-slate-200 dark:border-white/10 text-slate-900 dark:text-gray-200 text-sm focus:outline-none focus:ring-1 focus:ring-purple-500/30"
                       >
                         <option value="user">Utilisateur</option>
                         {currentUser?.is_superuser && <option value="admin">Administrateur</option>}
@@ -406,25 +403,25 @@ export default function AdminPage() {
                     </div>
                   ) : (
                     <div key={id} className="space-y-1.5">
-                      <Label className="text-xs text-gray-400">{label}</Label>
+                      <Label className="text-xs text-slate-600 dark:text-gray-400">{label}</Label>
                       <Input
                         type={type}
                         value={newUser[key] as string}
                         onChange={e => setNewUser({ ...newUser, [key]: e.target.value })}
                         placeholder={placeholder}
-                        className="bg-[#111827] border-white/10 text-gray-200 placeholder:text-gray-600 focus-visible:ring-purple-500/30 h-9 text-sm"
+                        className="bg-slate-50 dark:bg-[#111827] border-slate-200 dark:border-white/10 text-slate-900 dark:text-gray-200 placeholder:text-slate-400 dark:placeholder:text-gray-600 focus-visible:ring-purple-500/30 h-9 text-sm"
                       />
                     </div>
                   )
                 )}
                 <div className="space-y-1.5 sm:col-span-2">
-                  <Label className="text-xs text-gray-400">Mot de passe (vide = auto-généré)</Label>
+                  <Label className="text-xs text-slate-600 dark:text-gray-400">Mot de passe (vide = auto-généré)</Label>
                   <Input
                     type="password"
                     value={newUser.password}
                     onChange={e => setNewUser({ ...newUser, password: e.target.value })}
                     placeholder="••••••••"
-                    className="bg-[#111827] border-white/10 text-gray-200 placeholder:text-gray-600 focus-visible:ring-purple-500/30 h-9 text-sm"
+                    className="bg-slate-50 dark:bg-[#111827] border-slate-200 dark:border-white/10 text-slate-900 dark:text-gray-200 placeholder:text-slate-400 dark:placeholder:text-gray-600 focus-visible:ring-purple-500/30 h-9 text-sm"
                   />
                 </div>
               </div>
@@ -433,7 +430,7 @@ export default function AdminPage() {
                   Créer
                 </Button>
                 <Button variant="outline" onClick={() => setShowCreateUser(false)}
-                  className="border-white/10 bg-transparent text-gray-400 hover:bg-white/5 hover:text-gray-200 h-9 text-sm">
+                  className="border-slate-200 dark:border-white/10 bg-transparent text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-gray-200 h-9 text-sm">
                   Annuler
                 </Button>
               </div>
@@ -442,7 +439,7 @@ export default function AdminPage() {
 
           {/* Tabs */}
           <Tabs defaultValue="users" className="space-y-4">
-            <TabsList className="bg-[#1a1f2e] border border-white/5 rounded-xl p-1 h-auto">
+            <TabsList className="bg-white dark:bg-[#1a1f2e] border border-slate-200 dark:border-white/5 rounded-xl p-1 h-auto">
               {[
                 { value: "users", label: "Utilisateurs", icon: Users },
                 { value: "models", label: "Modèles", icon: BarChart3 },
@@ -451,7 +448,7 @@ export default function AdminPage() {
                 <TabsTrigger
                   key={value}
                   value={value}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-gray-500 transition-all data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400"
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-500 dark:text-gray-500 transition-all data-[state=active]:bg-purple-500/15 data-[state=active]:text-purple-600 dark:data-[state=active]:bg-purple-500/20 dark:data-[state=active]:text-purple-400"
                 >
                   <Icon className="h-4 w-4" />
                   {label}
@@ -461,36 +458,36 @@ export default function AdminPage() {
 
             {/* Users Tab */}
             <TabsContent value="users">
-              <div className="bg-[#1a1f2e] rounded-xl border border-white/5 overflow-hidden">
-                <div className="flex items-center gap-3 px-4 py-3 border-b border-white/5">
+              <div className="bg-white dark:bg-[#1a1f2e] rounded-xl border border-slate-200 dark:border-white/5 overflow-hidden">
+                <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-200 dark:border-white/5">
                   <div className="relative flex-1 max-w-xs">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-500" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 dark:text-gray-500" />
                     <Input
                       value={userSearch}
                       onChange={e => setUserSearch(e.target.value)}
                       placeholder="Rechercher..."
-                      className="pl-8 h-8 text-xs bg-[#111827] border-white/10 text-gray-200 placeholder:text-gray-600 focus-visible:ring-purple-500/30"
+                      className="pl-8 h-8 text-xs bg-slate-100 dark:bg-[#111827] border-slate-200 dark:border-white/10 text-slate-900 dark:text-gray-200 placeholder:text-slate-400 dark:placeholder:text-gray-600 focus-visible:ring-purple-500/30"
                     />
                   </div>
-                  <span className="text-xs text-gray-500 ml-auto">{filteredUsers.length} utilisateur(s)</span>
-                  <button className="text-gray-500 hover:text-gray-300"><Filter className="h-4 w-4" /></button>
+                  <span className="text-xs text-slate-500 dark:text-gray-500 ml-auto">{filteredUsers.length} utilisateur(s)</span>
+                  <button className="text-slate-400 hover:text-slate-700 dark:text-gray-500 dark:hover:text-gray-300"><Filter className="h-4 w-4" /></button>
                 </div>
 
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b border-white/5">
-                        <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Utilisateur</th>
-                        <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                        <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Rôle</th>
-                        <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
-                        <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Dernière connexion</th>
-                        <th className="w-28 px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                      <tr className="border-b border-slate-200 dark:border-white/5">
+                        <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 dark:text-gray-500 uppercase tracking-wider">Utilisateur</th>
+                        <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 dark:text-gray-500 uppercase tracking-wider">Email</th>
+                        <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 dark:text-gray-500 uppercase tracking-wider">Rôle</th>
+                        <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 dark:text-gray-500 uppercase tracking-wider">Statut</th>
+                        <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 dark:text-gray-500 uppercase tracking-wider">Dernière connexion</th>
+                        <th className="w-28 px-4 py-3 text-xs font-medium text-slate-500 dark:text-gray-500 uppercase tracking-wider">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/5">
+                    <tbody className="divide-y divide-slate-200 dark:divide-white/5">
                       {filteredUsers.map(user => (
-                        <tr key={user.id} className="group hover:bg-white/[0.02] transition-colors">
+                        <tr key={user.id} className="group hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors">
                           <td className="px-4 py-3.5">
                             <div className="flex items-center gap-3">
                               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center flex-shrink-0">
@@ -498,17 +495,17 @@ export default function AdminPage() {
                                   {user.first_name?.[0] || user.username?.[0] || "?"}
                                 </span>
                               </div>
-                              <span className="font-medium text-white text-sm">
+                              <span className="font-medium text-slate-900 dark:text-white text-sm">
                                 {user.first_name} {user.last_name}
                               </span>
                             </div>
                           </td>
-                          <td className="px-4 py-3.5 text-gray-400 text-sm">{user.email}</td>
+                          <td className="px-4 py-3.5 text-slate-600 dark:text-gray-400 text-sm">{user.email}</td>
                           <td className="px-4 py-3.5">
                             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                               user.is_staff
-                                ? "bg-purple-500/15 text-purple-400"
-                                : "bg-white/5 text-gray-400"
+                                ? "bg-purple-500/15 text-purple-600 dark:text-purple-400"
+                                : "bg-slate-100 text-slate-600 dark:bg-white/5 dark:text-gray-400"
                             }`}>
                               {user.is_staff ? "Admin" : "Utilisateur"}
                             </span>
@@ -516,14 +513,14 @@ export default function AdminPage() {
                           <td className="px-4 py-3.5">
                             <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium ${
                               user.is_active
-                                ? "bg-green-500/15 text-green-400"
-                                : "bg-red-500/15 text-red-400"
+                                ? "bg-green-500/15 text-green-600 dark:text-green-400"
+                                : "bg-red-500/15 text-red-600 dark:text-red-400"
                             }`}>
-                              <span className={`w-1.5 h-1.5 rounded-full ${user.is_active ? "bg-green-400" : "bg-red-400"}`} />
+                              <span className={`w-1.5 h-1.5 rounded-full ${user.is_active ? "bg-green-500 dark:bg-green-400" : "bg-red-500 dark:bg-red-400"}`} />
                               {user.is_active ? "Actif" : "Inactif"}
                             </span>
                           </td>
-                          <td className="px-4 py-3.5 text-gray-500 text-xs">
+                          <td className="px-4 py-3.5 text-slate-500 dark:text-gray-500 text-xs">
                             {user.lastLogin ? user.lastLogin.toLocaleDateString("fr-FR") : "Jamais"}
                           </td>
                           <td className="px-4 py-3.5">
@@ -532,26 +529,26 @@ export default function AdminPage() {
                                 <>
                                   <button
                                     onClick={() => toggleUserStatus(user.id)}
-                                    className="p-1.5 rounded-lg text-gray-500 hover:text-yellow-400 hover:bg-yellow-500/10 transition-all"
+                                    className="p-1.5 rounded-lg text-slate-400 hover:text-yellow-600 dark:text-gray-500 dark:hover:text-yellow-400 hover:bg-yellow-500/10 transition-all"
                                     title="Changer statut"
                                   >
                                     <Activity className="h-3.5 w-3.5" />
                                   </button>
                                   <AlertDialog>
                                     <AlertDialogTrigger asChild>
-                                      <button className="p-1.5 rounded-lg text-gray-500 hover:text-red-400 hover:bg-red-500/10 transition-all">
+                                      <button className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 dark:text-gray-500 dark:hover:text-red-400 hover:bg-red-500/10 transition-all">
                                         <Trash2 className="h-3.5 w-3.5" />
                                       </button>
                                     </AlertDialogTrigger>
-                                    <AlertDialogContent className="bg-[#1a1f2e] border-white/10 text-white">
+                                    <AlertDialogContent className="bg-white dark:bg-[#1a1f2e] border-slate-200 dark:border-white/10 text-slate-900 dark:text-white">
                                       <AlertDialogHeader>
                                         <AlertDialogTitle>Supprimer {user.first_name} {user.last_name} ?</AlertDialogTitle>
-                                        <AlertDialogDescription className="text-gray-400">
+                                        <AlertDialogDescription className="text-slate-500 dark:text-gray-400">
                                           Action irréversible. Tous ses modèles seront également supprimés.
                                         </AlertDialogDescription>
                                       </AlertDialogHeader>
                                       <AlertDialogFooter>
-                                        <AlertDialogCancel className="bg-white/5 border-white/10 text-gray-300 hover:bg-white/10">Annuler</AlertDialogCancel>
+                                        <AlertDialogCancel className="bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-700 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-white/10">Annuler</AlertDialogCancel>
                                         <AlertDialogAction onClick={() => handleDeleteUser(user.id)} className="bg-red-500 hover:bg-red-600 text-white">
                                           Supprimer
                                         </AlertDialogAction>
@@ -568,12 +565,12 @@ export default function AdminPage() {
                   </table>
                   {filteredUsers.length === 0 && (
                     <div className="py-16 text-center">
-                      <Users className="h-8 w-8 text-gray-700 mx-auto mb-3" />
-                      <p className="text-gray-500 text-sm">Aucun utilisateur trouvé</p>
+                      <Users className="h-8 w-8 text-slate-300 dark:text-gray-700 mx-auto mb-3" />
+                      <p className="text-slate-500 dark:text-gray-500 text-sm">Aucun utilisateur trouvé</p>
                     </div>
                   )}
                 </div>
-                <div className="px-4 py-3 border-t border-white/5 text-xs text-gray-600">
+                <div className="px-4 py-3 border-t border-slate-200 dark:border-white/5 text-xs text-slate-400 dark:text-gray-600">
                   {filteredUsers.length} utilisateur(s) • {activeUsers} actif(s)
                 </div>
               </div>
@@ -581,66 +578,66 @@ export default function AdminPage() {
 
             {/* Models Tab */}
             <TabsContent value="models">
-              <div className="bg-[#1a1f2e] rounded-xl border border-white/5 overflow-hidden">
-                <div className="flex items-center gap-3 px-4 py-3 border-b border-white/5">
+              <div className="bg-white dark:bg-[#1a1f2e] rounded-xl border border-slate-200 dark:border-white/5 overflow-hidden">
+                <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-200 dark:border-white/5">
                   <div className="relative flex-1 max-w-xs">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-500" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 dark:text-gray-500" />
                     <Input
                       value={modelSearch}
                       onChange={e => setModelSearch(e.target.value)}
                       placeholder="Rechercher un modèle..."
-                      className="pl-8 h-8 text-xs bg-[#111827] border-white/10 text-gray-200 placeholder:text-gray-600 focus-visible:ring-purple-500/30"
+                      className="pl-8 h-8 text-xs bg-slate-100 dark:bg-[#111827] border-slate-200 dark:border-white/10 text-slate-900 dark:text-gray-200 placeholder:text-slate-400 dark:placeholder:text-gray-600 focus-visible:ring-purple-500/30"
                     />
                   </div>
-                  <span className="text-xs text-gray-500 ml-auto">{filteredModels.length} modèle(s)</span>
+                  <span className="text-xs text-slate-500 dark:text-gray-500 ml-auto">{filteredModels.length} modèle(s)</span>
                 </div>
 
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b border-white/5">
-                        <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Modèle</th>
-                        <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Propriétaire</th>
-                        <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Ventes</th>
-                        <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Revenus</th>
-                        <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Dernière activité</th>
+                      <tr className="border-b border-slate-200 dark:border-white/5">
+                        <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 dark:text-gray-500 uppercase tracking-wider">Modèle</th>
+                        <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 dark:text-gray-500 uppercase tracking-wider">Propriétaire</th>
+                        <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 dark:text-gray-500 uppercase tracking-wider">Ventes</th>
+                        <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 dark:text-gray-500 uppercase tracking-wider">Revenus</th>
+                        <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 dark:text-gray-500 uppercase tracking-wider">Dernière activité</th>
                         <th className="w-20 px-4 py-3"></th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/5">
+                    <tbody className="divide-y divide-slate-200 dark:divide-white/5">
                       {filteredModels
                         .sort((a, b) => (b.totalAmount || 0) - (a.totalAmount || 0))
                         .map(model => {
                           const ownerId = typeof model.owner === "object" ? (model.owner as any).id : model.owner
                           const owner = users.find(u => u.id === ownerId)
                           return (
-                            <tr key={model.id} className="group hover:bg-white/[0.02] transition-colors cursor-pointer" onClick={() => router.push(`/model/${model.id}`)}>
+                            <tr key={model.id} className="group hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors cursor-pointer" onClick={() => router.push(`/model/${model.id}`)}>
                               <td className="px-4 py-3.5">
                                 <div className="flex items-center gap-3">
                                   {model.profile_photo_url ? (
-                                    <img src={model.profile_photo_url} alt={model.initials} className="w-8 h-8 rounded-full object-cover ring-2 ring-white/10" />
+                                    <img src={model.profile_photo_url} alt={model.initials} className="w-8 h-8 rounded-full object-cover ring-2 ring-slate-200 dark:ring-white/10" />
                                   ) : (
-                                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center ring-2 ring-white/10">
+                                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center ring-2 ring-slate-200 dark:ring-white/10">
                                       <span className="text-white text-xs font-bold">{model.initials}</span>
                                     </div>
                                   )}
-                                  <span className="font-medium text-white">{model.first_name} {model.last_name}</span>
+                                  <span className="font-medium text-slate-900 dark:text-white">{model.first_name} {model.last_name}</span>
                                 </div>
                               </td>
-                              <td className="px-4 py-3.5 text-gray-400 text-xs">
+                              <td className="px-4 py-3.5 text-slate-600 dark:text-gray-400 text-xs">
                                 {owner ? `${owner.first_name} ${owner.last_name}`.trim() || owner.username : "—"}
                               </td>
-                              <td className="px-4 py-3.5 text-gray-300">{model.totalSales || 0}</td>
+                              <td className="px-4 py-3.5 text-slate-700 dark:text-gray-300">{model.totalSales || 0}</td>
                               <td className="px-4 py-3.5">
-                                <span className="font-semibold text-green-400">{(Number(model.totalAmount) || 0).toFixed(0)} $</span>
+                                <span className="font-semibold text-green-600 dark:text-green-400">{(Number(model.totalAmount) || 0).toFixed(0)} $</span>
                               </td>
-                              <td className="px-4 py-3.5 text-gray-500 text-xs">
+                              <td className="px-4 py-3.5 text-slate-500 dark:text-gray-500 text-xs">
                                 {model.lastActivity ? model.lastActivity.toLocaleDateString("fr-FR") : "Aucune activité"}
                               </td>
                               <td className="px-4 py-3.5">
                                 <button
                                   onClick={e => { e.stopPropagation(); router.push(`/model/${model.id}`) }}
-                                  className="p-1.5 rounded-lg text-gray-500 hover:text-blue-400 hover:bg-blue-500/10 transition-all opacity-0 group-hover:opacity-100"
+                                  className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 dark:text-gray-500 dark:hover:text-blue-400 hover:bg-blue-500/10 transition-all opacity-0 group-hover:opacity-100"
                                 >
                                   <Eye className="h-3.5 w-3.5" />
                                 </button>
@@ -652,8 +649,8 @@ export default function AdminPage() {
                   </table>
                   {filteredModels.length === 0 && (
                     <div className="py-16 text-center">
-                      <BarChart3 className="h-8 w-8 text-gray-700 mx-auto mb-3" />
-                      <p className="text-gray-500 text-sm">Aucun modèle trouvé</p>
+                      <BarChart3 className="h-8 w-8 text-slate-300 dark:text-gray-700 mx-auto mb-3" />
+                      <p className="text-slate-500 dark:text-gray-500 text-sm">Aucun modèle trouvé</p>
                     </div>
                   )}
                 </div>
@@ -662,33 +659,33 @@ export default function AdminPage() {
 
             {/* Activity Tab */}
             <TabsContent value="activity">
-              <div className="bg-[#1a1f2e] rounded-xl border border-white/5 overflow-hidden">
-                <div className="flex items-center gap-3 px-4 py-3 border-b border-white/5">
-                  <h3 className="text-sm font-semibold text-white">Journal d'activité</h3>
-                  <span className="text-xs text-gray-500 ml-auto">{activities.length} actions récentes</span>
+              <div className="bg-white dark:bg-[#1a1f2e] rounded-xl border border-slate-200 dark:border-white/5 overflow-hidden">
+                <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-200 dark:border-white/5">
+                  <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Journal d'activité</h3>
+                  <span className="text-xs text-slate-500 dark:text-gray-500 ml-auto">{activities.length} actions récentes</span>
                 </div>
-                <div className="divide-y divide-white/5">
+                <div className="divide-y divide-slate-200 dark:divide-white/5">
                   {activities.length > 0 ? activities.map(activity => (
-                    <div key={activity.id} className="flex items-start gap-4 px-4 py-3.5 hover:bg-white/[0.02] transition-colors">
+                    <div key={activity.id} className="flex items-start gap-4 px-4 py-3.5 hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors">
                       <div className="w-7 h-7 rounded-lg bg-purple-500/15 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <Activity className="h-3.5 w-3.5 text-purple-400" />
+                        <Activity className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-2">
-                          <p className="text-sm font-medium text-white">{activity.action}</p>
-                          <p className="text-xs text-gray-600 flex-shrink-0">{activity.timestamp.toLocaleString("fr-FR")}</p>
+                          <p className="text-sm font-medium text-slate-900 dark:text-white">{activity.action}</p>
+                          <p className="text-xs text-slate-400 dark:text-gray-600 flex-shrink-0">{activity.timestamp.toLocaleString("fr-FR")}</p>
                         </div>
-                        <p className="text-xs text-gray-500 mt-0.5">{activity.details}</p>
+                        <p className="text-xs text-slate-500 dark:text-gray-500 mt-0.5">{activity.details}</p>
                         <div className="flex items-center gap-2 mt-1.5">
-                          <span className="text-xs text-gray-600 bg-white/5 px-2 py-0.5 rounded-full">{activity.userName}</span>
-                          <span className="text-xs text-gray-600 bg-white/5 px-2 py-0.5 rounded-full">{activity.modelName}</span>
+                          <span className="text-xs text-slate-600 dark:text-gray-400 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-full">{activity.userName}</span>
+                          <span className="text-xs text-slate-600 dark:text-gray-400 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-full">{activity.modelName}</span>
                         </div>
                       </div>
                     </div>
                   )) : (
                     <div className="py-16 text-center">
-                      <Activity className="h-8 w-8 text-gray-700 mx-auto mb-3" />
-                      <p className="text-gray-500 text-sm">Aucune activité enregistrée</p>
+                      <Activity className="h-8 w-8 text-slate-300 dark:text-gray-700 mx-auto mb-3" />
+                      <p className="text-slate-500 dark:text-gray-500 text-sm">Aucune activité enregistrée</p>
                     </div>
                   )}
                 </div>
