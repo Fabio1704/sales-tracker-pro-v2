@@ -48,7 +48,8 @@ export default function HomePage() {
     setTheme(theme === "dark" ? "light" : "dark")
   }
 
-  const handleLogin = async () => {
+  const handleLogin = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
     setLoading(true)
     setError("")
 
@@ -284,7 +285,7 @@ export default function HomePage() {
                       </p>
                     </div>
                     
-                    <div className="space-y-6">
+                    <form onSubmit={handleLogin} className="space-y-6">
                       <div className="space-y-2">
                         <Label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                           Email ou nom d'utilisateur
@@ -292,6 +293,8 @@ export default function HomePage() {
                         <Input
                           id="email"
                           type="text"
+                          name="username"
+                          autoComplete="username"
                           placeholder="Email ou nom d'utilisateur"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
@@ -306,6 +309,8 @@ export default function HomePage() {
                         <Input
                           id="password"
                           type="password"
+                          name="password"
+                          autoComplete="current-password"
                           placeholder="Entrez votre mot de passe"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
@@ -314,8 +319,8 @@ export default function HomePage() {
                       </div>
                       
                       <Button
+                        type="submit"
                         className="w-full h-12 text-base font-semibold bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-lg"
-                        onClick={handleLogin}
                         disabled={loading}
                       >
                         {loading ? (
@@ -333,6 +338,7 @@ export default function HomePage() {
                       
                       <div className="text-center pt-4 space-y-2">
                         <button 
+                          type="button"
                           onClick={() => router.push('/forgot-password')}
                           className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 underline transition-colors"
                         >
@@ -348,7 +354,7 @@ export default function HomePage() {
                           </a>
                         </p>
                       </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>
