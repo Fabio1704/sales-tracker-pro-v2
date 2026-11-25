@@ -356,7 +356,7 @@ export default function DashboardPage() {
 
                           {/* ID */}
                           <td className="px-4 py-3.5 font-mono text-xs text-gray-500 whitespace-nowrap" onClick={() => router.push(`/model/${model.id}`)}>
-                            #{model.id.slice(0, 8)}
+                            #{String(model.id).slice(0, 8)}
                           </td>
 
                           {/* Avatar */}
