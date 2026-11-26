@@ -109,13 +109,13 @@ export default function PrivacyPage() {
 
       <section className="relative pt-32 pb-12 text-center px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto space-y-5">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-[#c8f560]/25 text-slate-900 dark:bg-[#c8f560]/15 dark:text-[#c8f560] border border-[#c8f560]/50">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-violet-500/15 text-violet-700 dark:bg-violet-400/15 dark:text-violet-300 border border-violet-500/30">
             <Shield className="h-3.5 w-3.5" />
             Conforme RGPD
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white leading-tight">
             Politique de{" "}
-            <span className="bg-gradient-to-r from-emerald-600 to-teal-500 dark:from-[#c8f560] dark:to-emerald-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-violet-600 to-fuchsia-500 dark:from-violet-400 dark:to-fuchsia-400 bg-clip-text text-transparent">
               Confidentialité
             </span>
           </h1>
@@ -130,10 +130,10 @@ export default function PrivacyPage() {
           {sections.map(({ icon: Icon, title, subtitle, content }) => (
             <div
               key={title}
-              className="bg-white/85 dark:bg-[#132a35]/90 backdrop-blur-xl rounded-3xl p-7 sm:p-8 border border-slate-200/80 dark:border-white/10 shadow-xl"
+              className="bg-white/85 dark:bg-[#1c162e]/90 backdrop-blur-xl rounded-3xl p-7 sm:p-8 border border-slate-200/80 dark:border-white/10 shadow-xl"
             >
               <div className="flex items-center gap-3.5 mb-5">
-                <div className="w-11 h-11 rounded-2xl bg-[#10222b] text-[#c8f560] flex items-center justify-center flex-shrink-0">
+                <div className="w-11 h-11 rounded-2xl bg-[#161224] text-violet-400 flex items-center justify-center flex-shrink-0">
                   <Icon className="h-5 w-5" />
                 </div>
                 <div>
@@ -145,14 +145,14 @@ export default function PrivacyPage() {
             </div>
           ))}
 
-          <div className="bg-[#10222b] text-white rounded-3xl p-7 sm:p-8 border border-white/10 shadow-xl">
+          <div className="bg-[#161224] text-white rounded-3xl p-7 sm:p-8 border border-white/10 shadow-xl">
             <h2 className="text-lg font-bold mb-2">Nous contacter</h2>
             <p className="text-sm text-gray-300 mb-4">
               Pour toute question concernant cette politique ou pour exercer vos droits :
             </p>
             <div className="text-sm space-y-1 text-gray-200">
-              <p><strong className="text-[#c8f560]">E-mail :</strong> contact@salestrackerpro.com</p>
-              <p><strong className="text-[#c8f560]">DPO :</strong> contact@salestrackerpro.com</p>
+              <p><strong className="text-violet-400">E-mail :</strong> contact@salestrackerpro.com</p>
+              <p><strong className="text-violet-400">DPO :</strong> contact@salestrackerpro.com</p>
             </div>
           </div>
         </div>

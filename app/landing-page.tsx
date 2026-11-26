@@ -47,7 +47,7 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <PublicBackground />
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#c8f560]" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-500" />
       </div>
     )
   }
@@ -61,20 +61,20 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
         onScrollTo={scrollToSection}
       />
 
-      {/* Hero Section (Optibiz-inspired split layout) */}
+      {/* Hero Section */}
       <section className="relative pt-28 pb-16 sm:pt-36 sm:pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-12 gap-12 items-center">
             {/* Left Content */}
             <div className="lg:col-span-6 space-y-7">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-[#c8f560]/25 text-slate-900 dark:bg-[#c8f560]/15 dark:text-[#c8f560] border border-[#c8f560]/50">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-violet-500/15 text-violet-700 dark:bg-violet-400/15 dark:text-violet-300 border border-violet-500/30">
                 <Sparkles className="h-3.5 w-3.5" />
                 Bienvenue sur Sales Tracker Pro
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.06] tracking-tight text-slate-900 dark:text-white">
                 Là où l&apos;Expertise{" "}
-                <span className="bg-gradient-to-r from-emerald-600 to-teal-500 dark:from-[#c8f560] dark:to-emerald-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-violet-600 to-fuchsia-500 dark:from-violet-400 dark:to-fuchsia-400 bg-clip-text text-transparent">
                   Propulse Vos Ventes
                 </span>
               </h1>
@@ -87,10 +87,10 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
               <div className="flex flex-wrap items-center gap-4">
                 <button
                   onClick={onLoginClick}
-                  className="inline-flex items-center gap-3 bg-[#c8f560] hover:bg-[#b8eb47] text-[#0d1f26] font-semibold rounded-full pl-6 pr-2.5 py-2.5 shadow-xl shadow-lime-500/20 hover:scale-[1.02] transition-all"
+                  className="inline-flex items-center gap-3 bg-violet-600 hover:bg-violet-500 text-white font-semibold rounded-full pl-6 pr-2.5 py-2.5 shadow-xl shadow-violet-600/25 hover:scale-[1.02] transition-all"
                 >
                   <span>Découvrir la plateforme</span>
-                  <span className="w-8 h-8 rounded-full bg-[#0d1f26] text-[#c8f560] flex items-center justify-center">
+                  <span className="w-8 h-8 rounded-full bg-white text-violet-700 flex items-center justify-center">
                     <ArrowRight className="h-4 w-4" />
                   </span>
                 </button>
@@ -128,17 +128,17 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
                         className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 flex items-center justify-center text-xs font-bold text-white shadow"
                         style={{
                           background: [
-                            "linear-gradient(135deg,#0d9488,#059669)",
-                            "linear-gradient(135deg,#2563eb,#4f46e5)",
-                            "linear-gradient(135deg,#7c3aed,#db2777)",
-                            "linear-gradient(135deg,#0f172a,#334155)",
+                            "linear-gradient(135deg,#7c3aed,#a855f7)",
+                            "linear-gradient(135deg,#db2777,#f43f5e)",
+                            "linear-gradient(135deg,#9333ea,#c026d3)",
+                            "linear-gradient(135deg,#1e1b4b,#4c1d95)",
                           ][idx],
                         }}
                       >
                         {init}
                       </div>
                     ))}
-                    <div className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-[#c8f560] text-[#0d1f26] flex items-center justify-center text-xs font-bold">
+                    <div className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-violet-600 text-white flex items-center justify-center text-xs font-bold">
                       +
                     </div>
                   </div>
@@ -146,17 +146,16 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
               </div>
             </div>
 
-            {/* Right Mockup Card (Optibiz tilted device preview) */}
+            {/* Right Mockup Card */}
             <div className="lg:col-span-6 relative flex justify-center">
               <div className="relative w-full max-w-md">
-                {/* Main Device Card */}
-                <div className="bg-[#10222b] text-white rounded-[2rem] p-6 border border-white/15 shadow-2xl transform lg:rotate-[-3deg] hover:rotate-0 transition-transform duration-500">
+                <div className="bg-[#161224] text-white rounded-[2rem] p-6 border border-white/15 shadow-2xl transform lg:rotate-[-3deg] hover:rotate-0 transition-transform duration-500">
                   <div className="flex items-center justify-between mb-6">
                     <div>
                       <p className="text-xs text-gray-400">Revenus Nets (80%)</p>
-                      <p className="text-3xl font-bold text-[#c8f560] mt-1">$1,543.00</p>
+                      <p className="text-3xl font-bold text-violet-400 mt-1">$1,543.00</p>
                     </div>
-                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#c8f560]/15 text-[#c8f560]">
+                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-violet-500/20 text-violet-300">
                       +18.4%
                     </span>
                   </div>
@@ -165,31 +164,30 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
                   <div className="bg-white/5 rounded-2xl p-4 mb-5 border border-white/5">
                     <div className="flex items-center justify-between text-xs text-gray-400 mb-3">
                       <span>Performance Hebdomadaire</span>
-                      <span className="text-[#c8f560] font-medium">Temps réel</span>
+                      <span className="text-fuchsia-400 font-medium">Temps réel</span>
                     </div>
                     <svg viewBox="0 0 280 80" className="w-full h-20 overflow-visible">
                       <defs>
-                        <linearGradient id="limeGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#c8f560" stopOpacity="0.4" />
-                          <stop offset="100%" stopColor="#c8f560" stopOpacity="0" />
+                        <linearGradient id="violetGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#a855f7" stopOpacity="0.45" />
+                          <stop offset="100%" stopColor="#a855f7" stopOpacity="0" />
                         </linearGradient>
                       </defs>
                       <path
                         d="M0 65 Q 40 50, 70 55 T 140 35 T 210 25 T 280 10 L 280 80 L 0 80 Z"
-                        fill="url(#limeGrad)"
+                        fill="url(#violetGrad)"
                       />
                       <path
                         d="M0 65 Q 40 50, 70 55 T 140 35 T 210 25 T 280 10"
                         fill="none"
-                        stroke="#c8f560"
+                        stroke="#a855f7"
                         strokeWidth="3"
                         strokeLinecap="round"
                       />
-                      <circle cx="280" cy="10" r="5" fill="#c8f560" />
+                      <circle cx="280" cy="10" r="5" fill="#e879f9" />
                     </svg>
                   </div>
 
-                  {/* Bottom rows */}
                   <div className="grid grid-cols-2 gap-3">
                     <div className="bg-white/5 rounded-xl p-3 border border-white/5">
                       <p className="text-xs text-gray-400">Ventes Brutes</p>
@@ -197,25 +195,24 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
                     </div>
                     <div className="bg-white/5 rounded-xl p-3 border border-white/5">
                       <p className="text-xs text-gray-400">Commission (20%)</p>
-                      <p className="text-lg font-bold text-emerald-400 mt-0.5">$385.75</p>
+                      <p className="text-lg font-bold text-fuchsia-400 mt-0.5">$385.75</p>
                     </div>
                   </div>
                 </div>
 
-                {/* Floating Lime Badge */}
-                <div className="absolute -bottom-5 -right-2 sm:right-4 bg-[#c8f560] text-[#0d1f26] rounded-2xl px-5 py-3 shadow-xl border border-white/40">
+                <div className="absolute -bottom-5 -right-2 sm:right-4 bg-violet-600 text-white rounded-2xl px-5 py-3 shadow-xl border border-white/20">
                   <p className="text-2xl font-extrabold leading-none">24/7</p>
-                  <p className="text-xs font-semibold mt-1">Suivi Automatisé</p>
+                  <p className="text-xs font-semibold text-violet-100 mt-1">Suivi Automatisé</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Dark-teal 3-Column Feature Strip (Optibiz hero footer bar) */}
-          <div className="mt-16 bg-[#10222b]/95 backdrop-blur-xl text-white rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl">
+          {/* Dark 3-Column Feature Strip */}
+          <div className="mt-16 bg-[#161224]/95 backdrop-blur-xl text-white rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x divide-white/10">
               <div className="flex items-start gap-4 pt-2 md:pt-0">
-                <div className="w-11 h-11 rounded-full bg-[#c8f560] text-[#0d1f26] flex items-center justify-center flex-shrink-0">
+                <div className="w-11 h-11 rounded-full bg-violet-600 text-white flex items-center justify-center flex-shrink-0">
                   <BarChart3 className="h-5 w-5" />
                 </div>
                 <div>
@@ -227,7 +224,7 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
               </div>
 
               <div className="flex items-start gap-4 pt-6 md:pt-0 md:pl-6">
-                <div className="w-11 h-11 rounded-full bg-[#c8f560] text-[#0d1f26] flex items-center justify-center flex-shrink-0">
+                <div className="w-11 h-11 rounded-full bg-violet-600 text-white flex items-center justify-center flex-shrink-0">
                   <Euro className="h-5 w-5" />
                 </div>
                 <div>
@@ -239,7 +236,7 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
               </div>
 
               <div className="flex items-start gap-4 pt-6 md:pt-0 md:pl-6">
-                <div className="w-11 h-11 rounded-full bg-[#c8f560] text-[#0d1f26] flex items-center justify-center flex-shrink-0">
+                <div className="w-11 h-11 rounded-full bg-violet-600 text-white flex items-center justify-center flex-shrink-0">
                   <Shield className="h-5 w-5" />
                 </div>
                 <div>
@@ -254,13 +251,13 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
         </div>
       </section>
 
-      {/* About / Mission + Big KPI Numbers Section */}
+      {/* About / Mission + Big KPI Numbers */}
       <section className="py-16 sm:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-          <div className="bg-white/80 dark:bg-[#132a35]/85 backdrop-blur-xl rounded-3xl p-8 sm:p-12 border border-slate-200/70 dark:border-white/10 shadow-xl">
+          <div className="bg-white/80 dark:bg-[#1c162e]/85 backdrop-blur-xl rounded-3xl p-8 sm:p-12 border border-slate-200/70 dark:border-white/10 shadow-xl">
             <div className="grid lg:grid-cols-2 gap-10 items-center">
               <div className="space-y-5">
-                <span className="inline-block px-3.5 py-1 rounded-full text-xs font-semibold bg-[#c8f560]/30 text-slate-900 dark:text-[#c8f560]">
+                <span className="inline-block px-3.5 py-1 rounded-full text-xs font-semibold bg-violet-500/15 text-violet-700 dark:text-violet-300">
                   À propos de nous
                 </span>
                 <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white leading-tight">
@@ -271,7 +268,7 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
                 </p>
                 <div className="grid sm:grid-cols-2 gap-4 pt-2">
                   <div className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-full bg-[#c8f560] text-[#0d1f26] flex items-center justify-center flex-shrink-0">
+                    <div className="w-9 h-9 rounded-full bg-violet-600 text-white flex items-center justify-center flex-shrink-0">
                       <Target className="h-4 w-4" />
                     </div>
                     <div>
@@ -282,7 +279,7 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-full bg-[#c8f560] text-[#0d1f26] flex items-center justify-center flex-shrink-0">
+                    <div className="w-9 h-9 rounded-full bg-violet-600 text-white flex items-center justify-center flex-shrink-0">
                       <Zap className="h-4 w-4" />
                     </div>
                     <div>
@@ -295,9 +292,9 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
                 </div>
               </div>
 
-              {/* Dark CTA Banner inside About */}
-              <div className="bg-[#10222b] text-white rounded-3xl p-8 space-y-6 border border-white/10">
-                <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#c8f560]">
+              {/* Dark CTA Banner */}
+              <div className="bg-[#161224] text-white rounded-3xl p-8 space-y-6 border border-white/10">
+                <div className="inline-flex items-center gap-2 text-xs font-semibold text-violet-400">
                   <CheckCircle className="h-4 w-4" />
                   Prêt en moins de 2 minutes
                 </div>
@@ -309,10 +306,10 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
                 </p>
                 <button
                   onClick={onLoginClick}
-                  className="inline-flex items-center gap-3 bg-[#c8f560] hover:bg-[#b8eb47] text-[#0d1f26] font-semibold text-sm rounded-full pl-5 pr-2 py-2 transition-all"
+                  className="inline-flex items-center gap-3 bg-violet-600 hover:bg-violet-500 text-white font-semibold text-sm rounded-full pl-5 pr-2 py-2 transition-all"
                 >
                   <span>Accéder au tableau de bord</span>
-                  <span className="w-7 h-7 rounded-full bg-[#0d1f26] text-[#c8f560] flex items-center justify-center">
+                  <span className="w-7 h-7 rounded-full bg-white text-violet-700 flex items-center justify-center">
                     <ArrowRight className="h-3.5 w-3.5" />
                   </span>
                 </button>
@@ -323,25 +320,25 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 pt-10 mt-10 border-t border-slate-200 dark:border-white/10">
               <div>
                 <p className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
-                  24<span className="text-emerald-500 dark:text-[#c8f560]">/7</span>
+                  24<span className="text-violet-600 dark:text-violet-400">/7</span>
                 </p>
                 <p className="text-xs text-slate-500 dark:text-gray-400 mt-1">Disponibilité temps réel</p>
               </div>
               <div>
                 <p className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
-                  150K<span className="text-emerald-500 dark:text-[#c8f560]">+</span>
+                  150K<span className="text-violet-600 dark:text-violet-400">+</span>
                 </p>
                 <p className="text-xs text-slate-500 dark:text-gray-400 mt-1">Ventes suivies</p>
               </div>
               <div>
                 <p className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
-                  98<span className="text-emerald-500 dark:text-[#c8f560]">%</span>
+                  98<span className="text-violet-600 dark:text-violet-400">%</span>
                 </p>
                 <p className="text-xs text-slate-500 dark:text-gray-400 mt-1">Satisfaction client</p>
               </div>
               <div>
                 <p className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
-                  80<span className="text-emerald-500 dark:text-[#c8f560]">%</span>
+                  80<span className="text-violet-600 dark:text-violet-400">%</span>
                 </p>
                 <p className="text-xs text-slate-500 dark:text-gray-400 mt-1">Calcul net automatisé</p>
               </div>
@@ -350,12 +347,12 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
         </div>
       </section>
 
-      {/* Services / Features Grid */}
+      {/* Features Grid */}
       <section id="features" className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
-              <span className="inline-block px-3.5 py-1 rounded-full text-xs font-semibold bg-[#c8f560]/30 text-slate-900 dark:text-[#c8f560] mb-3">
+              <span className="inline-block px-3.5 py-1 rounded-full text-xs font-semibold bg-violet-500/15 text-violet-700 dark:text-violet-300 mb-3">
                 Fonctionnalités
               </span>
               <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
@@ -402,9 +399,9 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
             ].map(({ icon: Icon, title, desc }) => (
               <div
                 key={title}
-                className="bg-white/80 dark:bg-[#132a35]/85 backdrop-blur-xl rounded-3xl p-7 border border-slate-200/70 dark:border-white/10 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                className="bg-white/80 dark:bg-[#1c162e]/85 backdrop-blur-xl rounded-3xl p-7 border border-slate-200/70 dark:border-white/10 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
               >
-                <div className="w-12 h-12 rounded-2xl bg-[#10222b] text-[#c8f560] flex items-center justify-center mb-5 shadow-md">
+                <div className="w-12 h-12 rounded-2xl bg-[#161224] text-violet-400 flex items-center justify-center mb-5 shadow-md">
                   <Icon className="h-6 w-6" />
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{title}</h3>
@@ -419,7 +416,7 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
       <section id="testimonials" className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <span className="inline-block px-3.5 py-1 rounded-full text-xs font-semibold bg-[#c8f560]/30 text-slate-900 dark:text-[#c8f560] mb-3">
+            <span className="inline-block px-3.5 py-1 rounded-full text-xs font-semibold bg-violet-500/15 text-violet-700 dark:text-violet-300 mb-3">
               Témoignages
             </span>
             <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
@@ -453,7 +450,7 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
             ].map((item) => (
               <div
                 key={item.name}
-                className="bg-white/80 dark:bg-[#132a35]/85 backdrop-blur-xl rounded-3xl p-7 border border-slate-200/70 dark:border-white/10 shadow-lg flex flex-col justify-between"
+                className="bg-white/80 dark:bg-[#1c162e]/85 backdrop-blur-xl rounded-3xl p-7 border border-slate-200/70 dark:border-white/10 shadow-lg flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center gap-1 mb-4">
@@ -466,7 +463,7 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
                   </p>
                 </div>
                 <div className="flex items-center gap-3 pt-4 border-t border-slate-200 dark:border-white/10">
-                  <div className="w-10 h-10 rounded-full bg-[#10222b] text-[#c8f560] flex items-center justify-center font-bold text-xs">
+                  <div className="w-10 h-10 rounded-full bg-[#161224] text-violet-400 flex items-center justify-center font-bold text-xs">
                     {item.initials}
                   </div>
                   <div>
@@ -484,7 +481,7 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
       <section id="pricing" className="py-16 pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <span className="inline-block px-3.5 py-1 rounded-full text-xs font-semibold bg-[#c8f560]/30 text-slate-900 dark:text-[#c8f560] mb-3">
+            <span className="inline-block px-3.5 py-1 rounded-full text-xs font-semibold bg-violet-500/15 text-violet-700 dark:text-violet-300 mb-3">
               Tarifs
             </span>
             <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
@@ -494,7 +491,7 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {/* Starter */}
-            <div className="bg-white/80 dark:bg-[#132a35]/85 backdrop-blur-xl rounded-3xl p-8 border border-slate-200/70 dark:border-white/10 shadow-lg flex flex-col justify-between">
+            <div className="bg-white/80 dark:bg-[#1c162e]/85 backdrop-blur-xl rounded-3xl p-8 border border-slate-200/70 dark:border-white/10 shadow-lg flex flex-col justify-between">
               <div>
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white">Starter</h3>
                 <p className="text-sm text-slate-500 dark:text-gray-400 mt-1">Parfait pour débuter</p>
@@ -502,61 +499,61 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
                 <p className="text-xs text-slate-500 dark:text-gray-400 mt-1 mb-6">14 jours d&apos;essai</p>
                 <ul className="space-y-3 text-sm text-slate-700 dark:text-gray-300 mb-8">
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-emerald-500" /> Jusqu&apos;à 3 modèles
+                    <CheckCircle className="h-4 w-4 text-violet-500" /> Jusqu&apos;à 3 modèles
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-emerald-500" /> Rapports de base
+                    <CheckCircle className="h-4 w-4 text-violet-500" /> Rapports de base
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-emerald-500" /> Support email
+                    <CheckCircle className="h-4 w-4 text-violet-500" /> Support email
                   </li>
                 </ul>
               </div>
               <button
                 onClick={onLoginClick}
-                className="w-full py-3 rounded-full font-semibold text-sm bg-[#10222b] text-white hover:bg-slate-800 transition-colors"
+                className="w-full py-3 rounded-full font-semibold text-sm bg-[#161224] text-white hover:bg-slate-800 transition-colors"
               >
                 Commencer gratuitement
               </button>
             </div>
 
             {/* Pro */}
-            <div className="bg-[#10222b] text-white rounded-3xl p-8 border-2 border-[#c8f560] shadow-2xl relative flex flex-col justify-between">
-              <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-bold bg-[#c8f560] text-[#0d1f26]">
+            <div className="bg-[#161224] text-white rounded-3xl p-8 border-2 border-violet-500 shadow-2xl relative flex flex-col justify-between">
+              <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-bold bg-violet-600 text-white">
                 Populaire
               </span>
               <div>
                 <h3 className="text-xl font-bold">Pro</h3>
                 <p className="text-sm text-gray-400 mt-1">Pour les équipes en croissance</p>
-                <p className="text-4xl font-bold text-[#c8f560] mt-6">
+                <p className="text-4xl font-bold text-violet-400 mt-6">
                   29€<span className="text-base font-normal text-gray-400">/mois</span>
                 </p>
                 <p className="text-xs text-gray-400 mt-1 mb-6">Facturé annuellement</p>
                 <ul className="space-y-3 text-sm text-gray-200 mb-8">
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-[#c8f560]" /> Modèles illimités
+                    <CheckCircle className="h-4 w-4 text-violet-400" /> Modèles illimités
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-[#c8f560]" /> Rapports avancés
+                    <CheckCircle className="h-4 w-4 text-violet-400" /> Rapports avancés
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-[#c8f560]" /> Collaboration équipe
+                    <CheckCircle className="h-4 w-4 text-violet-400" /> Collaboration équipe
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-[#c8f560]" /> Support prioritaire
+                    <CheckCircle className="h-4 w-4 text-violet-400" /> Support prioritaire
                   </li>
                 </ul>
               </div>
               <button
                 onClick={onLoginClick}
-                className="w-full py-3 rounded-full font-semibold text-sm bg-[#c8f560] text-[#0d1f26] hover:bg-[#b8eb47] transition-colors"
+                className="w-full py-3 rounded-full font-semibold text-sm bg-violet-600 text-white hover:bg-violet-500 transition-colors"
               >
                 Choisir Pro
               </button>
             </div>
 
             {/* Enterprise */}
-            <div className="bg-white/80 dark:bg-[#132a35]/85 backdrop-blur-xl rounded-3xl p-8 border border-slate-200/70 dark:border-white/10 shadow-lg flex flex-col justify-between">
+            <div className="bg-white/80 dark:bg-[#1c162e]/85 backdrop-blur-xl rounded-3xl p-8 border border-slate-200/70 dark:border-white/10 shadow-lg flex flex-col justify-between">
               <div>
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white">Enterprise</h3>
                 <p className="text-sm text-slate-500 dark:text-gray-400 mt-1">Pour les grandes organisations</p>
@@ -564,19 +561,19 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
                 <p className="text-xs text-slate-500 dark:text-gray-400 mt-1 mb-6">Contactez-nous</p>
                 <ul className="space-y-3 text-sm text-slate-700 dark:text-gray-300 mb-8">
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-emerald-500" /> Tout du plan Pro
+                    <CheckCircle className="h-4 w-4 text-violet-500" /> Tout du plan Pro
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-emerald-500" /> API personnalisée
+                    <CheckCircle className="h-4 w-4 text-violet-500" /> API personnalisée
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-emerald-500" /> Support dédié 24/7
+                    <CheckCircle className="h-4 w-4 text-violet-500" /> Support dédié 24/7
                   </li>
                 </ul>
               </div>
               <button
                 onClick={() => router.push("/contact")}
-                className="w-full py-3 rounded-full font-semibold text-sm bg-[#10222b] text-white hover:bg-slate-800 transition-colors"
+                className="w-full py-3 rounded-full font-semibold text-sm bg-[#161224] text-white hover:bg-slate-800 transition-colors"
               >
                 Nous contacter
               </button>

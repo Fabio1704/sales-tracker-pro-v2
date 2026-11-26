@@ -66,7 +66,7 @@ export default function HomePage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <PublicBackground />
-        <Loader2 className="h-8 w-8 animate-spin text-[#c8f560]" />
+        <Loader2 className="h-8 w-8 animate-spin text-violet-500" />
       </div>
     )
   }
@@ -79,16 +79,16 @@ export default function HomePage() {
 
         <div className="min-h-screen flex items-center justify-center pt-28 pb-16 px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl w-full mx-auto grid lg:grid-cols-12 gap-12 items-center">
-            {/* Left Side - Optibiz Info */}
+            {/* Left Side */}
             <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-[#c8f560]/25 text-slate-900 dark:bg-[#c8f560]/15 dark:text-[#c8f560] border border-[#c8f560]/50">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-violet-500/15 text-violet-700 dark:bg-violet-400/15 dark:text-violet-300 border border-violet-500/30">
                 <Sparkles className="h-3.5 w-3.5" />
                 Espace Membre
               </div>
 
               <h1 className="text-4xl sm:text-5xl font-bold leading-tight text-slate-900 dark:text-white">
                 Bienvenue sur{" "}
-                <span className="bg-gradient-to-r from-emerald-600 to-teal-500 dark:from-[#c8f560] dark:to-emerald-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-violet-600 to-fuchsia-500 dark:from-violet-400 dark:to-fuchsia-400 bg-clip-text text-transparent">
                   Sales Tracker Pro
                 </span>
               </h1>
@@ -98,14 +98,14 @@ export default function HomePage() {
                 Connectez-vous pour accéder à vos données en temps réel.
               </p>
 
-              <div className="bg-[#10222b]/95 text-white rounded-3xl p-6 border border-white/10 shadow-xl space-y-5">
+              <div className="bg-[#161224]/95 text-white rounded-3xl p-6 border border-white/10 shadow-xl space-y-5">
                 {[
                   { icon: TrendingUp, title: "Analytics Avancés", sub: "Suivez vos performances en temps réel" },
                   { icon: Users, title: "Gestion d'Équipe", sub: "Administrez vos utilisateurs et modèles" },
                   { icon: BarChart3, title: "Rapports Détaillés", sub: "Exportez et analysez vos données" },
                 ].map(({ icon: Icon, title, sub }) => (
                   <div key={title} className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-[#c8f560] text-[#0d1f26] flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-violet-600 text-white flex items-center justify-center flex-shrink-0">
                       <Icon className="h-5 w-5" />
                     </div>
                     <div>
@@ -119,9 +119,9 @@ export default function HomePage() {
 
             {/* Right Side - Login Card */}
             <div className="lg:col-span-6 flex justify-center lg:justify-end">
-              <div className="w-full max-w-md bg-white/85 dark:bg-[#132a35]/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-slate-200/80 dark:border-white/10">
+              <div className="w-full max-w-md bg-white/85 dark:bg-[#1c162e]/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-slate-200/80 dark:border-white/10">
                 <div className="mb-7">
-                  <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[#c8f560]/30 text-slate-900 dark:text-[#c8f560] mb-3">
+                  <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-violet-500/15 text-violet-700 dark:text-violet-300 mb-3">
                     Connexion
                   </span>
                   <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
@@ -152,7 +152,7 @@ export default function HomePage() {
                       placeholder="Email ou nom d'utilisateur"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="h-11 bg-slate-50 dark:bg-[#0d1f26] border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white"
+                      className="h-11 bg-slate-50 dark:bg-[#110d1b] border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white"
                     />
                   </div>
 
@@ -168,14 +168,14 @@ export default function HomePage() {
                       placeholder="Entrez votre mot de passe"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="h-11 bg-slate-50 dark:bg-[#0d1f26] border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white"
+                      className="h-11 bg-slate-50 dark:bg-[#110d1b] border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full h-12 flex items-center justify-center gap-3 bg-[#c8f560] hover:bg-[#b8eb47] disabled:opacity-60 text-[#0d1f26] font-semibold rounded-full shadow-lg transition-all hover:scale-[1.01]"
+                    className="w-full h-12 flex items-center justify-center gap-3 bg-violet-600 hover:bg-violet-500 disabled:opacity-60 text-white font-semibold rounded-full shadow-lg shadow-violet-600/25 transition-all hover:scale-[1.01]"
                   >
                     {loading ? (
                       <>
@@ -185,7 +185,7 @@ export default function HomePage() {
                     ) : (
                       <>
                         <span>Se connecter</span>
-                        <span className="w-7 h-7 rounded-full bg-[#0d1f26] text-[#c8f560] flex items-center justify-center">
+                        <span className="w-7 h-7 rounded-full bg-white text-violet-700 flex items-center justify-center">
                           <ArrowRight className="h-3.5 w-3.5" />
                         </span>
                       </>
@@ -196,7 +196,7 @@ export default function HomePage() {
                     <button
                       type="button"
                       onClick={() => router.push("/forgot-password")}
-                      className="text-xs font-medium text-emerald-700 dark:text-[#c8f560] hover:underline"
+                      className="text-xs font-medium text-violet-700 dark:text-violet-400 hover:underline"
                     >
                       Mot de passe oublié ?
                     </button>

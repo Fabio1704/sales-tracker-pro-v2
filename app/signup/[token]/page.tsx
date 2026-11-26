@@ -176,7 +176,7 @@ export default function ClientSignupPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <PublicBackground />
-        <Loader2 className="h-8 w-8 animate-spin text-[#c8f560]" />
+        <Loader2 className="h-8 w-8 animate-spin text-violet-500" />
       </div>
     )
   }
@@ -187,12 +187,12 @@ export default function ClientSignupPage() {
       <PublicHeader actionLabel="Connexion" onActionClick={() => router.push("/")} />
 
       <div className="pt-28 pb-16 px-4 sm:px-6 lg:px-8 flex items-center justify-center min-h-screen">
-        <div className="w-full max-w-lg bg-white/85 dark:bg-[#132a35]/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-slate-200/80 dark:border-white/10">
+        <div className="w-full max-w-lg bg-white/85 dark:bg-[#1c162e]/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-slate-200/80 dark:border-white/10">
           <div className="text-center mb-7">
-            <div className="w-14 h-14 mx-auto mb-4 bg-[#10222b] text-[#c8f560] rounded-2xl flex items-center justify-center shadow-lg">
+            <div className="w-14 h-14 mx-auto mb-4 bg-[#161224] text-violet-400 rounded-2xl flex items-center justify-center shadow-lg">
               <UserPlus className="h-7 w-7" />
             </div>
-            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[#c8f560]/30 text-slate-900 dark:text-[#c8f560] mb-2">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-violet-500/15 text-violet-700 dark:text-violet-300 mb-2">
               Invitation Client
             </span>
             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
@@ -204,13 +204,13 @@ export default function ClientSignupPage() {
           </div>
 
           {invitation && (
-            <div className="mb-6 p-4 rounded-2xl bg-[#10222b]/95 text-white border border-white/10">
+            <div className="mb-6 p-4 rounded-2xl bg-[#161224]/95 text-white border border-white/10">
               <div className="flex items-center gap-2.5 mb-1">
-                <Mail className="h-4 w-4 text-[#c8f560]" />
+                <Mail className="h-4 w-4 text-violet-400" />
                 <span className="font-semibold text-sm">{invitation.contact_name}</span>
               </div>
               <p className="text-xs text-gray-300">{invitation.contact_email}</p>
-              <p className="text-xs text-[#c8f560] mt-1">{invitation.contact_subject}</p>
+              <p className="text-xs text-violet-400 mt-1">{invitation.contact_subject}</p>
             </div>
           )}
 
@@ -228,7 +228,7 @@ export default function ClientSignupPage() {
                   value={formData.first_name}
                   onChange={handleInputChange}
                   placeholder="Votre prénom"
-                  className="h-11 rounded-xl bg-slate-50 dark:bg-[#0d1f26] border-slate-200 dark:border-white/10 text-slate-900 dark:text-white"
+                  className="h-11 rounded-xl bg-slate-50 dark:bg-[#110d1b] border-slate-200 dark:border-white/10 text-slate-900 dark:text-white"
                 />
               </div>
               <div className="space-y-1.5">
@@ -243,7 +243,7 @@ export default function ClientSignupPage() {
                   value={formData.last_name}
                   onChange={handleInputChange}
                   placeholder="Votre nom"
-                  className="h-11 rounded-xl bg-slate-50 dark:bg-[#0d1f26] border-slate-200 dark:border-white/10 text-slate-900 dark:text-white"
+                  className="h-11 rounded-xl bg-slate-50 dark:bg-[#110d1b] border-slate-200 dark:border-white/10 text-slate-900 dark:text-white"
                 />
               </div>
             </div>
@@ -260,7 +260,7 @@ export default function ClientSignupPage() {
                 readOnly
                 value={formData.email}
                 autoComplete="username"
-                className="h-11 rounded-xl bg-slate-100 dark:bg-[#0d1f26]/60 border-slate-200 dark:border-white/10 text-slate-500 dark:text-gray-400 cursor-not-allowed"
+                className="h-11 rounded-xl bg-slate-100 dark:bg-[#110d1b]/60 border-slate-200 dark:border-white/10 text-slate-500 dark:text-gray-400 cursor-not-allowed"
               />
             </div>
 
@@ -277,7 +277,7 @@ export default function ClientSignupPage() {
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   autoComplete="new-password"
                   required
-                  className="h-11 pr-10 rounded-xl bg-slate-50 dark:bg-[#0d1f26] border-slate-200 dark:border-white/10 text-slate-900 dark:text-white"
+                  className="h-11 pr-10 rounded-xl bg-slate-50 dark:bg-[#110d1b] border-slate-200 dark:border-white/10 text-slate-900 dark:text-white"
                 />
                 <button
                   type="button"
@@ -287,7 +287,7 @@ export default function ClientSignupPage() {
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
-              <div className="p-3.5 rounded-2xl bg-[#10222b]/90 text-gray-300 text-xs space-y-1.5 border border-white/10">
+              <div className="p-3.5 rounded-2xl bg-[#161224]/90 text-gray-300 text-xs space-y-1.5 border border-white/10">
                 <p className="text-gray-400 font-medium mb-1">Le mot de passe doit contenir :</p>
                 {[
                   "Au moins 8 caractères",
@@ -296,7 +296,7 @@ export default function ClientSignupPage() {
                   "Un caractère spécial (!@#$%^&*)",
                 ].map((req) => (
                   <div key={req} className="flex items-center gap-2">
-                    <CheckCircle className="h-3 w-3 text-[#c8f560]" />
+                    <CheckCircle className="h-3 w-3 text-violet-400" />
                     <span>{req}</span>
                   </div>
                 ))}
@@ -317,7 +317,7 @@ export default function ClientSignupPage() {
                   onChange={handleInputChange}
                   placeholder="Confirmez votre mot de passe"
                   autoComplete="new-password"
-                  className="h-11 pr-10 rounded-xl bg-slate-50 dark:bg-[#0d1f26] border-slate-200 dark:border-white/10 text-slate-900 dark:text-white"
+                  className="h-11 pr-10 rounded-xl bg-slate-50 dark:bg-[#110d1b] border-slate-200 dark:border-white/10 text-slate-900 dark:text-white"
                 />
                 <button
                   type="button"
@@ -343,7 +343,7 @@ export default function ClientSignupPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full h-12 flex items-center justify-center gap-3 bg-[#c8f560] hover:bg-[#b8eb47] disabled:opacity-60 text-[#0d1f26] font-semibold rounded-full shadow-lg transition-all"
+              className="w-full h-12 flex items-center justify-center gap-3 bg-violet-600 hover:bg-violet-500 disabled:opacity-60 text-white font-semibold rounded-full shadow-lg shadow-violet-600/25 transition-all"
             >
               {isSubmitting ? (
                 <>
@@ -353,7 +353,7 @@ export default function ClientSignupPage() {
               ) : (
                 <>
                   <span>Créer mon compte</span>
-                  <span className="w-7 h-7 rounded-full bg-[#0d1f26] text-[#c8f560] flex items-center justify-center">
+                  <span className="w-7 h-7 rounded-full bg-white text-violet-700 flex items-center justify-center">
                     <ArrowRight className="h-3.5 w-3.5" />
                   </span>
                 </>
@@ -361,7 +361,7 @@ export default function ClientSignupPage() {
             </button>
 
             <div className="text-center text-xs text-slate-500 dark:text-gray-400 flex items-center justify-center gap-2 pt-2">
-              <Shield className="h-3.5 w-3.5 text-emerald-600 dark:text-[#c8f560]" />
+              <Shield className="h-3.5 w-3.5 text-violet-600 dark:text-violet-400" />
               <span>Connexion sécurisée avec chiffrement SSL</span>
             </div>
           </form>

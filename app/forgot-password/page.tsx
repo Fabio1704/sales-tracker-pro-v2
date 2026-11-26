@@ -41,9 +41,9 @@ export default function ForgotPasswordPage() {
       <div className="min-h-screen flex items-center justify-center pt-24 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md">
           {sent ? (
-            <div className="bg-white/85 dark:bg-[#132a35]/90 backdrop-blur-xl rounded-3xl p-8 border border-slate-200/80 dark:border-white/10 shadow-2xl text-center space-y-5">
-              <div className="w-16 h-16 bg-[#c8f560]/25 rounded-full flex items-center justify-center mx-auto">
-                <CheckCircle className="h-8 w-8 text-emerald-600 dark:text-[#c8f560]" />
+            <div className="bg-white/85 dark:bg-[#1c162e]/90 backdrop-blur-xl rounded-3xl p-8 border border-slate-200/80 dark:border-white/10 shadow-2xl text-center space-y-5">
+              <div className="w-16 h-16 bg-violet-500/15 rounded-full flex items-center justify-center mx-auto">
+                <CheckCircle className="h-8 w-8 text-violet-600 dark:text-violet-400" />
               </div>
               <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
                 Email envoyé !
@@ -57,20 +57,20 @@ export default function ForgotPasswordPage() {
               </p>
               <button
                 onClick={() => router.push("/")}
-                className="w-full h-12 flex items-center justify-center gap-2 bg-[#c8f560] hover:bg-[#b8eb47] text-[#0d1f26] font-semibold rounded-full shadow-lg transition-all"
+                className="w-full h-12 flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-500 text-white font-semibold rounded-full shadow-lg transition-all"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Retour à la connexion
               </button>
             </div>
           ) : (
-            <div className="bg-white/85 dark:bg-[#132a35]/90 backdrop-blur-xl rounded-3xl p-8 border border-slate-200/80 dark:border-white/10 shadow-2xl space-y-6">
+            <div className="bg-white/85 dark:bg-[#1c162e]/90 backdrop-blur-xl rounded-3xl p-8 border border-slate-200/80 dark:border-white/10 shadow-2xl space-y-6">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-[#10222b] text-[#c8f560] flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 rounded-2xl bg-[#161224] text-violet-400 flex items-center justify-center flex-shrink-0">
                   <Mail className="h-6 w-6" />
                 </div>
                 <div>
-                  <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#c8f560]/30 text-slate-900 dark:text-[#c8f560] mb-1">
+                  <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-violet-500/15 text-violet-700 dark:text-violet-300 mb-1">
                     Récupération
                   </span>
                   <h1 className="text-xl font-bold text-slate-900 dark:text-white">
@@ -102,25 +102,25 @@ export default function ForgotPasswordPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="h-11 rounded-xl bg-slate-50 dark:bg-[#0d1f26] border-slate-200 dark:border-white/10 text-slate-900 dark:text-white"
+                    className="h-11 rounded-xl bg-slate-50 dark:bg-[#110d1b] border-slate-200 dark:border-white/10 text-slate-900 dark:text-white"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading || !email}
-                  className="w-full h-12 flex items-center justify-center gap-3 bg-[#c8f560] hover:bg-[#b8eb47] disabled:opacity-60 text-[#0d1f26] font-semibold rounded-full shadow-lg transition-all"
+                  className="w-full h-12 flex items-center justify-center gap-3 bg-violet-600 hover:bg-violet-500 disabled:opacity-60 text-white font-semibold rounded-full shadow-lg shadow-violet-600/25 transition-all"
                 >
                   {loading ? (
                     <>
-                      <div className="w-4 h-4 border-2 border-[#0d1f26]/30 border-t-[#0d1f26] rounded-full animate-spin" />
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                       <span>Envoi en cours...</span>
                     </>
                   ) : (
                     <>
                       <Send className="h-4 w-4" />
                       <span>Envoyer le lien</span>
-                      <span className="w-7 h-7 rounded-full bg-[#0d1f26] text-[#c8f560] flex items-center justify-center">
+                      <span className="w-7 h-7 rounded-full bg-white text-violet-700 flex items-center justify-center">
                         <ArrowRight className="h-3.5 w-3.5" />
                       </span>
                     </>
@@ -137,8 +137,8 @@ export default function ForgotPasswordPage() {
                 </button>
               </form>
 
-              <div className="p-3.5 rounded-2xl bg-[#10222b]/90 text-gray-300 text-xs border border-white/10">
-                <strong className="text-[#c8f560]">Note :</strong> Seuls les utilisateurs invités et enregistrés peuvent réinitialiser leur mot de passe.
+              <div className="p-3.5 rounded-2xl bg-[#161224]/90 text-gray-300 text-xs border border-white/10">
+                <strong className="text-violet-400">Note :</strong> Seuls les utilisateurs invités et enregistrés peuvent réinitialiser leur mot de passe.
               </div>
             </div>
           )}
