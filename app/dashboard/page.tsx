@@ -183,7 +183,7 @@ export default function DashboardPage() {
             <div>
               <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Dashboard</h1>
               <p className="text-sm text-slate-500 dark:text-gray-500 mt-0.5">
-                Bonjour, {user?.first_name || user?.username} 👋
+                Bonjour, {user?.first_name || user?.username}
               </p>
             </div>
             <div className="flex items-center gap-2">

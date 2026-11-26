@@ -153,9 +153,9 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
                   <div className="flex items-center justify-between mb-6">
                     <div>
                       <p className="text-xs text-gray-400">Revenus Nets (80%)</p>
-                      <p className="text-3xl font-bold text-violet-400 mt-1">$1,543.00</p>
+                      <p className="text-3xl font-bold text-emerald-400 mt-1">$1,543.00</p>
                     </div>
-                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-violet-500/20 text-violet-300">
+                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300">
                       +18.4%
                     </span>
                   </div>
@@ -164,13 +164,13 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
                   <div className="bg-white/5 rounded-2xl p-4 mb-5 border border-white/5">
                     <div className="flex items-center justify-between text-xs text-gray-400 mb-3">
                       <span>Performance Hebdomadaire</span>
-                      <span className="text-fuchsia-400 font-medium">Temps réel</span>
+                      <span className="text-amber-400 font-medium">Temps réel</span>
                     </div>
                     <svg viewBox="0 0 280 80" className="w-full h-20 overflow-visible">
                       <defs>
                         <linearGradient id="violetGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#a855f7" stopOpacity="0.45" />
-                          <stop offset="100%" stopColor="#a855f7" stopOpacity="0" />
+                          <stop offset="0%" stopColor="#10b981" stopOpacity="0.45" />
+                          <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
                         </linearGradient>
                       </defs>
                       <path
@@ -180,11 +180,11 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
                       <path
                         d="M0 65 Q 40 50, 70 55 T 140 35 T 210 25 T 280 10"
                         fill="none"
-                        stroke="#a855f7"
+                        stroke="#10b981"
                         strokeWidth="3"
                         strokeLinecap="round"
                       />
-                      <circle cx="280" cy="10" r="5" fill="#e879f9" />
+                      <circle cx="280" cy="10" r="5" fill="#f59e0b" />
                     </svg>
                   </div>
 
@@ -195,14 +195,14 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
                     </div>
                     <div className="bg-white/5 rounded-xl p-3 border border-white/5">
                       <p className="text-xs text-gray-400">Commission (20%)</p>
-                      <p className="text-lg font-bold text-fuchsia-400 mt-0.5">$385.75</p>
+                      <p className="text-lg font-bold text-rose-400 mt-0.5">$385.75</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="absolute -bottom-5 -right-2 sm:right-4 bg-violet-600 text-white rounded-2xl px-5 py-3 shadow-xl border border-white/20">
+                <div className="absolute -bottom-5 -right-2 sm:right-4 bg-gradient-to-br from-rose-500 to-orange-500 text-white rounded-2xl px-5 py-3 shadow-xl border border-white/20">
                   <p className="text-2xl font-extrabold leading-none">24/7</p>
-                  <p className="text-xs font-semibold text-violet-100 mt-1">Suivi Automatisé</p>
+                  <p className="text-xs font-semibold text-rose-100 mt-1">Suivi Automatisé</p>
                 </div>
               </div>
             </div>
@@ -224,7 +224,7 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
               </div>
 
               <div className="flex items-start gap-4 pt-6 md:pt-0 md:pl-6">
-                <div className="w-11 h-11 rounded-full bg-violet-600 text-white flex items-center justify-center flex-shrink-0">
+                <div className="w-11 h-11 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0">
                   <Euro className="h-5 w-5" />
                 </div>
                 <div>
@@ -236,7 +236,7 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
               </div>
 
               <div className="flex items-start gap-4 pt-6 md:pt-0 md:pl-6">
-                <div className="w-11 h-11 rounded-full bg-violet-600 text-white flex items-center justify-center flex-shrink-0">
+                <div className="w-11 h-11 rounded-full bg-rose-500 text-white flex items-center justify-center flex-shrink-0">
                   <Shield className="h-5 w-5" />
                 </div>
                 <div>
@@ -326,19 +326,19 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
               </div>
               <div>
                 <p className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
-                  150K<span className="text-violet-600 dark:text-violet-400">+</span>
+                  150K<span className="text-emerald-600 dark:text-emerald-400">+</span>
                 </p>
                 <p className="text-xs text-slate-500 dark:text-gray-400 mt-1">Ventes suivies</p>
               </div>
               <div>
                 <p className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
-                  98<span className="text-violet-600 dark:text-violet-400">%</span>
+                  98<span className="text-rose-600 dark:text-rose-400">%</span>
                 </p>
                 <p className="text-xs text-slate-500 dark:text-gray-400 mt-1">Satisfaction client</p>
               </div>
               <div>
                 <p className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white">
-                  80<span className="text-violet-600 dark:text-violet-400">%</span>
+                  80<span className="text-amber-600 dark:text-amber-400">%</span>
                 </p>
                 <p className="text-xs text-slate-500 dark:text-gray-400 mt-1">Calcul net automatisé</p>
               </div>
@@ -368,40 +368,46 @@ export default function LandingPage({ onLoginClick }: LandingPageProps) {
             {[
               {
                 icon: BarChart3,
+                color: "text-violet-400",
                 title: "Analytics en temps réel",
                 desc: "Visualisez vos performances avec des graphiques interactifs et des rapports générés automatiquement.",
               },
               {
                 icon: TrendingUp,
+                color: "text-emerald-400",
                 title: "Analyses avancées",
                 desc: "Suivez vos tendances hebdomadaires et mensuelles avec une précision chirurgicale.",
               },
               {
                 icon: Users,
+                color: "text-rose-400",
                 title: "Collaboration d'équipe",
                 desc: "Administrez vos utilisateurs et modèles avec des permissions granulaires.",
               },
               {
                 icon: Calendar,
+                color: "text-amber-400",
                 title: "Vues Semaine & Mois",
                 desc: "Basculez entre saisie quotidienne, vue hebdomadaire et bilan mensuel en un clic.",
               },
               {
                 icon: Euro,
+                color: "text-emerald-400",
                 title: "Calculs intelligents",
                 desc: "Commissions (20%) et revenus nets (80%) calculés automatiquement sur chaque vente.",
               },
               {
                 icon: Shield,
+                color: "text-rose-400",
                 title: "Sécurité entreprise",
                 desc: "Authentification sécurisée, tokens chiffrés et protection stricte de vos données.",
               },
-            ].map(({ icon: Icon, title, desc }) => (
+            ].map(({ icon: Icon, color, title, desc }) => (
               <div
                 key={title}
                 className="bg-white/80 dark:bg-[#1c162e]/85 backdrop-blur-xl rounded-3xl p-7 border border-slate-200/70 dark:border-white/10 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
               >
-                <div className="w-12 h-12 rounded-2xl bg-[#161224] text-violet-400 flex items-center justify-center mb-5 shadow-md">
+                <div className={`w-12 h-12 rounded-2xl bg-[#161224] ${color} flex items-center justify-center mb-5 shadow-md`}>
                   <Icon className="h-6 w-6" />
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{title}</h3>

@@ -7,11 +7,15 @@ interface ContactFormData {
   message: string
 }
 
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_BACKEND_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  'https://sales-tracker-pro-v2.onrender.com/api'
+
 export async function POST(request: NextRequest) {
   try {
     const body: ContactFormData = await request.json()
-    
-    // Validation des données
+
     if (!body.name || !body.email || !body.subject || !body.message) {
       return NextResponse.json(
         { error: 'Tous les champs sont requis' },
@@ -19,7 +23,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Validation de l'email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(body.email)) {
       return NextResponse.json(
@@ -28,123 +31,51 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Ici vous pouvez choisir l'une des options suivantes :
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 8000)
 
-    // OPTION 1: Sauvegarder en base de données Django
     try {
-      const response = await fetch(`https://sales-tracker-backend-j0c0.onrender.com/api/accounts/contact-messages/`, {
+      const response = await fetch(`${API_BASE_URL}/accounts/contact-messages/`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: body.name,
           email: body.email,
           subject: body.subject,
           message: body.message,
-          created_at: new Date().toISOString()
+          created_at: new Date().toISOString(),
         }),
+        signal: controller.signal,
       })
-      
+
+      clearTimeout(timeoutId)
+
       if (!response.ok) {
-        console.error('Erreur lors de la sauvegarde en base:', response.status)
-      } else {
-        console.log('✅ Message sauvegardé en base de données Django')
+        const errorText = await response.text().catch(() => '')
+        console.error('Erreur backend contact:', response.status, errorText)
+        return NextResponse.json(
+          { error: 'Erreur lors de la sauvegarde du message' },
+          { status: response.status >= 500 ? 502 : response.status }
+        )
       }
-    } catch (dbError) {
-      console.error('Erreur base de données:', dbError)
-      // Continuer avec l'envoi d'email même si la DB échoue
-    }
-
-    // OPTION 2: Envoyer par email (exemple avec un service d'email)
-    // Vous devrez configurer un service comme SendGrid, Nodemailer, etc.
-    /*
-    const nodemailer = require('nodemailer')
-    
-    const transporter = nodemailer.createTransporter({
-      service: 'gmail', // ou votre service email
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
-    })
-
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: 'contact@salestrackerpro.com',
-      subject: `[Contact] ${body.subject}`,
-      html: `
-        <h3>Nouveau message de contact</h3>
-        <p><strong>Nom:</strong> ${body.name}</p>
-        <p><strong>Email:</strong> ${body.email}</p>
-        <p><strong>Sujet:</strong> ${body.subject}</p>
-        <p><strong>Message:</strong></p>
-        <p>${body.message.replace(/\n/g, '<br>')}</p>
-        <hr>
-        <p><small>Envoyé depuis Sales Tracker Pro</small></p>
-      `
-    })
-    */
-
-    // OPTION 3: Log dans la console (pour développement)
-    console.log(`📧 Nouveau message de contact reçu:`)
-    console.log('='.repeat(50))
-    console.log(`Nom: ${body.name}`)
-    console.log(`Email: ${body.email}`)
-    console.log(`Sujet: ${body.subject}`)
-    console.log(`Message: ${body.message}`)
-    console.log(`Date: ${new Date().toLocaleString('fr-FR')}`)
-    console.log('='.repeat(50))
-
-    // OPTION 4: Sauvegarder dans un fichier JSON local (pour développement)
-    const fs = require('fs').promises
-    const path = require('path')
-    
-    try {
-      const messagesFile = path.join(process.cwd(), 'contact-messages.json')
-      let messages = []
-      
-      try {
-        const fileContent = await fs.readFile(messagesFile, 'utf8')
-        messages = JSON.parse(fileContent)
-        
-        // Nettoyer les messages de plus de 3 jours avant d'ajouter le nouveau
-        const threeDaysAgo = new Date()
-        threeDaysAgo.setDate(threeDaysAgo.getDate() - 3)
-        
-        messages = messages.filter((msg: any) => {
-          const messageDate = new Date(msg.timestamp)
-          return messageDate > threeDaysAgo
-        })
-        
-      } catch (error) {
-        // Le fichier n'existe pas encore, on commence avec un tableau vide
-      }
-      
-      messages.push({
-        id: Date.now(),
-        name: body.name,
-        email: body.email,
-        subject: body.subject,
-        message: body.message,
-        timestamp: new Date().toISOString(),
-        read: false
-      })
-      
-      await fs.writeFile(messagesFile, JSON.stringify(messages, null, 2))
-      console.log(`💾 Message sauvegardé dans ${messagesFile} (${messages.length} messages après nettoyage)`)
-    } catch (fileError) {
-      console.error('Erreur lors de la sauvegarde du fichier:', fileError)
+    } catch (dbError: any) {
+      clearTimeout(timeoutId)
+      console.error('Erreur connexion backend contact:', dbError)
+      const isTimeout = dbError?.name === 'AbortError'
+      return NextResponse.json(
+        {
+          error: isTimeout
+            ? 'Le serveur met trop de temps à répondre, veuillez réessayer.'
+            : 'Impossible de contacter le serveur',
+        },
+        { status: isTimeout ? 504 : 502 }
+      )
     }
 
     return NextResponse.json(
-      { 
-        success: true, 
-        message: 'Message envoyé avec succès' 
-      },
+      { success: true, message: 'Message envoyé avec succès' },
       { status: 200 }
     )
-
   } catch (error) {
     console.error('Erreur API contact:', error)
     return NextResponse.json(

@@ -54,8 +54,9 @@ export default function ContactMessagesPage() {
     try {
       setIsLoading(true)
       const token = localStorage.getItem("authToken")
+      const apiBase = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || "https://sales-tracker-pro-v2.onrender.com/api"
       const response = await fetch(
-        "https://sales-tracker-backend-j0c0.onrender.com/api/accounts/contact-messages/list/",
+        `${apiBase}/accounts/contact-messages/list/`,
         { headers: { Authorization: `Bearer ${token}` } }
       )
       if (response.ok) {
@@ -72,8 +73,9 @@ export default function ContactMessagesPage() {
   const markAsRead = async (messageId: number) => {
     try {
       const token = localStorage.getItem("authToken")
+      const apiBase = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || "https://sales-tracker-pro-v2.onrender.com/api"
       const response = await fetch(
-        `https://sales-tracker-backend-j0c0.onrender.com/api/accounts/contact-messages/${messageId}/read/`,
+        `${apiBase}/accounts/contact-messages/${messageId}/read/`,
         {
           method: "PATCH",
           headers: {
@@ -96,8 +98,9 @@ export default function ContactMessagesPage() {
     if (!confirm("Êtes-vous sûr de vouloir supprimer ce message ?")) return
     try {
       const token = localStorage.getItem("authToken")
+      const apiBase = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || "https://sales-tracker-pro-v2.onrender.com/api"
       const response = await fetch(
-        `https://sales-tracker-backend-j0c0.onrender.com/api/accounts/contact-messages/${messageId}/`,
+        `${apiBase}/accounts/contact-messages/${messageId}/`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },

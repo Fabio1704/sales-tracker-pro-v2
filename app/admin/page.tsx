@@ -104,8 +104,9 @@ export default function AdminPage() {
     try {
       if (!currentUser?.is_superuser) { setUnreadMessages(0); return }
       const token = localStorage.getItem("authToken")
+      const apiBase = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || "https://sales-tracker-pro-v2.onrender.com/api"
       const response = await fetch(
-        "https://sales-tracker-backend-j0c0.onrender.com/api/accounts/contact-messages/list/",
+        `${apiBase}/accounts/contact-messages/list/`,
         { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
       )
       if (response.ok) {

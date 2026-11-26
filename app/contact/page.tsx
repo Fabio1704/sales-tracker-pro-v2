@@ -115,7 +115,7 @@ export default function ContactPage() {
 
             <div className="bg-[#161224]/95 text-white rounded-3xl p-7 border border-white/10 shadow-xl space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-full bg-violet-600 text-white flex items-center justify-center flex-shrink-0">
+                <div className="w-11 h-11 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0">
                   <Users className="h-5 w-5" />
                 </div>
                 <div>
@@ -125,15 +125,15 @@ export default function ContactPage() {
               </div>
               <div className="space-y-2.5 text-sm text-gray-300 pt-2">
                 <div className="flex items-center gap-3">
-                  <Mail className="h-4 w-4 text-violet-400" />
+                  <Mail className="h-4 w-4 text-emerald-400" />
                   <span>sales@salestrackerpro.com</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Phone className="h-4 w-4 text-violet-400" />
+                  <Phone className="h-4 w-4 text-emerald-400" />
                   <span>+33 1 23 45 67 90</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Clock className="h-4 w-4 text-violet-400" />
+                  <Clock className="h-4 w-4 text-emerald-400" />
                   <span>Lun-Ven 9h-19h (CET)</span>
                 </div>
               </div>
@@ -141,7 +141,7 @@ export default function ContactPage() {
 
             <div className="bg-white/85 dark:bg-[#1c162e]/90 backdrop-blur-xl rounded-3xl p-7 border border-slate-200/80 dark:border-white/10 shadow-xl">
               <div className="flex items-start gap-3">
-                <div className="w-11 h-11 rounded-full bg-[#161224] text-violet-400 flex items-center justify-center flex-shrink-0">
+                <div className="w-11 h-11 rounded-full bg-[#161224] text-rose-400 flex items-center justify-center flex-shrink-0">
                   <MapPin className="h-5 w-5" />
                 </div>
                 <div>

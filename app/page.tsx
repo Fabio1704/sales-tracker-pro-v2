@@ -100,12 +100,12 @@ export default function HomePage() {
 
               <div className="bg-[#161224]/95 text-white rounded-3xl p-6 border border-white/10 shadow-xl space-y-5">
                 {[
-                  { icon: TrendingUp, title: "Analytics Avancés", sub: "Suivez vos performances en temps réel" },
-                  { icon: Users, title: "Gestion d'Équipe", sub: "Administrez vos utilisateurs et modèles" },
-                  { icon: BarChart3, title: "Rapports Détaillés", sub: "Exportez et analysez vos données" },
-                ].map(({ icon: Icon, title, sub }) => (
+                  { icon: TrendingUp, bg: "bg-emerald-500", title: "Analytics Avancés", sub: "Suivez vos performances en temps réel" },
+                  { icon: Users, bg: "bg-rose-500", title: "Gestion d'Équipe", sub: "Administrez vos utilisateurs et modèles" },
+                  { icon: BarChart3, bg: "bg-amber-500", title: "Rapports Détaillés", sub: "Exportez et analysez vos données" },
+                ].map(({ icon: Icon, bg, title, sub }) => (
                   <div key={title} className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-violet-600 text-white flex items-center justify-center flex-shrink-0">
+                    <div className={`w-10 h-10 rounded-full ${bg} text-white flex items-center justify-center flex-shrink-0`}>
                       <Icon className="h-5 w-5" />
                     </div>
                     <div>
